@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',225);
             $table->string('type',225);
-            $table->integr('publicacion id');
+            $table->integer('publicacion id');
             $table->timestamps();
         });
     }
