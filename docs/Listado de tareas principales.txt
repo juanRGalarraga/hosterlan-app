@@ -1,0 +1,17 @@
+[] - Vista para ver la publicacion
+	[] - Logica para obtener la foto
+	[] - Logica para mostrar los datos
+	[] - Interfaz
+	
+[] - Perfil público del propietario
+	[] - Logica para obtener los datos del propietario
+	[] - Interfaz
+	
+[] - Vista crear/editar publicacion
+	[] - Crud de publicaciones
+	[] - Interfaz
+	
+[] - Vista de inicio
+	[] - Listado de publicaciones
+	[] - Filtros del listado
+	[] - Puede agregarse un modal para mostrar la publiaciones y también una vista aparte.
