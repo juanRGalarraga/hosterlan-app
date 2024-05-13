@@ -20,7 +20,7 @@ CREATE TABLE `owners` (
   PRIMARY KEY (`id`, `email`)
 );
 
-CREATE TABLE `Publication` (
+CREATE TABLE `publication` (
   `id` integer PRIMARY KEY,
   `price` integer,
   `ubication` varchar(255),
@@ -32,7 +32,7 @@ CREATE TABLE `Publication` (
   `number_people` integer
 );
 
-CREATE TABLE `Publication_users` (
+CREATE TABLE `publication_users` (
   `id` integer PRIMARY KEY,
   `owners_id` integer,
   `publication_id` integer
@@ -55,7 +55,7 @@ CREATE TABLE `publication_avaliable_days` (
 
 ALTER TABLE `pictures` ADD FOREIGN KEY (`id`) REFERENCES `Publication` (`id`);
 
-CREATE TABLE `Publication_users_Publication` (
+CREATE TABLE `publication_users_publication` (
   `Publication_users_owners_id` integer,
   `Publication_id` integer,
   PRIMARY KEY (`Publication_users_owners_id`, `Publication_id`)
