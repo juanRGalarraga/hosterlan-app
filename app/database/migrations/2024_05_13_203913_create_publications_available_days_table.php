@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\PublicationState;
 
 return new class extends Migration
 {
@@ -11,15 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('publications', function (Blueprint $table) {
+        Schema::create('publications_available_days', function (Blueprint $table) {
             $table->id();
-            $table->float('price');
-            $table->string('ubication');
-            $table->text('description');
-            $table->integer('room_count');
-            $table->boolean('pets');
-            $table->integer('number_people');
-            // $table->foreignIdFor(Rent::class);
+            $table->datetime('since');
+            $table->datetime('to');
+            $table->enum('state', PublicationState::forMigration())->default(PublicationState::Available->value);
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('publications');
+        Schema::dropIfExists('publications_available_days');
     }
 };
