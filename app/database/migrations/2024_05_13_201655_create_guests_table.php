@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', 125);
             $table->string('username', 125);
             $table->string('password', 400);
-            $table->string('email', 250)->primary();
+            $table->string('email', 250)->index();
             $table->json('options');
             $table->float('rating');
             $table->timestamps();

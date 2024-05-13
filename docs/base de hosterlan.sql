@@ -54,14 +54,3 @@ CREATE TABLE `publication_avaliable_days` (
 );
 
 ALTER TABLE `pictures` ADD FOREIGN KEY (`id`) REFERENCES `Publication` (`id`);
-
-CREATE TABLE `publication_users_publication` (
-  `Publication_users_owners_id` integer,
-  `Publication_id` integer,
-  PRIMARY KEY (`Publication_users_owners_id`, `Publication_id`)
-);
-
-ALTER TABLE `Publication_users_Publication` ADD FOREIGN KEY (`Publication_users_owners_id`) REFERENCES `Publication_users` (`owners_id`);
-
-ALTER TABLE `Publication_users_Publication` ADD FOREIGN KEY (`Publication_id`) REFERENCES `Publication` (`id`);
-
