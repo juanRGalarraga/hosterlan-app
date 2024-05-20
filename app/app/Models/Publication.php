@@ -9,7 +9,7 @@ class Publication extends Model
 {
     use HasFactory;
       protected $fillable = [
-        'id',
+         'id',
         'price',
         'ubication',
         'description',
