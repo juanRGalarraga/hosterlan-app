@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Picture extends Model
 {
-     use HasFactory;
-      protected $fillable = [
-        'id',
-        'name',
-        'type',
-        'publication_id'
+    use HasFactory;
+    protected $fillable = [
+      'id',
+      'name',
+      'type',
+      'publication_id'
     ];
     
 }

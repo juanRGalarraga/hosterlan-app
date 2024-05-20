@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class RentType extends Model
 {
     use HasFactory;
-      protected $fillable = [
-        'id',
-        'name',
-        'description',
-        
+    protected $fillable = [
+      'id',
+      'name',
+      'description',
     ];
 }
