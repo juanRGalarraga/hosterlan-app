@@ -15,3 +15,12 @@
 	[] - Listado de publicaciones
 	[] - Filtros del listado
 	[] - Puede agregarse un modal para mostrar la publiaciones y también una vista aparte.
+	
+	
+Modelos:
+
+[] - Guest
+[] - Owner
+[] - Publication
+[] - Picture
+[] - RentType
