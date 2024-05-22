@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Publication;
 
 class Picture extends Model
 {
@@ -15,4 +16,7 @@ class Picture extends Model
       'publication_id'
     ];
     
+    public function publication(){
+      return $this->hasOne(Publication::class);
+    }
 }

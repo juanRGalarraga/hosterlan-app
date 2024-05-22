@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RentType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +14,14 @@ return new class extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->float('price');
             $table->string('ubication');
             $table->text('description');
             $table->integer('room_count');
             $table->boolean('pets');
             $table->integer('number_people');
-            // $table->foreignIdFor(Rent::class);
+            $table->foreignIdFor(RentType::class);
             $table->timestamps();
         });
     }

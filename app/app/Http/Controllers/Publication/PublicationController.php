@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Publication;
 
 use App\Http\Controllers\Controller;
+use App\Models\Publication;
 use Illuminate\Http\Request;
 
 class PublicationController extends Controller
@@ -12,7 +13,9 @@ class PublicationController extends Controller
      */
     public function index()
     {
-        return view("publications.index");
+        return view("publications.index", [
+            'publications' => Publication::latest()->paginate(25)
+        ]);
     }
 
     /**

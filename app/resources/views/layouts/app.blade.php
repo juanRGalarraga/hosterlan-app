@@ -14,9 +14,8 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        @if (isset($head))
-            {{$head}}
-        @endif
+        @stack('calendar-js')
+        @stack('custom-css')
 
     </head>
     <body class="font-sans antialiased">
@@ -37,5 +36,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @stack('custom-scripts')
     </body>
 </html>

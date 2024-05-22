@@ -3,7 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\RentType;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use App\Models\Owner;
+use App\Models\Publication;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        Owner::factory()->count(30)->create();
+        Publication::factory()->count(50)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory()->count(1)->create([
+            'email' => 'juan_dlp2@outlook.com',
+            'password' => '$2y$12$tVvrEzxs6KEi7Uc6cEJs7uoG4OZ5w0eGCqWEwX7geR5xY4/FL2v5u'
+        ]);
     }
 }

@@ -1,4 +1,4 @@
-<x-publication.publication-layout>
+<x-app-layout>
 
     @push('custom-scripts')
         <script src="/js/publications/create.js"></script>
@@ -38,7 +38,7 @@
 
             <x-form.minimal-input id="bathCount" type="number" label="{{__('Número de baños')}}"></x-form-minimal-input>
 
-            <x-form.minimal-input id="monthPrice" type="number" label="{{__('Precio por mes')}}"></x-form-minimal-input>
+            <x-form.minimal-input id="monthPrice" type="number" label="{{__('Precio')}}"></x-form-minimal-input>
 
             <x-form.minimal-input id="propertyAddress" type="number" label="{{__('Direccion de la propiedad')}}"></x-form-minimal-input>
             
@@ -48,4 +48,4 @@
             
         </div>
     </div>
-</x-publication.publication-layout>
+</x-app-layout>

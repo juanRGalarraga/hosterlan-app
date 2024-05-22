@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\RentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,11 +18,13 @@ class PublicationFactory extends Factory
     public function definition(): array
     {
         return [
-            'price'=>fake()->numberBetween(100000,200000),
+            'title' => fake()->sentence(3),
+            'price'=>fake()->randomFloat(2,0,8),
             'ubication'=> fake()->address(),
             'description'=>fake()->sentence(),
             'room_count'=>fake()->numberBetween(1,10),
             'pets'=>fake()->boolean(),
+            'rent_type_id' => fake()->randomElement([1,2,3,4,5]),
             'number_people'=> fake()->numberBetween(1,10),
         ];
     }
