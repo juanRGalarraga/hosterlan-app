@@ -19,10 +19,10 @@ class OwnerFactory extends Factory
         return [
             'name'=> fake()->name(),
             'username'=> fake()->username(),
-            'password'=> bcrypt(fake()->password()),
+            'password'=> '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'email'=> fake()->unique()->safeEmail(),
-            'options'=>[],
-            'rating'=>fake()->randomFloat(0,10)
+            'options'=> '{}',
+            'rating'=>fake()->randomFloat(2,0,8)
         ];
     }
 }
