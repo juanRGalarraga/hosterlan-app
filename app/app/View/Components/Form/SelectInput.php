@@ -6,26 +6,21 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class MinimalInput extends Component
+class SelectInput extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
         public string $id,
-        public string $type,
-        public string $name = '',
+        public string $label,
+        public string $placeholder = '',
         public string $value = '',
-        public string $label = '',
-        public string $labelIcon  = "",
-        public string $placeholder = "",
-    ) {
+        public string $name = '',
+    )
+    {
         if(empty($name)){
             $this->name = $id;
-        }
-
-        if(empty(trim($type))) {
-            $this->type = 'text';
         }
     }
 
@@ -34,6 +29,6 @@ class MinimalInput extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.minimal-input');
+        return view('components.form.select-input');
     }
 }

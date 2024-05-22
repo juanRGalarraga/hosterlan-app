@@ -17,12 +17,12 @@ class PublicationFactory extends Factory
     public function definition(): array
     {
         return [
-        'price'=>fake()->numberBetween(100000,200000),
-        'ubication'=> fake()->address(),
-        'description'=>fake()->sentence(),
-        'room_count'=>fake()->numberBetween(1,10),
-        'pets'=>fake()->boolean(),
-        'number_people'=> fake()->numberBetween(1,10),
+            'price'=>fake()->numberBetween(100000,200000),
+            'ubication'=> fake()->address(),
+            'description'=>fake()->sentence(),
+            'room_count'=>fake()->numberBetween(1,10),
+            'pets'=>fake()->boolean(),
+            'number_people'=> fake()->numberBetween(1,10),
         ];
     }
 }

@@ -17,12 +17,12 @@ class OwnerFactory extends Factory
     public function definition(): array
     {
         return [
-        'name'=> fake()->name(),
-        'username'=> fake()->username(),
-        'password'=> bcrypt(fake()->password()),
-        'email'=> fake()->unique()->safeEmail(),
-        'options'=>[],
-        'rating'=>fake()->randomFloat(0,10)
+            'name'=> fake()->name(),
+            'username'=> fake()->username(),
+            'password'=> bcrypt(fake()->password()),
+            'email'=> fake()->unique()->safeEmail(),
+            'options'=>[],
+            'rating'=>fake()->randomFloat(0,10)
         ];
     }
 }

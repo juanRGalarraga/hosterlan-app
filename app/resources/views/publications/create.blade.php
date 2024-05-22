@@ -1,29 +1,51 @@
-<x-app-layout>
+<x-publication.publication-layout>
+
+    @push('custom-scripts')
+        <script src="/js/publications/create.js"></script>
+    @endpush
+
+    @push('custom-css')
+        <link rel="stylesheet" href="/css/publications/create.css">
+    @endpush
+
+    @push('calendar-js')
+        <script src="/js/calendar/jsCalendar.min.js"></script>
+        <script src="/js/calendar/jsCalendar.lang.es.js"></script>
+        <script src="/js/calendar/jsCalendar.datepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.darkseries.min.css">
+    @endpush
+
     <div class="text-white flex flex-row p-3">
         <div class="basis-1/2" id="description">
             <div id="publisher"></div>
             <div id="picture">
                 <div id="dropzone"></div>
             </div>
-            <select name="rent-type" id="rent-type">
-                <option value="house">{{__("Casa")}}</option>
-                <option value="depto">{{__("Departamento")}}</option>
-                <option value="hut">{{__("Cabaña")}}</option>
-            </select>
 
-            <div class="max-w-2xl mx-auto">
-                <label for="website-admin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Username</label>
-                <div class="flex">
-                    <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                        @
-                    </span>
-                    <input type="text" id="website-admin" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="elonmusk">
-                </div>
+            <div class="flex flex-row max-w-2xl mx-auto space-x-3 justify-center mb-3">
+                <x-form.datepicker-input :label="__('Desde')"></x-form.datepicker-input>
+                <x-form.datepicker-input :label="__('Hasta')"></x-form.datepicker-input>
             </div>
+
+            <x-form.select-input id="rentType" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta">
+                <x-form.select-input-option value="Rent1">Rent1</x-form.select-input-option>
+                <x-form.select-input-option value="Rent2">Rent2</x-form.select-input-option>
+                <x-form.select-input-option value="Rent3">Rent3</x-form.select-input-option>
+            </x-form.select-input>
+
+            <x-form.minimal-input id="roomCount" type="number" label="{{__('Número de habitaciones')}}"></x-form-minimal-input>
+
+            <x-form.minimal-input id="bathCount" type="number" label="{{__('Número de baños')}}"></x-form-minimal-input>
+
+            <x-form.minimal-input id="monthPrice" type="number" label="{{__('Precio por mes')}}"></x-form-minimal-input>
+
+            <x-form.minimal-input id="propertyAddress" type="number" label="{{__('Direccion de la propiedad')}}"></x-form-minimal-input>
             
+            <x-form.minimal-input id="propertyDescription" type="text" label="{{__('Descripción del alquiler')}}"></x-form-minimal-input>
         </div>
         <div class="">
             
         </div>
     </div>
-</x-app-layout>
+</x-publication.publication-layout>
