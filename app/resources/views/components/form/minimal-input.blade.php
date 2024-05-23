@@ -1,4 +1,4 @@
-<div class="max-w-2xl mx-auto" {{ $attributes->merge(['class' => 'max-w-2xl mx-auto']) }}>
+<div {{ $attributes->merge(['class' => 'max-w-2xl mx-auto']) }}>
     @if(!empty($label))
     <label for="{{$id}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $label }}</label>
     @endif

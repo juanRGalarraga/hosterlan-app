@@ -1,15 +1,18 @@
 @php
     $imageSourceDefault = 'https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80';
+    $searchIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>';
 @endphp
 
 @props(['imageSource' => $imageSourceDefault, 'title', 'description', 'buttonText' ,'rating' => ''])
 
 <div class="relative flex max-w-[26rem] flex-col bg-blend-darken bg-clip-border text-gray-700 shadow-lg w-80 h-[20rem]">
-  <div class="relative mx-4 mt-4 overflow-hidden bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
+  <div class="relative mx-3 overflow-hidden bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
     <img
       src="{{$imageSource}}"
       alt="ui/ux review check"
-      class="rounded-md"
+      class="rounded-md w-[90%] max-w-90 max-h-90"
     />
     <div class="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60"></div>
     <!-- <button
