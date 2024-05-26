@@ -9,7 +9,7 @@
     <img
       src="{{$imageSource}}"
       alt="ui/ux review check"
-      class="rounded-md w-[90%] max-w-90 max-h-90"
+      class="rounded-md  max-w-90 max-h-90"
     />
     <div class="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60"></div>
     <!-- <button

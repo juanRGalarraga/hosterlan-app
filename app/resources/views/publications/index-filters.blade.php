@@ -1,4 +1,4 @@
-<div class="w-[20%] pl-3 mt-3">
+
 
     <x-form.minimal-input label="Buscar" class="mb-3" type="text" id="buscador"></x-form.minimal-input>
 
@@ -17,9 +17,9 @@
 
     <x-form.label text="Precio"></x-form.label>
     <div class="flex flex-row mb-3">
-        <x-form.minimal-input class="mb-3 w-[50%]" type="text" id="" placeholder="Min."></x-form.minimal-input>
+        <x-form.minimal-input class="mb-3" type="text" id="" placeholder="Min."></x-form.minimal-input>
         <span>a</span>
-        <x-form.minimal-input class="mb-3 w-[50%]" type="text" id="" placeholder="Máx."></x-form.minimal-input>
+        <x-form.minimal-input class="mb-3" type="text" id="" placeholder="Máx."></x-form.minimal-input>
     </div>
 
     <x-form.select-input id="" label="{{__('Habitaciones')}}" class="mb-3">
@@ -44,11 +44,17 @@
 
     <x-form.label text="Metros cuadrados"></x-form.label>
     <div class="flex flex-row mb-3">
-        <x-form.minimal-input class="mb-3 w-[50%]" type="text" id="" placeholder="Min."></x-form.minimal-input>
+        <x-form.minimal-input class="mb-3" type="text" id="" placeholder="Min."></x-form.minimal-input>
         <span>a</span>
-        <x-form.minimal-input class="mb-3 w-[50%]" type="text" id="" placeholder="Máx."></x-form.minimal-input>
+        <x-form.minimal-input class="mb-3" type="text" id="" placeholder="Máx."></x-form.minimal-input>
     </div>
 
     <x-form.toggle-switch label="Permite mascotas"></x-form.toggle-switch>
 
-</div>
+    <x-form.toggle-switch label="Permite mascotas"></x-form.toggle-switch>
+
+    <x-form.toggle-switch label="Permite mascotas"></x-form.toggle-switch>
+
+    <x-form.toggle-switch label="Permite mascotas"></x-form.toggle-switch>
+
+    <x-form.toggle-switch label="Permite mascotas"></x-form.toggle-switch>
