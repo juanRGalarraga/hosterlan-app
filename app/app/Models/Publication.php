@@ -11,10 +11,11 @@ class Publication extends Model
     use HasFactory;
     protected $fillable = [
       'price',
+      'title',
       'ubication',
       'description',
       'room_count',
-      'pet',
+      'pets',
       'numbre_people'
     ];
 
