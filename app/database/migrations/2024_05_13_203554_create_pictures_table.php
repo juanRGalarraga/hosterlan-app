@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Publication;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',225);
             $table->string('type',225);
-            $table->integer('publicacion_id');
+            $table->foreignIdFor(Publication::class);
             $table->timestamps();
         });
     }
