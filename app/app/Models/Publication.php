@@ -19,7 +19,16 @@ class Publication extends Model
       'numbre_people'
     ];
 
-    public function picture(){
-      return $this->belongsTo(Picture::class);
+    public function pictures(){
+      return $this->hasMany(Picture::class);
+    }
+
+    public function getUrlPicture(int $id){
+      $filename = '';
+      if($this->exists()){
+        $picture = $this->pictures->find($id);
+        $filename = asset("imgs/publications/{$this->id}/{$picture->name}.{$picture->type}");
+      }
+      return $filename;
     }
 }

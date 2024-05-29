@@ -17,6 +17,6 @@ class Picture extends Model
     ];
     
     public function publication(){
-      return $this->hasOne(Publication::class);
+      return $this->belongsTo(Publication::class);
     }
 }
