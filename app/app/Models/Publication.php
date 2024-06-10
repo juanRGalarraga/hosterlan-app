@@ -16,7 +16,7 @@ class Publication extends Model
       'description',
       'room_count',
       'pets',
-      'numbre_people'
+      'number_people'
     ];
 
     public function picture(){

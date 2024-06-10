@@ -1,0 +1,16 @@
+#preview {
+    background-color: #1a202c;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#preview h2 {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#preview p {
+    color: #cbd5e0;
+    margin-bottom: 5px;
+}
