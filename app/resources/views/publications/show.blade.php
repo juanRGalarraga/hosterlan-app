@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :includeNav="false">
   
   @push('custom-scripts')
     <script src="/js/flowbite/flowbite.min.js"></script>
