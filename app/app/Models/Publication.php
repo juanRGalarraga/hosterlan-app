@@ -31,4 +31,15 @@ class Publication extends Model
       }
       return $filename;
     }
+
+    public function getFirstPicture(){
+      $filename = '';
+      if($this->exists()){
+        $picture = $this->pictures[0] ?? '';
+        if(!empty($picture)){
+          $filename = asset("imgs/publications/{$this->id}/{$picture->name}.{$picture->type}");
+        }
+      }
+      return $filename;
+    }
 }

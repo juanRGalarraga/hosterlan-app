@@ -22,10 +22,11 @@
             @include('publications.index-filters')
         </div>
         
-        <div class="flex flex-wrap justify-center mt-3 w-full">
+        <!-- <div class="flex flex-wrap justify-center mt-3 w-full"> -->
+        <div class="grid grid-cols-3 auto-cols-auto	gap-2">
             @forelse($publications as $publication)
-                <div class="hover:cursor-pointer">
-                    <x-booking-card class="ml-3" :title="__($publication->title)" :description="__($publication->description)" :buttonText="__('')"></x-booking-card>
+                <div class="hover:cursor-pointer shrink">
+                    <x-booking-card :imageSource="$publication->getFirstPicture()" :title="__($publication->title)" :description="__($publication->description)" :buttonText="__('')"></x-booking-card>
                 </div>
             @empty
                 <span class="text-danger">

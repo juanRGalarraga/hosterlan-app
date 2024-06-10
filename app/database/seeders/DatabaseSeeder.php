@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         Owner::factory()->count(30)->create();
 
-        Publication::factory()->has(Picture::factory()->count(4))->count(50)->create();
+        Publication::factory()->has(Picture::factory()->count(4))->count(25)->create();
         
         User::factory()->count(1)->create([
             'email' => 'test@example.com',
