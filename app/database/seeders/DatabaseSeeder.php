@@ -18,10 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Owner::factory()->count(30)->create();
-        Publication::factory()->has(Picture::factory()->count(3))->count(50)->create();
+
+        Publication::factory()->has(Picture::factory()->count(4))->count(50)->create();
         
         User::factory()->count(1)->create([
-            'email' => 'juan_dlp2@outlook.com',
+            'email' => 'test@example.com',
             'password' => '$2y$12$tVvrEzxs6KEi7Uc6cEJs7uoG4OZ5w0eGCqWEwX7geR5xY4/FL2v5u'
         ]);
     }

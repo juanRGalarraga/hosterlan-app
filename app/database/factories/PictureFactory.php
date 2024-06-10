@@ -16,9 +16,19 @@ class PictureFactory extends Factory
      */
     public function definition(): array
     {
+
+        $images = [
+            '0000001' => 'jpg',
+            '0000002' => 'jpg',
+            '0000003' => 'jpg',
+            '0000004' => 'png',
+        ];
+
+        $randomKey = fake()->randomKey($images);
+
         return [
-            'name' => 'picture',
-            'type' => 'jpg',
+            'name' => $randomKey,
+            'type' => $images[$randomKey],
         ];
     }
 }
