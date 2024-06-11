@@ -1,0 +1,11 @@
+.fixed-filters-zone{
+    position: fixed;
+    max-height: calc(100vh - 60px); 
+    background-color: #101727; 
+    scrollbar-color: white #676767;
+    scrollbar-width: none;
+}
+
+.show-scroll:hover {
+    scrollbar-width: thin !important;
+}

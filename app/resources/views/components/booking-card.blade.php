@@ -1,13 +1,14 @@
 @php
     $imageSourceDefault = 'https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80';
+    $defaultClasses = "relative flex flex-col bg-blend-darken bg-clip-border text-gray-700 shadow-lg";
 @endphp
 
 @props(['imageSource' => $imageSourceDefault, 'title', 'description', 'buttonText' ,'rating' => ''])
 
-<div class="relative flex max-w-[20rem] flex-col bg-blend-darken bg-clip-border text-gray-700 shadow-lg w-80">
-  <div class="relative mx-3 h-90 overflow-hidden bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-    <div style="background-image: url('{{$imageSource}}');" class="bg-no-repeat bg-cover bg-center	rounded-md  h-[9rem] to-bg-black-10 inset-0 from-transparent via-transparent to-black/60"></div>
-    <!-- <button
+<div {{$attributes->merge(['class' => $defaultClasses])}}>
+  <div class="relative overflow-hidden bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
+    <div style="background-image: url('{{$imageSource}}');" class="bg-no-repeat bg-cover bg-center rounded-md h-[9rem] to-bg-black-10 inset-0 from-transparent via-transparent to-black/60"></div>
+    <!-- <button 
       class="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
       type="button"
       data-ripple-dark="true"

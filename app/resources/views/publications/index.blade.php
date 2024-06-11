@@ -9,24 +9,26 @@
     @endpush
 
     @push('custom-css')
-        <link rel="stylesheet" type="text/css" href="/css/publications/index.css">
+        <link rel="stylesheet" type="text/css" href="/css/publications/index.css??v={{time()}};">
+    @endpush
+
+    @push('custom-scripts')
+    <script src="/js/publications/index.js"></script>
     @endpush
 
     <x-slot:header>
         {{__('Propiedades disponibles')}}
     </x-slot:header>
 
-    <div class="flex flex-row">
+    <div class="flex flex-row pl-3 mt-3 w-fit">
         
-        <div class="pl-3 mt-3 w-fit">
-            @include('publications.index-filters')
-        </div>
+        @include('publications.index-filters')
         
         <!-- <div class="flex flex-wrap justify-center mt-3 w-full"> -->
-        <div class="grid grid-cols-3 auto-cols-auto	gap-2">
+        <div class="grid grid-cols-3 gap-2" id="card-list">
             @forelse($publications as $publication)
-                <div class="hover:cursor-pointer shrink">
-                    <x-booking-card :imageSource="$publication->getFirstPicture()" :title="__($publication->title)" :description="__($publication->description)" :buttonText="__('')"></x-booking-card>
+                <div>
+                    <x-booking-card class="hover:cursor-pointer clickeable-card" :imageSource="$publication->getFirstPicture()" :title="__($publication->title)" :description="__($publication->description)" :buttonText="__('')"></x-booking-card>
                 </div>
             @empty
                 <span class="text-danger">

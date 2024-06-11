@@ -1,8 +1,8 @@
-<div class="flex">
-    <!-- Filtro -->
-    <div class="w-64 p-4 overflow-y-auto" style="max-height: calc(100vh - 60px); background-color: #101727; position: fixed;">
+<!-- <div class="w-fit hover:cursor-pointer show-scroll"> -->
+    <div class="w-64 pl-4 overflow-y-auto fixed-filters-zone show-scroll">
         <!-- Filtro de Búsqueda -->
-        <x-form.minimal-input label="Buscar" class="mb-3" type="text" id="buscador"></x-form.minimal-input>
+        <x-form.minimal-input label="Buscar" 
+        class="mb-3" type="text" id="buscador"></x-form.minimal-input>
 
         <x-form.select-input id="" label="{{__('Ordenar por')}}" class="mb-3">
             <x-form.select-input-option value="Opcion1">Opcion1</x-form.select-input-option>
@@ -54,12 +54,10 @@
         <x-form.toggle-switch label="Permite mascotas"></x-form.toggle-switch>
     </div>
 
-    <!-- Galería -->
-    <div class="flex-1 overflow-y-auto p-4 ml-64" style="max-height: calc(100vh - 60px);">
+
+    <div class="flex-1 overflow-y-auto pl-4 ml-64" style="max-height: calc(100vh - 60px);">
         <div class="gallery grid grid-cols-3 gap-4">
-            <!-- Itera sobre tus elementos aquí -->
         </div>
     </div>
-</div>
-
+<!-- </div> -->
 

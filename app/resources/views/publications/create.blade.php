@@ -60,7 +60,7 @@
             </form>
         </div>
         <div id="preview" class="basis-1/2">
-           >
+           
         </div>
     </div>
 </x-app-layout>
