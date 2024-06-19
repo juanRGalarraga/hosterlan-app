@@ -10,14 +10,31 @@ use Illuminate\Http\Request;
 
 class PublicationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view("publications.index", [
-            'publications' => Publication::latest()->paginate(25)
-        ]);
+        $publications = Publication::latest()->paginate(25);
+        $html = view("publications.index", compact('publications'));
+        // dd($html);
+        return $html;
+        // return response()->json([
+        //     'status' => 200,
+        //     'html' => $html
+        // ]);
+    }
+
+    public function getList(){
+        $publications = Publication::latest()->paginate(25);
+        $html = view("publications.list", compact('publications'))->render();
+        // dd($html);
+        return $html;
     }
 
     /**

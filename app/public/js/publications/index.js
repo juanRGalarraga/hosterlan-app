@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', ev => {
-    publicationsOnClick();
+  publicationLoadOnClickToShow();
 });
 
-function publicationsOnClick() {
-    console.log("Im in line 6");
+function publicationLoadOnClickToShow() {
     let mainCardList = document.getElementById('card-list');
     if (!(mainCardList instanceof HTMLElement)) return console.error('Without element!');
 
@@ -12,8 +11,30 @@ function publicationsOnClick() {
         if (ev.target.tagName == "x-booking-card") {
             ev.preventDefault();
             ev.stopImmediatePropagation();
-            }
+        }
     }
+}
+
+function publicationLoadFiltersEvents() {
+  let search = document.getElementById('search');
+  let publication_state = document.getElementById('publication_state');
+  let available_from = document.getElementById('available_from');
+  let available_to = document.getElementById('available_to');
+  let price_min = document.getElementById('price_min');
+  let price_max = document.getElementById('price_max');
+  let roomCount = document.getElementById('roomCount');
+  let bathroomCount = document.getElementById('bathroomCount');
+  let rentType = document.getElementById('rentType');
+  let withPets = document.getElementById('withPets');
+}
+
+function loadPublications() {
+  let publicationMainlist = document.getElementById('publicationMainlist');
+  fetch('publications/render')
+    .then((respuesta) => respuesta.blob())
+    .then(blob => {
+      publicationMainlist = blob.text();
+    });
 }
 
 function viewPublication(publicationId) {

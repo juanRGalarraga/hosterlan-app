@@ -13,7 +13,7 @@
     @endpush
 
     @push('custom-scripts')
-    <script src="/js/publications/index.js"></script>
+    <script src="/js/publications/index.js?v={{time()}}"></script>
     @endpush
 
     <x-slot:header>
@@ -25,16 +25,8 @@
         @include('publications.index-filters')
         
         <!-- <div class="flex flex-wrap justify-center mt-3 w-full"> -->
-        <div class="grid grid-cols-3 gap-2" id="card-list">
-            @forelse($publications as $publication)
-                <div>
-                    <x-booking-card class="hover:cursor-pointer clickeable-card" :imageSource="$publication->getFirstPicture()" :title="__($publication->title)" :description="__($publication->description)" :buttonText="__('')"></x-booking-card>
-                </div>
-            @empty
-                <span class="text-danger">
-                    <strong>{{__('No se encontraron publicaciones')}}</strong>
-                </span>
-            @endforelse
+        <div class="grid grid-cols-3 gap-2" id="publicationMainlist">
+            @include('publications.list')
         </div>
     </div>
     <div class="text-center flex justify-between">
