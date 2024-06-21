@@ -1,63 +1,79 @@
-document.addEventListener('DOMContentLoaded', ev => {
-  publicationLoadOnClickToShow();
-});
+class PublicationList {
 
-function publicationLoadOnClickToShow() {
-    let mainCardList = document.getElementById('card-list');
-    if (!(mainCardList instanceof HTMLElement)) return console.error('Without element!');
+  mainCardList = null;
+  inputPearch = null;
+  inputPublicationState = null;
+  inputPvailableFrom = null;
+  inputPvailableTo = null;
+  inputPriceMin = null;
+  inputPriceMax = null;
+  inputPoomCount = null;
+  inputPathroomCount = null;
+  inputPentType = null;
+  inputPithPets = null;
+  listId = 'publicationMainlist';
 
-    mainCardList.onclick = (ev) => {
-        console.log(ev.target.tagName);
-        if (ev.target.tagName == "x-booking-card") {
-            ev.preventDefault();
-            ev.stopImmediatePropagation();
-        }
+  constructor(){
+    this.loadOnClickToShow(this.listId);
+    this.initInputsFilter();
+    return this;
+  }
+
+  loadOnClickToShow(listId){
+    this.mainCardList = document.getElementById(listId);
+
+    if (!(this.mainCardList instanceof HTMLElement)) return console.error('Without element!');
+
+    let elements = this.mainCardList.getElementsByClassName('clickeable-card');
+    for (const element of elements) {
+      element.onclick = (event) => {
+        this.updateView(element);
+      }
     }
-}
+  }
 
-function publicationLoadFiltersEvents() {
-  let search = document.getElementById('search');
-  let publication_state = document.getElementById('publication_state');
-  let available_from = document.getElementById('available_from');
-  let available_to = document.getElementById('available_to');
-  let price_min = document.getElementById('price_min');
-  let price_max = document.getElementById('price_max');
-  let roomCount = document.getElementById('roomCount');
-  let bathroomCount = document.getElementById('bathroomCount');
-  let rentType = document.getElementById('rentType');
-  let withPets = document.getElementById('withPets');
-}
+  initInputsFilter(){
+    this.search = document.getElementById('search');
+    this.publication_state = document.getElementById('publication_state');
+    this.available_from = document.getElementById('available_from');
+    this.available_to = document.getElementById('available_to');
+    this.price_min = document.getElementById('price_min');
+    this.price_max = document.getElementById('price_max');
+    this.roomCount = document.getElementById('roomCount');
+    this.bathroomCount = document.getElementById('bathroomCount');
+    this.rentType = document.getElementById('rentType');
+    this.withPets = document.getElementById('withPets');
+  }
 
-function loadPublications() {
-  let publicationMainlist = document.getElementById('publicationMainlist');
-  fetch('publications/render')
-    .then((respuesta) => respuesta.blob())
-    .then(blob => {
-      publicationMainlist = blob.text();
-    });
-}
+  getList(){
+    let publicationMainlist = document.getElementById('publicationMainlist');
+    fetch('publications/render')
+      .then((respuesta) => respuesta.blob())
+      .then(blob => {
+        publicationMainlist = blob.text();
+      });
+  }
 
-function viewPublication(publicationId) {
-    
-}
+  viewPublication(id){
+    window.open('publications/' + id, '_self');
+  }
 
-function updateView(event) {
-
-    // Handle the difference in whether the event is fired on the <a> or the <img>
-    const targetIdentifier = event.target.firstChild || event.target;
+  updateView(element){
   
-    const displayNewImage = () => {
-      const mainSrc = `${targetIdentifier.src.split("_th.jpg")[0]}.jpg`;
-      galleryImg.src = mainSrc;
-      galleryCaption.textContent = targetIdentifier.alt;
-    };
-  
-    // Fallback for browsers that don't support View Transitions:
     if (!document.startViewTransition) {
-      displayNewImage();
+      this.viewPublication(element.id)
       return;
     }
   
     // With View Transitions:
-    const transition = document.startViewTransition(() => displayNewImage());
+    document.startViewTransition(() => this.viewPublication(element.id));
+  }
+
 }
+
+
+
+
+document.addEventListener('DOMContentLoaded', ev => {
+  new PublicationList();
+});

@@ -2,7 +2,7 @@
   
   @push('custom-scripts')
     <script src="/js/flowbite/flowbite.min.js"></script>
-    <script src="/js/publications/show.js"></script>
+    <script src="/js/publications/show.js?v={{time()}}"></script>
   @endpush
 
   @push('custom-css')
@@ -11,7 +11,7 @@
 
 <div class="bg-gray-900 text-white flex flex-col lg:flex-row h-screen w-full relative">
   <!-- Botón de cierre -->
-  <button type="button" class="absolute top-4 right-4 bg-gray-700 text-white rounded-full p-2 focus:outline-none">
+  <button type="button" id="buttonCloseView" class="absolute top-4 right-4 bg-gray-700 text-white rounded-full p-2 focus:outline-none">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>

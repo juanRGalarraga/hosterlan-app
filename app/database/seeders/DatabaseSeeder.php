@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Owner;
 use App\Models\Publication;
 use App\Models\Picture;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +24,7 @@ class DatabaseSeeder extends Seeder
         
         User::factory()->count(1)->create([
             'email' => 'test@example.com',
-            'password' => '$2y$12$tVvrEzxs6KEi7Uc6cEJs7uoG4OZ5w0eGCqWEwX7geR5xY4/FL2v5u'
+            'password' => Hash::make('password')
         ]);
     }
 }
