@@ -15,18 +15,10 @@
         <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.darkseries.min.css">
     @endpush
 
-    <div class="text-white flex flex-row p-3">
-        <div class="basis-1/2" id="description">
-            <form id="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="text-white flex flex-row p-3 space-x-4 bg-gray-800 min-h-screen">
+        <div class="w-1/2 bg-gray-900 p-6 rounded-lg" id="description">
+            <form id="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
-                <div id="publisher"></div>
-                <div id="picture">
-                    <div id="dropzone">
-                        <input type="text" name="nico" id="nico" accept="nico">
-                    </div>
-                </div>
-
-
 
                 <div class="flex flex-row max-w-2xl mx-auto space-x-3 justify-center mb-3">
                     <x-form.datepicker-input name="start_date" :label="__('Desde')" id="start_date"></x-form.datepicker-input>
@@ -45,23 +37,24 @@
 
                 <x-form.minimal-input name="price" id="monthPrice" type="number" label="{{__('Precio')}}"></x-form.minimal-input>
 
-                <x-form.minimal-input name="ubication" id="propertyAddress" type="text" label="{{__('Dirección de la propiedad')}}"></x-form.minimal-input>
-                
-                <x-form.minimal-input name="description" id="propertyDescription" type="text" label="{{__('Descripción del alquiler')}}"></x-form.minimal-input>
+                <x-form.minimal-input name="ubication" id="propertyAddress" type="text" label="{{__('Ubicación de la propiedad')}}"></x-form.minimal-input>
 
+                <div>
+                    <label for="propertyDescription" class="block text-sm font-medium text-gray-300">{{__('Descripción del alquiler')}}</label>
+                    <textarea name="description" id="propertyDescription" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600"></textarea>
+                </div>
                 <x-form.select-input name="pets" id="pets" label="{{__('Se aceptan mascotas')}}">
                     <x-form.select-input-option value="yes">Sí</x-form.select-input-option>
                     <x-form.select-input-option value="no">No</x-form.select-input-option>
                 </x-form.select-input>
 
-                <x-form.minimal-input name="image" id="image" type="file" accept="image/*" label="{{__('imagen de la propiedad')}}"></x-form.minimal-input>
+                <x-form.minimal-input name="image" id="image" type="file" accept="image/*" label="{{__('Imagen')}}"></x-form.minimal-input>
 
-                <button type="submit" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out" title="Publicar">{{ __('Publicar') }}</button>
+                <button type="submit" class="inline-flex items-center justify-center p-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:bg-blue-700 transition duration-150 ease-in-out">{{ __('Publicar') }}</button>
             </form>
         </div>
-        <div id="preview" class="basis-1/2">
-           
+        <div id="preview" class="w-1/2 bg-gray-900 p-6 rounded-lg text-white">
+            
         </div>
     </div>
 </x-app-layout>
-

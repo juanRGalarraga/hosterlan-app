@@ -26,9 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         preview.innerHTML = `
-            <h2>Vista previa</h2>
             <div><strong>Descripción:</strong> ${description}</div>
-            <div><strong>Precio:</strong> ${price} $</div>
+            <div><strong>Precio:</strong> $${price}</div>
             <div><strong>Ubicación:</strong> ${ubication}</div>
             <div><strong>Número de habitaciones:</strong> ${roomCount}</div>
             <div><strong>Número de baños:</strong> ${bathCount}</div>
