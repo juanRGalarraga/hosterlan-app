@@ -1,16 +1,63 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+#description form {
+    background-color: #2d3748;
+    padding: 2rem;
+    border-radius: 0.375rem;
+}
+
+#description label {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#description input, #description select, #description textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 0.375rem;
+    background-color: #edf2f7;
+    color: #1a202c;
+}
+
+#description button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    background-color: #4299e1;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#description button:hover {
+    background-color: #3182ce;
+}
+
 #preview {
-    background-color: #1a202c;
-    padding: 20px;
-    border-radius: 10px;
+    width: 100%;
+    padding: 2rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 0.375rem;
+    background-color: #2d3748;
+    color: #edf2f7;
 }
 
 #preview h2 {
-    color: #fff;
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
 }
 
-#preview p {
-    color: #cbd5e0;
-    margin-bottom: 5px;
+#preview div {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+#preview img {
+    max-width: 100%;
+    border-radius: 0.375rem;
+    margin-top: 1rem;
 }
