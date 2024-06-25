@@ -1,5 +1,4 @@
 <x-app-layout>
-
     @push('calendar-js')
         <script src="/js/calendar/jsCalendar.min.js"></script>
         <script src="/js/calendar/jsCalendar.lang.es.js"></script>
@@ -25,7 +24,7 @@
         @include('publications.index-filters')
         
         <!-- <div class="flex flex-wrap justify-center mt-3 w-full"> -->
-        <div class="grid grid-cols-3 gap-2" id="publicationMainlist">
+        <div class="grid grid-cols-3 lg:grid-cols-4 gap-2" id="publicationMainlist">
             @include('publications.list')
         </div>
     </div>

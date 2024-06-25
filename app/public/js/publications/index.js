@@ -66,7 +66,8 @@ class PublicationList {
     }
   
     // With View Transitions:
-    document.startViewTransition(() => this.viewPublication(element.id));
+    const transition = document.startViewTransition(() => this.viewPublication(element.id));
+
   }
 
 }

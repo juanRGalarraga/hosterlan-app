@@ -7,6 +7,7 @@
 
   @push('custom-css')
     <link  rel="stylesheet" href="/css/swiper/swiper-bundle.min.css"/>
+    <link  rel="stylesheet" href="/css/publications/show.css?v={{time()}}"/>
   @endpush
 
 <div class="bg-gray-900 text-white flex flex-col lg:flex-row h-screen w-full relative">
