@@ -12,7 +12,7 @@ class PublicationList {
   inputPentType = null;
   inputPithPets = null;
   listId = 'publicationMainlist';
-  KEY_ENTER = 13;
+  static KEY_ENTER = "Enter";
 
   constructor(){
     this.loadOnClickToShow(this.listId);
@@ -49,20 +49,33 @@ class PublicationList {
   }
   
   initEvents(){
+    let thisObj = this;
     this.search.onkeyup = function(ev){
-      if(ev.key == this.KEY_ENTER) {
-        
+      if(ev.key == PublicationList.KEY_ENTER) {
+        thisObj.getList({search:ev.target.value})
       }
     }
   }
 
 
-  getList(){
+  getList(dataToSend = null){
+
+    const url = 'publications/list';
+    const params = dataToSend;
+
+    // Convert parameters to a query string
+    const queryString = new URLSearchParams(params).toString();
+
+    // Append query string to the URL
+    const fullUrl = `${url}?${queryString}`;
+
     let publicationMainlist = document.getElementById('publicationMainlist');
-    fetch('publications/render')
+    fetch(fullUrl, dataToSend)
       .then((respuesta) => respuesta.blob())
       .then(blob => {
-        publicationMainlist = blob.text();
+        blob.text().then(text => {
+          publicationMainlist.innerHTML = text;
+        });
       });
   }
 

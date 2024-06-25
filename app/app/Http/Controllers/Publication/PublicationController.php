@@ -22,18 +22,31 @@ class PublicationController extends Controller
     {
         $publications = Publication::latest()->paginate(25);
         $html = view("publications.index", compact('publications'));
-        // dd($html);
         return $html;
-        // return response()->json([
-        //     'status' => 200,
-        //     'html' => $html
-        // ]);
     }
 
-    public function getList(){
-        $publications = Publication::latest()->paginate(25);
+    public function getList(Request $request){
+        // $request->validate(['search' => 'string|max:250']);
+        
+        $publication = new Publication();
+        $queryBuilder = $publication->newQuery();
+        
+        $searchValue = $request->input('search');
+        // dump($searchValue);
+        if(is_string($searchValue) && !empty($searchValue)){
+            $queryBuilder
+            ->where('title', 'like', "%$searchValue%")
+            ->orWhere('description', 'like', "%$searchValue%")
+            ->orWhere('ubication', 'like', "%$searchValue%");
+        }
+
+// "select * from `publications` where `title` like '%adsd%' or `description` like '%adsd%' or `ubication` like '%adsd%' order by `created_at` desc limit 25" // app\Http\Controllers\Publication\PublicationController.php:44
+
+        $publications = $queryBuilder->limit(25)->orderBy('created_at', 'desc')->get();
+
+        // dd($queryBuilder->toRawSql());
+        // dd($publications);
         $html = view("publications.list", compact('publications'))->render();
-        // dd($html);
         return $html;
     }
 
