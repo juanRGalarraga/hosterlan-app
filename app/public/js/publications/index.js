@@ -12,6 +12,7 @@ class PublicationList {
   inputPentType = null;
   inputPithPets = null;
   listId = 'publicationMainlist';
+  KEY_ENTER = 13;
 
   constructor(){
     this.loadOnClickToShow(this.listId);
@@ -43,7 +44,18 @@ class PublicationList {
     this.bathroomCount = document.getElementById('bathroomCount');
     this.rentType = document.getElementById('rentType');
     this.withPets = document.getElementById('withPets');
+
+    this.initEvents();
   }
+  
+  initEvents(){
+    this.search.onkeyup = function(ev){
+      if(ev.key == this.KEY_ENTER) {
+        
+      }
+    }
+  }
+
 
   getList(){
     let publicationMainlist = document.getElementById('publicationMainlist');
