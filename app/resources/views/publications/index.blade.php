@@ -13,6 +13,7 @@
 
     @push('custom-scripts')
     <script src="/js/publications/index.js?v={{time()}}"></script>
+    <script src="/js/publications/index-filter.js?v={{time()}}"></script>
     @endpush
 
     <x-slot:header>

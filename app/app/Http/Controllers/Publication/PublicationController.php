@@ -7,7 +7,7 @@ use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use Illuminate\Http\Request;
-
+use App\Enums\Publication\PublicationState;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -32,7 +32,6 @@ class PublicationController extends Controller
         $queryBuilder = $publication->newQuery();
         
         $searchValue = $request->input('search');
-        // dump($searchValue);
         if(is_string($searchValue) && !empty($searchValue)){
             $queryBuilder
             ->where('title', 'like', "%$searchValue%")
@@ -40,7 +39,19 @@ class PublicationController extends Controller
             ->orWhere('ubication', 'like', "%$searchValue%");
         }
 
-// "select * from `publications` where `title` like '%adsd%' or `description` like '%adsd%' or `ubication` like '%adsd%' order by `created_at` desc limit 25" // app\Http\Controllers\Publication\PublicationController.php:44
+        $stateValue = $request->input('state');
+        if(!is_null(PublicationState::tryFrom($stateValue))){
+            $queryBuilder
+                ->where('state', $stateValue);
+        }
+
+        $availableFrom = $request->input('available_from');
+        dd($availableFrom);
+        // if(){
+        //     $queryBuilder
+        //         ->where('state', $stateValue);
+        // }
+
 
         $publications = $queryBuilder->limit(25)->orderBy('created_at', 'desc')->get();
 

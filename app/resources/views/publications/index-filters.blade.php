@@ -17,8 +17,8 @@
 
         <x-form.label text="Disponibilidad"></x-form.label>
         <div class="flex flex-row mb-3">
-            <x-form.datepicker-input id="available_from" :label="__('Desde')" class="text-white" value=""></x-form.datepicker-input>
-            <x-form.datepicker-input id="available_to" :label="__('Hasta')" class="text-white ml-2" value=""></x-form.datepicker-input>
+            <x-form.datepicker-input id="available_from" name="available_from" :label="__('Desde')" class="text-white" value=""></x-form.datepicker-input>
+            <x-form.datepicker-input id="available_to" name="available_to" :label="__('Hasta')" class="text-white ml-2" value=""></x-form.datepicker-input>
         </div>
 
         <x-form.label text="Precio"></x-form.label>
@@ -48,7 +48,7 @@
             @endforeach
         </x-form.select-input>
 
-        <x-form.toggle-switch label="{{_('Permite mascotas')}}" name="withPets" class="withPets" value="true"></x-form.toggle-switch>
+        <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets" value="true"></x-form.toggle-switch>
     </form>
 </div>
 

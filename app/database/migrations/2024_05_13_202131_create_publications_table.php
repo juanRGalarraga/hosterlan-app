@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('ubication');
             $table->text('description');
             $table->integer('room_count');
+            $table->integer('bathroom_count');
             $table->boolean('pets');
             $table->integer('number_people');
+            $table->string('state', 150);
             $table->foreignIdFor(RentType::class);
             $table->timestamps();
         });

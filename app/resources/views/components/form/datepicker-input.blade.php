@@ -2,7 +2,7 @@
 <div class="w-fit">
     <label for="availableDayFrom" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{$label}}</label>
     <div {{ $attributes->merge(['class' => 'wrapper-datepicker']) }}>
-        <input data-class="black-theme rounded-lg" class="w-full"  data-datepicker/>
+        <input {{ $attributes->merge(['data-class' => 'black-theme rounded-lg', 'class'=>"w-full", "data-datepicker" => ""]) }}/>
     </div>
 </div>
 
