@@ -59,7 +59,7 @@ class PublicationList {
 
 
   getList(dataToSend = null){
-
+    let thisObj = this;
     const url = 'publications/list';
     const params = dataToSend;
 
@@ -75,6 +75,7 @@ class PublicationList {
       .then(blob => {
         blob.text().then(text => {
           publicationMainlist.innerHTML = text;
+          thisObj.loadOnClickToShow(thisObj.listId);
         });
       });
   }
