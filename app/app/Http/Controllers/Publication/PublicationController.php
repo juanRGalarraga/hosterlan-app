@@ -46,7 +46,7 @@ class PublicationController extends Controller
         }
 
         $availableFrom = $request->input('available_from');
-        dd($availableFrom);
+        
         // if(){
         //     $queryBuilder
         //         ->where('state', $stateValue);

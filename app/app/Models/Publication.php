@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Picture;
+use Carbon\Carbon;
 
 class Publication extends Model
 {
@@ -21,6 +22,10 @@ class Publication extends Model
 
     public function pictures(){
       return $this->hasMany(Picture::class);
+    }
+    
+    public function rentType(){
+      return $this->hasOne(RentType::class);
     }
 
     public function getUrlPicture(int $id){
@@ -41,5 +46,12 @@ class Publication extends Model
         }
       }
       return $filename;
+    }
+
+    public function getFormattedUpdateAt(){
+      if($this->exists()){
+        return Carbon::createFromTimestamp($this->created_at)->format('l jS \\of F Y h:i:s A');
+      }
+      return '';
     }
 }

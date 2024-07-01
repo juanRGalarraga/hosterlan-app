@@ -13,4 +13,8 @@ class RentType extends Model
       'name',
       'description',
     ];
+
+    public function publications(){
+      return $this->belongsToMany(Publication::class);
+    }
 }
