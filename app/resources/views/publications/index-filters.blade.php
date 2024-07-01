@@ -1,4 +1,4 @@
-<!-- <div class="w-fit hover:cursor-pointer show-scroll"> -->
+
 @php
     use App\Enums\Publication\PublicationState;
     use App\Enums\Publication\RentType;
@@ -56,6 +56,5 @@
 <div class="flex-1 overflow-y-auto pl-4 ml-64" style="max-height: calc(100vh - 60px);">
     <div class="gallery grid grid-cols-3 gap-4">
     </div>
-</div>
-<!-- </div> -->
+
 

@@ -44,11 +44,11 @@
                     <textarea name="description" id="propertyDescription" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600"></textarea>
                 </div>
                 <x-form.select-input name="pets" id="pets" label="{{__('Se aceptan mascotas')}}">
-                    <x-form.select-input-option value="yes">Sí</x-form.select-input-option>
+                    <x-form.select-input-option value="si">Sí</x-form.select-input-option>
                     <x-form.select-input-option value="no">No</x-form.select-input-option>
                 </x-form.select-input>
 
-                <x-form.minimal-input name="image" id="image" type="file" accept="image/*" label="{{__('Imagen')}}"></x-form.minimal-input>
+                <input  name="image" id="image" type="file"  multiple="multiple" accept="image/*" label="{{__('Imagen')}}"></input>
 
                 <button type="submit" class="inline-flex items-center justify-center p-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:bg-blue-700 transition duration-150 ease-in-out">{{ __('Publicar') }}</button>
             </form>
