@@ -19,4 +19,12 @@ class Picture extends Model
     public function publication(){
       return $this->belongsTo(Publication::class);
     }
+
+    public function getUrl(){
+      $filename = '';
+      if($this->exists()){
+        $filename = asset("imgs/publications/{$this->publication->id}/{$this->name}.{$this->type}");
+      }
+      return $filename;
+    }
 }

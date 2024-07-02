@@ -48,7 +48,10 @@
             @endforeach
         </x-form.select-input>
 
-        <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets" value="true"></x-form.toggle-switch>
+        <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
+        <br>
+        <br>
+        <br>
     </form>
 </div>
 
