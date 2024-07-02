@@ -2,8 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\RentType;
+use Database\Factories\RentTypeFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\Publication\PublicationState;
+use App\Enums\Publication\RentType as PublicationRentType;
+use App\Models\RentType;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Publication>
@@ -23,9 +26,11 @@ class PublicationFactory extends Factory
             'ubication'=> fake()->address(),
             'description'=>fake()->sentence(),
             'room_count'=>fake()->numberBetween(1,10),
+            'bathroom_count'=>fake()->numberBetween(1,10),
             'pets'=>fake()->boolean(),
-            'rent_type_id' => fake()->randomElement([1,2,3,4,5]),
             'number_people'=> fake()->numberBetween(1,10),
+            'rent_type_id' => fake()->randomKey(PublicationRentType::cases())+1,
+            'state'=> fake()->randomElement(PublicationState::forMigration()),
         ];
     }
 }

@@ -1,23 +1,12 @@
 class PublicationList {
 
   mainCardList = null;
-  inputPearch = null;
-  inputPublicationState = null;
-  inputPvailableFrom = null;
-  inputPvailableTo = null;
-  inputPriceMin = null;
-  inputPriceMax = null;
-  inputPoomCount = null;
-  inputPathroomCount = null;
-  inputPentType = null;
-  inputPithPets = null;
   listId = 'publicationMainlist';
-  KEY_ENTER = 13;
+  static KEY_ENTER = "Enter";
 
   constructor(){
     this.loadOnClickToShow(this.listId);
     this.initInputsFilter();
-    return this;
   }
 
   loadOnClickToShow(listId){
@@ -33,36 +22,26 @@ class PublicationList {
     }
   }
 
-  initInputsFilter(){
-    this.search = document.getElementById('search');
-    this.publication_state = document.getElementById('publication_state');
-    this.available_from = document.getElementById('available_from');
-    this.available_to = document.getElementById('available_to');
-    this.price_min = document.getElementById('price_min');
-    this.price_max = document.getElementById('price_max');
-    this.roomCount = document.getElementById('roomCount');
-    this.bathroomCount = document.getElementById('bathroomCount');
-    this.rentType = document.getElementById('rentType');
-    this.withPets = document.getElementById('withPets');
 
-    this.initEvents();
-  }
-  
-  initEvents(){
-    this.search.onkeyup = function(ev){
-      if(ev.key == this.KEY_ENTER) {
-        
-      }
-    }
-  }
+  getList(dataToSend = null){
+    let thisObj = this;
+    const url = 'publications/list';
+    const params = dataToSend;
 
+    // Convert parameters to a query string
+    const queryString = new URLSearchParams(params).toString();
 
-  getList(){
+    // Append query string to the URL
+    const fullUrl = `${url}?${queryString}`;
+
     let publicationMainlist = document.getElementById('publicationMainlist');
-    fetch('publications/render')
+    fetch(fullUrl, dataToSend)
       .then((respuesta) => respuesta.blob())
       .then(blob => {
-        publicationMainlist = blob.text();
+        blob.text().then(text => {
+          publicationMainlist.innerHTML = text;
+          thisObj.loadOnClickToShow(thisObj.listId);
+        });
       });
   }
 
@@ -81,12 +60,4 @@ class PublicationList {
     const transition = document.startViewTransition(() => this.viewPublication(element.id));
 
   }
-
 }
-
-
-
-
-document.addEventListener('DOMContentLoaded', ev => {
-  new PublicationList();
-});

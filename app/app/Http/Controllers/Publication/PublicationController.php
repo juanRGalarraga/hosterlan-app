@@ -7,7 +7,7 @@ use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use Illuminate\Http\Request;
-
+use App\Enums\Publication\PublicationState;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -22,18 +22,42 @@ class PublicationController extends Controller
     {
         $publications = Publication::latest()->paginate(25);
         $html = view("publications.index", compact('publications'));
-        // dd($html);
         return $html;
-        // return response()->json([
-        //     'status' => 200,
-        //     'html' => $html
-        // ]);
     }
 
-    public function getList(){
-        $publications = Publication::latest()->paginate(25);
+    public function getList(Request $request){
+        // $request->validate(['search' => 'string|max:250']);
+        
+        $publication = new Publication();
+        $queryBuilder = $publication->newQuery();
+        
+        $searchValue = $request->input('search');
+        if(is_string($searchValue) && !empty($searchValue)){
+            $queryBuilder
+            ->where('title', 'like', "%$searchValue%")
+            ->orWhere('description', 'like', "%$searchValue%")
+            ->orWhere('ubication', 'like', "%$searchValue%");
+        }
+
+        $stateValue = $request->input('state');
+        if(!is_null(PublicationState::tryFrom($stateValue))){
+            $queryBuilder
+                ->where('state', $stateValue);
+        }
+
+        $availableFrom = $request->input('available_from');
+        
+        // if(){
+        //     $queryBuilder
+        //         ->where('state', $stateValue);
+        // }
+
+
+        $publications = $queryBuilder->limit(25)->orderBy('created_at', 'desc')->get();
+
+        // dd($queryBuilder->toRawSql());
+        // dd($publications);
         $html = view("publications.list", compact('publications'))->render();
-        // dd($html);
         return $html;
     }
 
