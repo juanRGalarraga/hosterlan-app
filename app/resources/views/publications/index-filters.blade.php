@@ -3,7 +3,7 @@
     use App\Enums\Publication\PublicationState;
     use App\Enums\Publication\RentType;
 @endphp
-<div class="w-64 px-4 hover:pr-3 overflow-y-auto fixed-filters-zone show-scroll">
+<div class="w-64 px-4 overflow-y-auto fixed-filters-zone show-scroll">
     <form name="formPublicationFilters" id="formPublicationFilters">
         @csrf
         <x-form.minimal-input label="Buscar"

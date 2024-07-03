@@ -17,7 +17,7 @@
     </x-slot:header>
 
     <div class="flex flex-row">
-        <div class="w-1/4 px-4 overflow-y-auto fixed-filters-zone show-scroll" id="description">
+        <div class="w-64 px-4 overflow-y-auto fixed-filters-zone show-scroll space-x-2" id="description">
             @include('publications.create-form')
         </div>
         <div id="preview" class="w-1/2 bg-gray-900 p-6 rounded-lg text-white">
