@@ -5,7 +5,7 @@
         <script src="/js/calendar/jsCalendar.datepicker.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.min.css">
         <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.darkseries.min.css">
-        <script src="/js/publications/create.js"></script>
+        <script src="/js/publications/create.js?v={{time()}}"></script>
     @endpush
 
     @push('custom-css')
@@ -21,7 +21,7 @@
             @include('publications.create-form')
         </div>
         <div id="preview" class="w-1/2 bg-gray-900 p-6 rounded-lg text-white">
-            
+            @include('publications.create-preview')
         </div>
     </div>
 </x-app-layout>
