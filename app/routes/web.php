@@ -34,4 +34,8 @@ Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.
 Route::get('publications/list', [PublicationController::class, 'getList'])->name('publication.list');
 Route::resource('publications', PublicationController::class);
 
+Route::get('/test', function(){
+    return view('test');
+});
+
 require __DIR__.'/auth.php';
