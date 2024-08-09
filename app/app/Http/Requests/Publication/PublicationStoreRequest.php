@@ -26,9 +26,11 @@ class PublicationStoreRequest extends FormRequest
             'title' => 'required|string|max:150',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
-            'room_count' => 'integer|min:0',
-            'pets' => 'boolean',
-            'numbre_people' => 'integer|min:1'
+            'room_count' => 'required|integer|min:0',
+            'bathroom_count' => 'required|integer|min:0',
+            'pets' => 'required|boolean',
+            'numbre_people' => 'required|integer|min:1',
+            'rent_type' => 'required|integer',
         ];
     }
 }

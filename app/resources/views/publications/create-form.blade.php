@@ -1,11 +1,20 @@
-@php
+    @php
     use App\Enums\Publication\RentType;
+
+    $optRoomCount = 4;
+    $optBathroomCount = 4;
+    $optNumberPeople = 10;
 @endphp
 
-<div class="flex flex-col" id="description">
-    <section class="space-x-2 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone px-5 ">
-        <form id="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
+<div class="flex flex-col w-1/5 md:w-2/5 lg:w-1/5" id="description">
+    <section class="space-x-2 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone px-5 my-h-screen pt-3">
+        <form id="publicationForm"  action="{{ route('publications.store') }}" method="post">
             @csrf
+            <h3 class="text-white font-bold text-lg mb-3">Nueva publicación</h3>
+
+            <x-form.minimal-input name="title" id="title" type="text" placeholder="Título de la publicación" class="mb-3"></x-form.minimal-input>
+            <x-input-error :messages="$errors->first('title')" />
+
             <x-form.label text="Disponibilidad"></x-form.label>
             <div class="flex flex-row mb-3">
                 <x-form.datepicker-input id="available_from" name="available_from" :label="__('Desde')" class="text-white" value=""></x-form.datepicker-input>
@@ -19,49 +28,43 @@
             </x-form.select-input>
         
             <x-form.select-input id="roomCount" name="roomCount" label="{{__('Habitaciones')}}" class="mb-3">
-                <x-form.select-input-option value="1">1</x-form.select-input-option>
-                <x-form.select-input-option value="2">2</x-form.select-input-option>
-                <x-form.select-input-option value="3">3</x-form.select-input-option>
-                <x-form.select-input-option value="4">4</x-form.select-input-option>
+                @for ($i=1;$i<=$optRoomCount;$i++)
+                    <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
+                @endfor
             </x-form.select-input>
         
             <x-form.select-input id="bathroomCount" name="bathroomCount" label="{{__('Baños')}}" class="mb-3">
-                <x-form.select-input-option value="1">1</x-form.select-input-option>
-                <x-form.select-input-option value="2">2</x-form.select-input-option>
-                <x-form.select-input-option value="3">3</x-form.select-input-option>
-                <x-form.select-input-option value="4">4</x-form.select-input-option>
+            @for ($i=1;$i<=$optBathroomCount;$i++)
+                    <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
+                @endfor
+            </x-form.select-input>
+
+            <x-form.select-input id="number_people" name="number_people" label="{{__('Máx. personas')}}" class="mb-3">
+            @for ($i=1;$i<=$optNumberPeople;$i++)
+                    <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
+                @endfor
             </x-form.select-input>
         
-            <x-form.minimal-input name="price" id="price" type="number" label="{{__('Precio por noche')}}" class="mb-3"></x-form.minimal-input>
-        
+            <x-form.minimal-input name="price" id="price" type="text" label="{{__('Precio por noche')}}" class="mb-3"></x-form.minimal-input>
+            <x-input-error :messages="$errors->first('price')" />
+
             <x-form.minimal-input name="address" id="address" type="text" label="{{__('Ubicación de la propiedad')}}" class="mb-3"></x-form.minimal-input>
-        
+            <x-input-error :messages="$errors->first('address')" />
+
+
             <div>
                 <label for="propertyDescription" class="block text-sm font-medium mb-3 text-gray-300">{{__('Descripción del alquiler')}}</label>
                 <textarea name="description" id="propertyDescription" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600"></textarea>
             </div>
+            <x-input-error :messages="$errors->first('description')" />
         
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
             <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="withPets mb-[10-rem]" value="true"></x-form.toggle-switch>
             
             <!-- <input  name="image" id="image" type="file"  multiple="multiple" accept="image/*" label="{{__('Imagen')}}"></input> -->
     
         </form>
     </section>
-    <div class="bottom-0 relative text-center justify-center mx-0">
+    <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
         <button form="publicationForm" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
     </div>
 </div>

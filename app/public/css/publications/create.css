@@ -78,6 +78,6 @@
 .my-max-h-screen{
     max-height: calc(100vh - 70px);
 }
-.my-max-h-screen-preview{
-    max-height: calc(100vh - 80px);
+.my-h-screen{
+    height: calc(100vh - 70px);
 }

@@ -15,6 +15,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script type="text/javascript" src="/js/input.js"></script>
 
         @stack('calendar-js')
         @stack('custom-css')
@@ -41,6 +42,7 @@
                 {{ $slot }}
             </main>
         </div>
+        
         @stack('custom-scripts')
     </body>
 </html>
