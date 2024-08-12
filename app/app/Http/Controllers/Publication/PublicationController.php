@@ -74,7 +74,7 @@ class PublicationController extends Controller
      */
     public function store(PublicationStoreRequest $request)
     {
-        Publication::create($request->all());
+        Publication::create($request->validated());
 
         return redirect()
         ->route('publications.index')

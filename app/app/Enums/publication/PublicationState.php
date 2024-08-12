@@ -10,4 +10,3 @@ enum PublicationState: string {
     case Available = 'Disponible';
     case Occupied = 'Ocupado';
 }
-
