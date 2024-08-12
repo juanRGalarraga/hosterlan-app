@@ -11,13 +11,27 @@ class Input{
 
     checkFormatNumber(){
         this.input.onkeydown = (event) => {
-            event.preventDefault();
-            let userInput = event.target.value;
-            let itHaveOnlyDigits = /^\d{1,20}\.*\d{0,2}$/.test(userInput);
+            // Define tu expresión regular aquí
+            const regex = /^\d{1,8}\.*\d{0,2}$/; // Ejemplo: solo permite letras y números
+
+            // Captura el valor actual del input
+            let currentValue = event.target.value;
+
+            // Captura la tecla que el usuario presiona
+            let keyPressed = event.key;
             
-            if(!itHaveOnlyDigits){
-                event.target.value = userInput.substring(0, userInput.length-1);
+            if(!["Backspace", "Enter", "Tab"].includes( keyPressed )){
+            
+                // Genera el nuevo valor si se permite escribir la tecla presionada
+                let newValue = currentValue + keyPressed;
+    
+                // Verifica si el nuevo valor cumple con la expresión regular
+                if (!regex.test(newValue)) {
+                    event.preventDefault(); 
+                }
+
             }
+
         }
     }
 }
