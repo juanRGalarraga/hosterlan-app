@@ -10,12 +10,13 @@ class Input{
     }
 
     checkFormatNumber(){
-        this.input.onchange = (event) => {
-            let userInput = parseInt(event.target.value);
-            let pattern = new RegExp('/^\d{3,8}\.*\d{0,2}$/', 'g');
-            let itHaveOnlyDigits = pattern.test(userInput);
+        this.input.onkeydown = (event) => {
+            event.preventDefault();
+            let userInput = event.target.value;
+            let itHaveOnlyDigits = /^\d{1,20}\.*\d{0,2}$/.test(userInput);
+            
             if(!itHaveOnlyDigits){
-                event.target.value = '';
+                event.target.value = userInput.substring(0, userInput.length-1);
             }
         }
     }
