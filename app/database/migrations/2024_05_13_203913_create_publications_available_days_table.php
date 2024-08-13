@@ -13,7 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('publications_available_days', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('publication_id')->primary();
+            $table->foreign('publication_id')->references('id')->on('publications')->onDelete('cascade');
             $table->datetime('since');
             $table->datetime('to');
             $table->enum('state', PublicationState::forMigration())->default(PublicationState::Available->value);
