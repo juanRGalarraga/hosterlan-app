@@ -16,6 +16,8 @@ class Publication extends Model
       'ubication',
       'description',
       'room_count',
+      'bathroom_count',
+      'rent_type',
       'pets',
       'number_people'
     ];

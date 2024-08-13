@@ -63,12 +63,21 @@
 }
 */
 .fixed-filters-zone{
-    max-height: calc(100vh - 60px); 
+    /* max-height: calc(100vh - 60px);  */
     background-color: #101727; 
     scrollbar-color: white #676767;
     scrollbar-width: none;
+    scroll-behavior: smooth;
 }
 
 .show-scroll:hover {
+    /* overflow-y: auto; */
     scrollbar-width: thin !important;
 } 
+
+.my-max-h-screen{
+    max-height: calc(100vh - 70px);
+}
+.my-h-screen{
+    height: calc(100vh - 70px);
+}
