@@ -22,15 +22,15 @@ class PublicationStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => 'required|decimal:8,2',
             'title' => 'required|string|max:150',
+            'price' => 'required|decimal:8,2',
+            'rent_type' => 'string',
+            'room_count' => 'integer',
+            'bathroom_count' => 'integer',
+            'numbre_people' => 'required|integer',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
-            'room_count' => 'required|integer|min:0',
-            'bathroom_count' => 'required|integer|min:0',
-            'pets' => 'required|boolean',
-            'numbre_people' => 'required|integer|min:1',
-            'rent_type' => 'required|integer',
+            'pets' => 'boolean|nullable',
         ];
     }
 }
