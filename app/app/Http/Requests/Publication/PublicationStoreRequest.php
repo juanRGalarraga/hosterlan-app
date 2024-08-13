@@ -23,14 +23,14 @@ class PublicationStoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:150',
-            'price' => 'required|decimal:8,2',
-            'rent_type' => 'string',
+            'price' => 'required|integer|decimal:0,2',
+            'rent_type_id' => 'required|integer',
             'room_count' => 'integer',
             'bathroom_count' => 'integer',
-            'numbre_people' => 'required|integer',
+            'number_people' => 'required|integer',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
-            'pets' => 'boolean|nullable',
+            'pets' => 'in:1,0',
         ];
     }
 }

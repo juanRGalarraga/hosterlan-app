@@ -8,7 +8,8 @@ use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+
 class PublicationController extends Controller
 {
     public function __construct()
@@ -74,16 +75,15 @@ class PublicationController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(PublicationStoreRequest $request)
-    {   
-        
-        // $validator = Validator::make($request->all(), $request->rules());
+    {
+        $validator = Validator::make($request->all(), $request->rules());
 
-        if($request->fails()){
+        if($validator->fails()){
             $request->flash();
             return redirect()
+            ->withErrors($validator->errors(), 'validates')
             ->withInput();
         }
- 
         
         Publication::create($request->all());
         

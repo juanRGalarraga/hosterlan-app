@@ -21,26 +21,26 @@
                 <x-form.datepicker-input id="available_to" value="{{old('available_to')}}" name="available_to" :label="__('Hasta')" class="text-white ml-[2px]" value=""></x-form.datepicker-input>
             </div>
         
-            <x-form.select-input name="rent_type" id="rentType" value="{{old('rentType')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3">
-                @foreach(RentType::cases() as $rentType)
-                    <x-form.select-input-option value="{{$rentType->name}}">{{$rentType->value}}</x-form.select-input-option>
+            <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3">
+                @foreach(RentType::cases() as $key => $rentType)
+                    <x-form.select-input-option value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
                 @endforeach
             </x-form.select-input>
         
-            <x-form.select-input id="roomCount" value="{{old('roomCount')}}" name="roomCount" label="{{__('Habitaciones')}}" class="mb-3">
+            <x-form.select-input id="room_count" value="{{old('room_count')}}" name="room_count" label="{{__('Habitaciones')}}" class="mb-3">
                 @for ($i=1;$i<=$optRoomCount;$i++)
                     <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
                 @endfor
             </x-form.select-input>
         
-            <x-form.select-input id="bathroomCount" value="{{old('bathroomCount')}}" name="bathroomCount" label="{{__('Baños')}}" class="mb-3">
-            @for ($i=1;$i<=$optBathroomCount;$i++)
+            <x-form.select-input id="bathroom_count" value="{{old('bathroom_count')}}" name="bathroom_count" label="{{__('Baños')}}" class="mb-3">
+                @for ($i=1;$i<=$optBathroomCount;$i++)
                     <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
                 @endfor
             </x-form.select-input>
 
             <x-form.select-input id="number_people" value="{{old('number_people')}}" name="number_people" label="{{__('Máx. personas')}}" class="mb-3">
-            @for ($i=1;$i<=$optNumberPeople;$i++)
+                @for ($i=1;$i<=$optNumberPeople;$i++)
                     <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
                 @endfor
             </x-form.select-input>
@@ -48,17 +48,17 @@
             <x-form.minimal-input name="price" id="price" value="{{old('price')}}" type="text" label="{{__('Precio por noche')}}" class="mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('price')" />
 
-            <x-form.minimal-input name="address" id="address" value="{{old('address')}}" type="text" label="{{__('Ubicación de la propiedad')}}" class="mb-3"></x-form.minimal-input>
-            <x-input-error :messages="$errors->first('address')" />
+            <x-form.minimal-input name="ubication" id="ubication" value="{{old('ubication')}}" type="text" label="{{__('Ubicación de la propiedad')}}" class="mb-3"></x-form.minimal-input>
+            <x-input-error :messages="$errors->first('ubication')" />
 
 
             <div>
-                <label for="propertyDescription" class="block text-sm font-medium mb-3 text-gray-300">{{__('Descripción del alquiler')}}</label>
-                <textarea name="description" id="propertyDescription" value="{{old('propertyDescription')}}" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600"></textarea>
+                <label for="description" class="block text-sm font-medium mb-3 text-gray-300">{{__('Descripción del alquiler')}}</label>
+                <textarea name="description" id="description" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600">{{old('description')}}</textarea>
             </div>
             <x-input-error :messages="$errors->first('description')" />
         
-            <x-form.toggle-switch label="{{__('Permite mascotas')}}"  name="withPets" id="withPets" class="withPets mb-[10-rem]" value="{{old('withPets')}}"></x-form.toggle-switch>
+            <x-form.toggle-switch label="{{__('Permite mascotas')}}"  name="pets" id="pets" class="withPets mb-[10-rem]" value="{{old('pets', 0)}}"></x-form.toggle-switch>
             
             <!-- <input  name="image" id="image" type="file"  multiple="multiple" accept="image/*" label="{{__('Imagen')}}"></input> -->
     
