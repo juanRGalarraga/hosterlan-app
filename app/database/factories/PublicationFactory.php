@@ -29,7 +29,7 @@ class PublicationFactory extends Factory
             'bathroom_count'=>fake()->numberBetween(1,10),
             'pets'=>fake()->boolean(),
             'number_people'=> fake()->numberBetween(1,10),
-            'rent_type_id' => fake()->randomKey(PublicationRentType::cases())+1,
+            'rent_type_id' => fake()->randomKey(PublicationRentType::cases()),
             'state'=> fake()->randomElement(PublicationState::forMigration()),
         ];
     }
