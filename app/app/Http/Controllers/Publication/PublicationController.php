@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
+use App\Models\Publications_availables_days;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
+use Carbon\Carbon;
+
 class PublicationController extends Controller
 {
     public function __construct()
@@ -46,11 +49,22 @@ class PublicationController extends Controller
         }
 
         $availableFrom = $request->input('available_from');
+        $carbonFecha= new Carbon($availableFrom);
+        if(!is_null($availableFrom)){
+            $request->validated([
+                'available_from' => 'required|date',
+                'available_to' => 'required|date|after_or_equal:available_from',
+            ]);
+
+        }
+            
         
-        // if(){
-        //     $queryBuilder
-        //         ->where('state', $stateValue);
-        // }
+            
+            
+        
+        
+            //fijarme si es un fecha valida y transforma a formato datetime
+    
 
 
         $publications = $queryBuilder->limit(25)->orderBy('created_at', 'desc')->get();
@@ -59,6 +73,22 @@ class PublicationController extends Controller
         // dd($publications);
         $html = view("publications.list", compact('publications'))->render();
         return $html;
+    }
+    public function filterdate(Request $request){
+     $request->validated([
+        'available_from' => 'required|date',
+        'available_to' => 'required|date|after_or_equal:available_from',
+    ]);
+    $availableFrom = $request->input('available_from');
+    $availableTo = $request->input('available_to');
+
+    $carbonFrom=carbon::parse($availableFrom);
+    $carbonTo=carbon::parse($availableTo);
+    //$publications_availables =publications_availables_days::whereBetween('since', [$carbonFrom, $carbonTo])
+                                                                       // ->orWhereBetween('to',[$carbonFrom,$carbonTo])
+                                                                        //->get();
+
+
     }
 
     /**
