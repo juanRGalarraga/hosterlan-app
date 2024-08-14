@@ -12,6 +12,8 @@
             @csrf
             <h3 class="text-white font-bold text-lg mb-3">{{__('Nueva publicación')}}</h3>
 
+            @include('publications.create-form-dropzone')
+
             <x-form.minimal-input name="title" id="title" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
 
