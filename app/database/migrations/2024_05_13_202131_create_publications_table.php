@@ -4,6 +4,7 @@ use App\Models\RentType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\Publication\PublicationState;
 
 return new class extends Migration
 {
@@ -20,10 +21,10 @@ return new class extends Migration
             $table->text('description');
             $table->integer('room_count');
             $table->integer('bathroom_count');
-            $table->boolean('pets');
+            $table->boolean('pets')->default(0);
             $table->integer('number_people');
-            $table->string('state', 150);
-            $table->foreignIdFor(RentType::class);
+            $table->enum('state', PublicationState::forMigration())->default(PublicationState::Available->value);
+            $table->foreignIdFor(RentType::class)->default(0);
             $table->timestamps();
         });
     }

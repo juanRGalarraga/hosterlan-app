@@ -1,6 +1,3 @@
-let form = document.getElementById("publicationForm");
-let preview = document.getElementById("preview");
-
 class PublicationCreate {
     form = null
     formId = "publicationForm"
@@ -29,10 +26,11 @@ class PublicationCreate {
     }
 
     sendForm(){
-        console.log(this.url);
+        let formData = new FormData(this.form);
         
-        fetch(this.url, {
+        fetch(this.form.getAttribute('url'), {
             method: 'POST',
+            body: formData
         })
         .then(data => {
             console.log(data);

@@ -5,10 +5,16 @@
         <x-form.label text="{{$label}}"></x-form.label>
     @endif
     <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-        <input {{ $attributes->merge(["type"=>"checkbox", "class" => "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"]) }}/>
+        <input {{ $attributes->merge(["type"=>"checkbox", "class" => "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer", 'onclick' => 'toggleSwitchOnChange(this)', 'value' => 0]) }}/>
         <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
     </div>
 </div>
+<script>
+    function toggleSwitchOnChange(inputCheckBox){
+        let newValue = inputCheckBox.getAttribute('value') == 1 ? 0 : 1;
+        inputCheckBox.setAttribute('value', newValue);
+    }
+</script>
 
 <style>
     /* CHECKBOX TOGGLE SWITCH */

@@ -10,6 +10,7 @@ use App\Models\Publications_availables_days;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PublicationController extends Controller
 {
@@ -104,8 +105,17 @@ class PublicationController extends Controller
      */
     public function store(PublicationStoreRequest $request)
     {
-        Publication::create($request->validated());
+        $validator = Validator::make($request->all(), $request->rules());
 
+        if($validator->fails()){
+            $request->flash();
+            return redirect()
+            ->withErrors($validator->errors(), 'validates')
+            ->withInput();
+        }
+        
+        Publication::create($request->all());
+        
         return redirect()
         ->route('publications.index')
         ->withSuccess(__('La publicacion ha sido creada exitosamente'));

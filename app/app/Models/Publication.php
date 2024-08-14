@@ -17,7 +17,7 @@ class Publication extends Model
       'description',
       'room_count',
       'bathroom_count',
-      'rent_type',
+      'rent_type_id',
       'pets',
       'number_people'
     ];
