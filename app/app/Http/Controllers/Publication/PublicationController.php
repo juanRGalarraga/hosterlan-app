@@ -110,7 +110,7 @@ class PublicationController extends Controller
         if($validator->fails()){
             $request->flash();
             return redirect()
-            ->withErrors($validator->errors(), 'validates')
+            ->withErrors($validator->errors())
             ->withInput();
         }
         

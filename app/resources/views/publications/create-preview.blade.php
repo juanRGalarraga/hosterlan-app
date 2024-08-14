@@ -1,6 +1,6 @@
-<div id="preview"  class="flex flex-row bg-slate-600 p-3 rounded-lg text-white w-4/5 mx-8 my-6">
+<div id="preview"  class="flex flex-row bg-slate-600 p-3 rounded-lg text-white sm:w-3/4 md:w-4/5 mx-8 my-6">
     <section class="flex flex-row w-full pt-6">
-        <div id="preview-carousel" class="w-3/5 relative mr-2" data-carousel="slide">
+        <div id="preview-carousel" class="w-3/5 relative mr-2" data-carousel="static">
 
             <div class="bg-slate-900 flex justify-center py-auto items-center w-full h-full -z-10" id="carrousel-placeholder">
                 <span>Vista previa de la publicación</span>
@@ -11,7 +11,7 @@
             </div>
             
             <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse" id="carrousel-slider">
-                <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+                
             </div>
 
             <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev="">
@@ -35,7 +35,7 @@
             </div> -->
         </div>
 
-        <div class="flex flex-col w-2/5 bg-slate-500">
+        <div class="flex flex-col sm:w-3/4 md:w-2/5 bg-slate-500">
             <section class=" w-full bg-slate-500 overflow-y-auto p-2 show-scroll fixed-filters-zone my-h-screen my-max-h-screen">
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Earum dolorum facilis impedit veniam reiciendis a tempore optio aperiam asperiores quos in maxime, inventore, deserunt, debitis eius repellat quidem libero accusamus.
                 Neque suscipit ratione aspernatur velit eveniet, fuga, tenetur itaque deleniti eos modi eius culpa iusto iure hic dolor optio reprehenderit sunt illum provident assumenda. Nesciunt beatae natus necessitatibus tempore ab!
