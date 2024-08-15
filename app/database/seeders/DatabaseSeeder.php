@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         Publication::factory()
             ->has(Picture::factory()->count(4))
-            ->has(new PublicationsAvailablesDaysFactory()->count(4))
+            // ->has(new PublicationsAvailablesDaysFactory()->count(4))
         ->count(25)->create();
 
         
