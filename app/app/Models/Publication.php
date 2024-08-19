@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PublicationsAvailablesDays;
 use App\Models\Picture;
 use Carbon\Carbon;
 
@@ -55,5 +56,8 @@ class Publication extends Model
         return Carbon::createFromTimestamp($this->created_at)->format('l jS \\of F Y h:i:s A');
       }
       return '';
+    }
+    public function publicationsAvailablesDays()
+    {return $this->hasmany(PublicationsAvailablesDays::class);
     }
 }

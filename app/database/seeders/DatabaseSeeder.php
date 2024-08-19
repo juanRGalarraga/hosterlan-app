@@ -8,6 +8,7 @@ use App\Enums\Publication\RentType as PublicationRentType;
 use App\Models\RentType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use App\Models\PublicationsAvailablesDays;
 use App\Models\Owner;
 use App\Models\Publication;
 use App\Models\Picture;
@@ -30,11 +31,11 @@ class DatabaseSeeder extends Seeder
 
         Publication::factory()
             ->has(Picture::factory()->count(4))
-            ->has(new PublicationsAvailablesDaysFactory()->count(4))
-        ->count(25)->create();
+            ->has(PublicationsAvailablesDays::factory()->count(3))
+            ->count(25)->create();
 
-        
-        
+        //PublicationsAvailablesDays::factory()->count(7);
+
         User::factory()->count(1)->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password')
