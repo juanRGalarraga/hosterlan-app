@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class PublicationController extends Controller
 {
@@ -104,8 +106,8 @@ class PublicationController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(PublicationStoreRequest $request)
-    {   
-        dd($request->all());
+    {
+        Debugbar::info($request->all());
         $validator = Validator::make($request->all(), $request->rules());
 
         if($validator->fails()){
@@ -115,10 +117,12 @@ class PublicationController extends Controller
             ->withInput();
         }
 
-        Publication::pictures()->create([
-            'name' => '',
-            'publication_id' => ''
-        ]);
+        // if($request->files())
+
+        // Publication::pictures()->create([
+        //     'name' => '',
+        //     'publication_id' => ''
+        // ]);
         
         Publication::create($request->all());
         

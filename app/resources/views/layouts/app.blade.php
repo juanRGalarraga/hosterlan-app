@@ -18,7 +18,6 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="/js/flowbite/flowbite.min.js"></script>
         <script type="text/javascript" src="/js/input.js"></script>
-        <script type="text/javascript" src="/js/main.js"></script>
 
         @stack('calendar-js')
         @stack('custom-css')

@@ -21,7 +21,9 @@ class PublicationCreate {
 
     loadSendForm(){
         this.buttonToSendForm.onclick = (event) => {
-            this.sendForm();
+            this.preventDefault();
+            this.stopPropagation();
+            // this.sendForm();
         }
     }
 
@@ -43,7 +45,6 @@ class PublicationCreate {
         });
     }
 }
-
 
 let price = new Input('price');
 let publicationDropZone = new PublicationDropzone('dropzone-file');

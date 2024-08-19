@@ -54,7 +54,6 @@
             <x-form.minimal-input name="ubication" id="ubication" value="{{old('ubication')}}" type="text" label="{{__('Ubicación de la propiedad')}}" class="mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('ubication')" />
 
-
             <div>
                 <label for="description" class="block text-sm font-medium mb-3 text-gray-300">{{__('Descripción del alquiler')}}</label>
                 <textarea name="description" id="description" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600">{{old('description')}}</textarea>
@@ -68,6 +67,6 @@
         </form>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button id="buttonPublicationForm" form="publicationForm"  type="button" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
+        <button id="buttonPublicationForm" form="publicationForm"  type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
     </div>
 </div>

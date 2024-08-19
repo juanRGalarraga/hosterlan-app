@@ -34,7 +34,7 @@ class Publication extends Model
       $filename = '';
       if($this->exists()){
         $picture = $this->pictures->find($id);
-        $filename = asset("imgs/publications/{$this->id}/{$picture->name}.{$picture->type}");
+        $filename = asset("publications-pictures/{$this->id}/{$picture->name}.{$picture->type}");
       }
       return $filename;
     }
@@ -44,7 +44,7 @@ class Publication extends Model
       if($this->exists()){
         $picture = $this->pictures[0] ?? '';
         if(!empty($picture)){
-          $filename = asset("imgs/publications/{$this->id}/{$picture->name}.{$picture->type}");
+          $filename = asset("publications-pictures/{$this->id}/{$picture->name}.{$picture->type}");
         }
       }
       return $filename;
