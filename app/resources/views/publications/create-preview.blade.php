@@ -1,49 +1,48 @@
-<!-- <div id="preview" class="w-1/2 bg-gray-900 p-6 rounded-lg text-white"> -->
-
-<dir>
-@foreach ($errors->all() as $error)
-    <li>{{ $error }}</li>
-@endforeach
-</dir>
-<div id="preview"  class="flex flex-row bg-slate-600 p-3 rounded-lg text-white w-4/5 mx-8 my-6">
+<div id="preview"  class="flex flex-row bg-slate-600 p-3 rounded-lg text-white sm:w-3/4 md:w-4/5 mx-8 my-6">
     <section class="flex flex-row w-full pt-6">
-        <div id="preview-carousel" class="w-3/5 relative mr-2" data-carousel="slide">
+        <div id="preview-carousel" class="w-3/5 relative mr-2" data-carousel="static">
 
-            <div class="bg-slate-900 flex justify-center py-auto items-center w-full h-full -z-10">
+            <div class="bg-slate-900 flex justify-center py-auto items-center w-full h-full -z-10 hidden" id="carrousel-placeholder">
                 <span>Vista previa de la publicación</span>
             </div>
             
-            <div class="absolute h-full overflow-hidden rounded-lg">
-                <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src="https://th.bing.com/th/id/OIP.TbPAlPbJ0QQEfFA0pIq4ggHaEO?rs=1&pid=ImgDetMain" alt="...">
+            <div class="relative h-full overflow-hidden rounded-lg py-auto" id="rootCarrousel">
+                <div class="hidden duration-700 ease-in-out" data-carousel-item="active" data-carousel-number="0">
+                    <img src="{{asset('publications-pictures/vistaprevia.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+                </div>
+                <div class="hidden duration-700 ease-in-out" data-carousel-item="" data-carousel-number="1">
+                    <img src="" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
                 </div>
             </div>
             
-            <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-                <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+            <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse" id="carrousel-slider">
+                
             </div>
 
-            <div class="w-full flex flex-row justify-between my-auto z-40 hidden">
-                <button type="button" class="absolute h-full top-0 z-40 left-0 start-0 px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+            <div class="hidden" id="buttonSlideCarousel">
+                <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev="">
                     <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
                         <svg class="w-4 h-4 text-white dark:text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"></path>
                         </svg>
                         <span class="sr-only">Previous</span>
                     </span>
                 </button>
-                <button type="button" class="absolute top-0 h-full z-40 right-0 px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+    
+                <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next="">
                     <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
                         <svg class="w-4 h-4 text-white dark:text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
                         </svg>
                         <span class="sr-only">Next</span>
                     </span>
                 </button>
             </div>
+            <!-- <div class="w-full flex flex-row justify-between my-auto z-40">
+            </div> -->
         </div>
 
-        <div class="flex flex-col w-2/5 bg-slate-500">
+        <div class="flex flex-col sm:w-3/4 md:w-2/5 bg-slate-500">
             <section class=" w-full bg-slate-500 overflow-y-auto p-2 show-scroll fixed-filters-zone my-h-screen my-max-h-screen">
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Earum dolorum facilis impedit veniam reiciendis a tempore optio aperiam asperiores quos in maxime, inventore, deserunt, debitis eius repellat quidem libero accusamus.
                 Neque suscipit ratione aspernatur velit eveniet, fuga, tenetur itaque deleniti eos modi eius culpa iusto iure hic dolor optio reprehenderit sunt illum provident assumenda. Nesciunt beatae natus necessitatibus tempore ab!

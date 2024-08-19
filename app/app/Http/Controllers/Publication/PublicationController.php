@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class PublicationController extends Controller
 {
@@ -105,14 +107,22 @@ class PublicationController extends Controller
      */
     public function store(PublicationStoreRequest $request)
     {
+        Debugbar::info($request->all());
         $validator = Validator::make($request->all(), $request->rules());
 
         if($validator->fails()){
             $request->flash();
             return redirect()
-            ->withErrors($validator->errors(), 'validates')
+            ->withErrors($validator->errors())
             ->withInput();
         }
+
+        // if($request->files())
+
+        // Publication::pictures()->create([
+        //     'name' => '',
+        //     'publication_id' => ''
+        // ]);
         
         Publication::create($request->all());
         
