@@ -2,10 +2,12 @@ class PublicationDropzone {
 
     input = null
     rootCarrousel = 'rootCarrousel'
+    rootButtonSlideCarousel = 'buttonSlideCarousel'
     carrouselPlaceholder = 'carrousel-placeholder'
     carrouselSlider = 'carrousel-slider'
     itemsCarrousel = []
     sliders = []
+    itemsCount = 0
 
     constructor(inputId){
         this.input = document.getElementById(inputId)
@@ -28,6 +30,11 @@ class PublicationDropzone {
             throw new Error("Carrousel slider not found");
         }
 
+        this.rootButtonSlideCarousel = document.getElementById(this.rootButtonSlideCarousel)
+        if(!this.rootButtonSlideCarousel){
+            throw new Error("rootButtonSlideCarousel not found");
+        }
+
         this.loadOnchange();
     }
 
@@ -35,7 +42,7 @@ class PublicationDropzone {
         let thisInstance = this
         this.input.onchange = function(event) {
             thisInstance.convertFileToBase64(event.target.files)
-            .then( base64 => thisInstance.createCarousel(base64) )
+            .then( base64 => { thisInstance.createCarousel(base64); })
             .catch( error => console.error(error) );
         };
     }
@@ -68,27 +75,39 @@ class PublicationDropzone {
     }
 
     createSliderButton() {
-        let itemNumber = this.rootCarrousel.children.length;
-        let isCurrent = (itemNumber == 0) ? 'true' : 'false';
+        let isCurrent = (this.itemsCount == 0) ? 'true' : 'false';
         const carrouselSliderButton = document.createElement('button');
         carrouselSliderButton.type = 'button';
         carrouselSliderButton.className = 'w-3 h-3 rounded-full';
-        carrouselSliderButton.setAttribute('data-carousel-slide-to', itemNumber);
+        carrouselSliderButton.setAttribute('data-carousel-slide-to', this.itemsCount);
         carrouselSliderButton.setAttribute('aria-current', isCurrent);
-        carrouselSliderButton.id = `carousel-slider-${itemNumber}`;
+        carrouselSliderButton.id = `carousel-slider-${this.itemsCount}`;
         this.carrouselSlider.insertAdjacentElement('afterbegin', carrouselSliderButton);    
         return carrouselSliderButton;
     }
 
     createCarouselImage(base64Image) {
-        let itemNumber = this.rootCarrousel.children.length;
-        let isCurrent = (itemNumber == 0) ? 'true' : 'false';
+        let isActive = (this.itemsCount == 0) ? 'active' : '';
+
+        if( [0, 1].includes(this.itemsCount) ){
+            let thisCarouselImage = this.rootCarrousel.querySelector(`div[data-carousel-number="${this.itemsCount}"] > img`);
+            thisCarouselImage.src = base64Image;
+
+            if(this.itemsCount == 1){
+                this.rootButtonSlideCarousel.classList.remove('hidden');
+            }
+
+            this.addItem();
+
+            return;
+        }
+
         const innerDiv = document.createElement('div');
-        innerDiv.id = `carousel-item-${itemNumber}`;
-        innerDiv.className = 'duration-700 ease-in-out absolute inset-0 transition-transform transform translate-x-0 z-30';
-        innerDiv.setAttribute('aria-current', isCurrent);
-        innerDiv.setAttribute('data-carousel-item', '');
-        innerDiv.setAttribute('data-carousel-number', itemNumber);
+        innerDiv.id = `carousel-item-${this.itemsCount}`;
+        innerDiv.className = 'hidden duration-700 ease-in-out';
+        
+        innerDiv.setAttribute('data-carousel-item', isActive);
+        innerDiv.setAttribute('data-carousel-number', this.itemsCount);
         
         const img = document.createElement('img');
         img.className = 'absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2';
@@ -96,9 +115,14 @@ class PublicationDropzone {
         img.alt = '...';
     
         innerDiv.appendChild(img);
-        this.rootCarrousel.insertAdjacentElement('afterbegin', innerDiv);
+        this.rootCarrousel.insertAdjacentElement('beforeend', innerDiv);
+
+        this.addItem();
+
         return innerDiv;
     }
-}
 
-new PublicationDropzone('dropzone-file');
+    addItem(){
+        return this.itemsCount++;
+    }
+}

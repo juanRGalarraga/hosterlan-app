@@ -3,9 +3,8 @@
         <script src="/js/calendar/jsCalendar.min.js"></script>
         <script src="/js/calendar/jsCalendar.lang.es.js"></script>
         <script src="/js/calendar/jsCalendar.datepicker.min.js"></script>
-        <script src="/js/flowbite/flowbite.min.js"></script>
-        <script src="/js/publications/create.js?v={{time()}}"></script>
         <script src="/js/publications/dropzone.js"></script>
+        <script src="/js/publications/create.js?v={{time()}}"></script>
     @endpush
 
     @push('custom-css')

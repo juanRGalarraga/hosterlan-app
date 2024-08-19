@@ -4,6 +4,7 @@
     $optRoomCount = 4;
     $optBathroomCount = 4;
     $optNumberPeople = 10;
+    //Storage::disk('local')->put('example.txt', 'Contents');
 @endphp
 
 <div class="flex flex-col w-1/5 md:w-2/5 lg:w-1/5" id="description">
