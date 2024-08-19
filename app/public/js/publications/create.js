@@ -10,7 +10,7 @@ class PublicationCreate {
         if( !(this.form instanceof HTMLFormElement) ){
             throw new Error("Form not found"); 
         }
-
+        
         this.buttonToSendForm = document.getElementById(this.buttonToSendFormId)
         if( !(this.buttonToSendForm instanceof HTMLButtonElement) ){
             throw new Error("Button not found"); 
@@ -27,6 +27,10 @@ class PublicationCreate {
 
     sendForm(){
         let formData = new FormData(this.form);
+
+        for (let [key, value] of publicationDropZone.formData) {
+            formData.append(key, value);
+        }
         
         fetch(this.form.getAttribute('url'), {
             method: 'POST',
@@ -42,8 +46,11 @@ class PublicationCreate {
 
 
 let price = new Input('price');
+let publicationDropZone = new PublicationDropzone('dropzone-file');
+let publicationCreate = new PublicationCreate();
 
-document.addEventListener("DOMContentLoaded", function () {
-    price.checkFormatNumber();
-    new PublicationDropzone('dropzone-file');
-});
+
+price.checkFormatNumber();
+
+// document.addEventListener("DOMContentLoaded", function () {
+// });

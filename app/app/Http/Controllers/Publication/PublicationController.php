@@ -104,7 +104,8 @@ class PublicationController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(PublicationStoreRequest $request)
-    {
+    {   
+        dd($request->all());
         $validator = Validator::make($request->all(), $request->rules());
 
         if($validator->fails()){
@@ -113,6 +114,11 @@ class PublicationController extends Controller
             ->withErrors($validator->errors())
             ->withInput();
         }
+
+        Publication::pictures()->create([
+            'name' => '',
+            'publication_id' => ''
+        ]);
         
         Publication::create($request->all());
         

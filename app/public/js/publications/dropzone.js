@@ -8,6 +8,7 @@ class PublicationDropzone {
     itemsCarrousel = []
     sliders = []
     itemsCount = 0
+    formData
 
     constructor(inputId){
         this.input = document.getElementById(inputId)
@@ -34,6 +35,8 @@ class PublicationDropzone {
         if(!this.rootButtonSlideCarousel){
             throw new Error("rootButtonSlideCarousel not found");
         }
+        
+        this.formData = new FormData();
 
         this.loadOnchange();
     }
@@ -42,7 +45,10 @@ class PublicationDropzone {
         let thisInstance = this
         this.input.onchange = function(event) {
             thisInstance.convertFileToBase64(event.target.files)
-            .then( base64 => { thisInstance.createCarousel(base64); })
+            .then( base64 => { 
+                thisInstance.createCarousel(base64); 
+                thisInstance.addImageToFormData(base64);
+            })
             .catch( error => console.error(error) );
         };
     }
@@ -65,7 +71,6 @@ class PublicationDropzone {
                 reader.readAsDataURL(file);
             });
         });
-
     }
 
     createCarousel(base64) {
@@ -124,5 +129,13 @@ class PublicationDropzone {
 
     addItem(){
         return this.itemsCount++;
+    }
+
+    addImageToFormData(base64){
+        this.formData.append(`image-${this.itemsCount}`, base64);
+    }
+
+    getFormData(){
+        return this.formData;
     }
 }
