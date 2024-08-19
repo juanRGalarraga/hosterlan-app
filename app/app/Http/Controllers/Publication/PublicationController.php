@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
-use App\Models\Publications_availables_days;
+use App\Models\PublicationsAvailablesDays;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
@@ -50,16 +50,36 @@ class PublicationController extends Controller
             $queryBuilder
                 ->where('state', $stateValue);
         }
-
         $availableFrom = $request->input('available_from');
         $carbonFecha= new Carbon($availableFrom);
+
+        $queryBuilder->leftJoin('publications_available_days', 'publication.id', '=', 'publications_available_days.publication_id');
+        
         if(!is_null($availableFrom)){
             $request->validated([
                 'available_from' => 'required|date',
-                'available_to' => 'required|date|after_or_equal:available_from',
-            ]);
+            ]);  
 
+            $queryBuilder
+                ->where('publications_available_days.since', '>=', $availableFrom);
+                
         }
+        $availableTo=$request->input('available_to');
+        $carbonFecha2= new Carbon($availableTo);
+        if(!is_null($availableTo)){
+            $request->validated([
+                'available_to' => 'required|date|after_or_equal:available_from',
+            ]);  
+
+            $queryBuilder
+                ->where('publications_available_days.to', '<=', $availableTo);
+                
+        }
+
+        
+        
+
+        
             
         
             
@@ -77,22 +97,7 @@ class PublicationController extends Controller
         $html = view("publications.list", compact('publications'))->render();
         return $html;
     }
-    public function filterdate(Request $request){
-     $request->validated([
-        'available_from' => 'required|date',
-        'available_to' => 'required|date|after_or_equal:available_from',
-    ]);
-    $availableFrom = $request->input('available_from');
-    $availableTo = $request->input('available_to');
-
-    $carbonFrom=carbon::parse($availableFrom);
-    $carbonTo=carbon::parse($availableTo);
-    //$publications_availables =publications_availables_days::whereBetween('since', [$carbonFrom, $carbonTo])
-                                                                       // ->orWhereBetween('to',[$carbonFrom,$carbonTo])
-                                                                        //->get();
-
-
-    }
+   
 
     /**
      * Show the form for creating a new resource.

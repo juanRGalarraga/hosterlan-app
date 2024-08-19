@@ -21,9 +21,9 @@ class PublicationsAvailablesDaysFactory extends Factory
     public function definition(): array
     {
         return [
-            'since'=>fake()->datetime(),
-            'to'=>fake()->datetime(),
-            'state'=>fake()->randomElement(['occupied','available'])
+            'since'=>fake()->randomElement(['2024-08-01','2024-08-02','2024-08-03']),
+            'to'=>fake()->randomElement(['2024-08-04','2024-08-05','2024-08-06']),
+            'state'=>fake()->randomElement(['No disponible','Disponible','Ocupado'])
         ];
     }
 }
