@@ -7,20 +7,29 @@
     //Storage::disk('local')->put('example.txt', 'Contents');
 @endphp
 
-<div class="w-1/2 mx-auto" id="description">
-    <section class="space-x-2 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone px-5 my-h-screen pt-3">
+<div class="flex flex-col w-1/2 mx-auto" id="description">
+    <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone">
         <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <h3 class="text-white font-bold text-lg mb-3">{{__('Nueva publicación')}}</h3>
 
             @include('publications.create-form-dropzone')
-            <x-input-error :messages="$errors->images->first('image')" />
+
+            <div class="flex flex-row overflow-x-auto fixed-filters-zone overflow-y-hidden show-scroll mb-3">
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+                <span class="text-white font-bold bg-slate-900 rounded-md py-5 px-2 mb-2">Saraza.jpg</span>
+            </div>
 
             <x-form.minimal-input name="title" id="title" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
 
             <x-form.label text="Disponibilidad"></x-form.label>
-            <div class="flex flex-row mb-3">
+            <div class="flex flex-row mb-3 w-full">
                 <x-form.datepicker-input id="available_from" value="{{old('available_from')}}" name="available_from" :label="__('Desde')" class="text-white" value=""></x-form.datepicker-input>
                 <x-form.datepicker-input id="available_to" value="{{old('available_to')}}" name="available_to" :label="__('Hasta')" class="text-white ml-[2px]" value=""></x-form.datepicker-input>
             </div>
