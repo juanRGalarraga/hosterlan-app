@@ -32,6 +32,7 @@ Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.up
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 Route::get('publications/list', [PublicationController::class, 'getList'])->name('publication.list');
+Route::post('publications/carousel', [PublicationController::class, 'getCarousel'])->name('publication.carousel');
 Route::resource('publications', PublicationController::class);
 
 Route::get('/test', function(){

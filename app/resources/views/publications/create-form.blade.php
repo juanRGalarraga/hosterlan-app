@@ -9,11 +9,12 @@
 
 <div class="flex flex-col w-1/5 md:w-2/5 lg:w-1/5" id="description">
     <section class="space-x-2 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone px-5 my-h-screen pt-3">
-        <form id="publicationForm" name="publicationForm" url="{{ route('publications.store') }}">
+        <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <h3 class="text-white font-bold text-lg mb-3">{{__('Nueva publicación')}}</h3>
 
             @include('publications.create-form-dropzone')
+            <x-input-error :messages="$errors->images->first('image')" />
 
             <x-form.minimal-input name="title" id="title" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
@@ -67,6 +68,6 @@
         </form>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button id="buttonPublicationForm" form="publicationForm"  type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
+        <button form="publicationForm" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
     </div>
 </div>
