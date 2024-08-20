@@ -1,6 +1,7 @@
 <div id="preview"  class="flex flex-row bg-slate-600 p-3 rounded-lg text-white sm:w-3/4 md:w-4/5 mx-8 my-6">
     <section class="flex flex-row w-full pt-6">
         <div id="preview-carousel" class="w-3/5 relative mr-2" data-carousel="static">
+            @include('publications.create-form-carousel')
         </div>
         <div class="flex flex-col sm:w-3/4 md:w-2/5 bg-slate-500">
             <section class=" w-full bg-slate-500 overflow-y-auto p-2 show-scroll fixed-filters-zone my-h-screen my-max-h-screen">

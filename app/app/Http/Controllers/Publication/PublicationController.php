@@ -110,9 +110,13 @@ class PublicationController extends Controller
     }
 
     public function getCarousel(Request $request){
-        $images = $request->input('images');
-        $html = view("publications.create-form-carousel", compact('images'))->render();
-        return $html;
+        $images = $request->file('file');
+        $response[] = [
+            ['src' => asset('publications-pictures/carousel-preview.svg')],
+            ['src' => ''],
+        ];
+
+        return response()->json($response);
     }
 
     /**

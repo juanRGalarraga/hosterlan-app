@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "flowbite": "^2.3.0",
-        "simple-jscalendar": "^1.4.5"
+        "simple-jscalendar": "^1.4.5",
+        "slick-carousel": "^1.8.1"
     }
 }

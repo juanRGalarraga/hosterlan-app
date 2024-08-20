@@ -47,7 +47,5 @@ class PublicationCreate {
 }
 
 let price = new Input('price');
-let publicationDropZone = new PublicationDropzone('dropzone-file');
 
 price.checkFormatNumber();
-publicationDropZone.getCarousel();

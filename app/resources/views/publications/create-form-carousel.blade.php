@@ -1,22 +1,5 @@
-@php
-
-dump($images)
-@endphp
 <div class="relative h-full overflow-hidden rounded-lg py-auto" id="rootCarrousel">      
-    @if($images)
-        @foreach ($images as $image)
-            <div class="hidden duration-700 ease-in-out" data-carousel-item="active" data-carousel-number="0">
-                <img src="{{$image}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-            </div>
-        @endforeach
-    @else
-        <div class="hidden duration-700 ease-in-out" data-carousel-item="active" data-carousel-number="0">
-            <img src="{{asset('publications-pictures/carousel-preview.svg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-        <div class="hidden duration-700 ease-in-out" data-carousel-item data-carousel-number="1">
-            <img src="" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
-    @endif
+
 </div>
 
 <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse" id="carrousel-slider">

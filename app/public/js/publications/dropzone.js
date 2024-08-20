@@ -1,7 +1,7 @@
 class PublicationDropzone {
 
     input = null
-    rootCarrousel = 'preview-carousel'
+    rootCarrousel = 'rootCarrousel'
     rootButtonSlideCarousel = 'buttonSlideCarousel'
     carrouselSlider = 'carrousel-slider'
     itemsCarrousel = []
@@ -20,6 +20,11 @@ class PublicationDropzone {
             throw new Error("Root component image not found");
         }
 
+        this.carrouselSlider = document.getElementById(this.carrouselSlider)
+        if(!this.carrouselSlider){
+            throw new Error("Root component image not found");
+        }
+
         this.form = document.getElementById(this.form)
         if(!this.form){
             throw new Error("Form not found");
@@ -35,7 +40,7 @@ class PublicationDropzone {
         this.input.onchange = function(event) {
             Array.from(event.target.files).forEach(file => {
                 const blobURL = URL.createObjectURL(file);
-                formData.append('image[]', blobURL);
+                formData.append('file', blobURL, 'image');
             });
             thisInstance.getCarousel({body: formData});
         };
@@ -64,87 +69,90 @@ class PublicationDropzone {
     }
 
     createCarousel(data) {
-        this.getCarousel();
+        data.forEach(element => {
+            let slick = $('#preview-carousel').slick();
+            $('#preview-carousel').slick('slickAdd', `<div></div>`);
+        });
+        // data.indicators.forEach(indicator => {   
+        //     this.createSliderButton(indicator);
+        //     indicator.el = document.getElementById(indicator.el)
+        // });
+        // data.items.forEach(item => {
+        //     this.createCarouselImage(item);
+        //     item.el = document.getElementById(item.el)
+        // });
+
+        // this.reloadCarousel(data.items, data.indicators);
     }
 
-    createSliderButton() {
+    createSliderButton(dataIndicators) {
         const carrouselSliderButton = document.createElement('button');
         carrouselSliderButton.type = 'button';
         carrouselSliderButton.className = 'w-3 h-3 rounded-full';
-        carrouselSliderButton.setAttribute('data-carousel-slide-to', this.itemsCount);
-        carrouselSliderButton.id = `carousel-slider-${this.itemsCount}`;
+        carrouselSliderButton.setAttribute('data-carousel-slide-to', dataIndicators.position);
+        carrouselSliderButton.id = `carousel-slider-${dataIndicators.position}`;
         this.carrouselSlider.insertAdjacentElement('afterbegin', carrouselSliderButton);    
         return carrouselSliderButton;
     }
 
     createCarouselImage(data) {
-        let isActive = (this.itemsCount == 0) ? 'active' : '';
-
-        if( [0, 1].includes(this.itemsCount) ){
-            let thisCarouselImage = this.rootCarrousel.querySelector(`div[data-carousel-number="${this.itemsCount}"] > img`);
-            thisCarouselImage.src = data;
-
-            if(this.itemsCount == 1){
-                this.rootButtonSlideCarousel.classList.remove('hidden');
-            }
-
-            this.reloadCarousel();
-
-            this.addItem();
-
-            return;
-        }
-
         const innerDiv = document.createElement('div');
         innerDiv.className = 'duration-700 ease-in-out absolute inset-0 transition-transform transform z-10 translate-x-full z-20';
-        
-        innerDiv.setAttribute('data-carousel-item', isActive);
-        innerDiv.setAttribute('data-carousel-number', this.itemsCount);
+        innerDiv.id = `carousel-image-${data.position}`;
+        innerDiv.setAttribute('data-carousel-item', data?.isActive);
+        innerDiv.setAttribute('data-carousel-number', data.position);
         
         const img = document.createElement('img');
         img.className = 'absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2';
-        img.src = data;
+        img.src = data?.src ?? '';
         img.alt = '...';
     
         innerDiv.appendChild(img);
             
         this.rootCarrousel.insertAdjacentElement('beforeend', innerDiv);
 
-        this.addItem();
-
-        this.reloadCarousel();
-
         return innerDiv;
     }
 
-    reloadCarousel() {
-        new Carousel(this.rootCarrousel, {
-            interval: 3000, // Set your desired interval
-            wrap: true
-        });
-    }
+    reloadCarousel(items, indicators) {
+        const options = {
+            defaultPosition: 0,
+            indicators: {
+                activeClasses: 'bg-white dark:bg-gray-800',
+                inactiveClasses:
+                    'bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800',
+                items: indicators,
+            },
+        };
+        
+        const instanceOptions = {
+            id:'preview-carousel',
+            override: true
+        };
 
-    addItem(){
-        return this.itemsCount++;
+
+        let root = document.getElementById('preview-carousel');
+        this.rootCarrousel.remove();
+        let carousel = new Carousel(root, items, options, instanceOptions);
     }
 
     getCarousel(dataToSend = {}){
 
+        let fullUrl = 'carousel';
         let thisInstance = this;
-        const url = 'carousel';
 
         dataToSend = Object.assign(dataToSend, {method: 'POST'});
 
-        fetch(url, dataToSend)
-          .then((respuesta) => respuesta.blob())
-          .then(blob => {
+        fetch(fullUrl, dataToSend)
+          .then((respuesta) => respuesta.json())
+            .then(data => {
+              
+              thisInstance.createCarousel(data);
             
-            blob.text().then(text => {
-                thisInstance.rootCarrousel.innerHTML = text;
-            });
-
           }).catch(error => {
             console.error(error);
           });
       }
 }
+
+// let publicationDropZone = new PublicationDropzone('dropzone-file');

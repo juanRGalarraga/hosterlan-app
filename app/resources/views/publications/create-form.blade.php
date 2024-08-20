@@ -7,7 +7,7 @@
     //Storage::disk('local')->put('example.txt', 'Contents');
 @endphp
 
-<div class="flex flex-col w-1/5 md:w-2/5 lg:w-1/5" id="description">
+<div class="w-1/2 mx-auto" id="description">
     <section class="space-x-2 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone px-5 my-h-screen pt-3">
         <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
