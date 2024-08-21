@@ -78,17 +78,17 @@ class PublicationFilter extends PublicationList {
           applyFilter({available_from: date.toString()});
         })
 
-        // this.available_from.onchange = (ev) => {
-        //   applyFilter({available_from: ev.target.value});
-        // };
+        this.available_from.onchange = (ev) => {
+          applyFilter({available_from: ev.target.value});
+        };
 
         let calendarPickerAvailableTo = new jsCalendar.new(this.available_to);
         calendarPickerAvailableTo.onDateClick(function(event, date){
           applyFilter({available_to: date.toString()});
         })
-        // this.available_to.onchange = (ev) => {
-        //   applyFilter({available_to: ev.target.value});
-        // };
+        this.available_to.onchange = (ev) => {
+          applyFilter({available_to: ev.target.value});
+        };
         this.roomCount.onchange = (ev) => {
           applyFilter({roomCount: ev.target.value});
         };

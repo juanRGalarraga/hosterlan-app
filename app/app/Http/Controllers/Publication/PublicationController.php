@@ -52,33 +52,35 @@ class PublicationController extends Controller
             $queryBuilder
                 ->where('state', $stateValue);
         }
-        // $available_from = $request->input('available_from');
-        // $availableFromFormated = Carbon::createFromFormat('d-m-Y', $available_from)->format('Y-m-d');
+
+        
+        $available_from = $request->input('available_from');
+        $availableFromFormated = Carbon::createFromFormat('Y-m-d', $available_from);
     
 
-        // $queryBuilder->leftjoin('publications_availables_days', 'publications.id', '=', 'publications_availables_days.publication_id');
+        $queryBuilder->leftjoin('publications_availables_days', 'publications.id', '=', 'publications_availables_days.publication_id');
         
         
-        // if(!is_null($availableFromFormated)){
-        //     $request->validate([
-        //         'available_from' => 'required|date',
-        //     ]);  
+        if(!is_null($availableFromFormated)){
+            $request->validate([
+                'available_from' => 'required|date',
+            ]);  
 
-        //     $queryBuilder
-        //        ->where('publications_availables_days.since', '>=', $availableFromFormated);
+            $queryBuilder
+               ->where('publications_availables_days.since', '>=', $availableFromFormated);
                 
-        // }
-        // $availableTo=$request->input('available_to');
-        // $fechaTo= new carbon($availableTo);
-        // $availableTo = Carbon::createFromFormat('d-m-Y', $availableTo)->format('Y-m-d');
-        // if(!is_null($availableTo)){
-        //     $request->validate([
-        //         'available_to' => 'required|date|after_or_equal:available_from',
-        //     ]);  
+        }
+        $availableTo=$request->input('available_to');
+        $fechaTo= new carbon($availableTo);
+        $availableTo = Carbon::createFromFormat('d-m-Y', $availableTo)->format('Y-m-d');
+        if(!is_null($availableTo)){
+            $request->validate([
+                'available_to' => 'required|date|after_or_equal:available_from',
+            ]);  
 
-        //     $queryBuilder
-        //         ->where('publications_availables_days.to', '<=', $availableTo);
-        // }
+            $queryBuilder
+                ->where('publications_availables_days.to', '<=', $availableTo);
+        }
 
         
         

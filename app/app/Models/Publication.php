@@ -41,10 +41,10 @@ class Publication extends Model
     }
 
     public function getFirstPicture(){
-      $filename = '';
+      $filename = asset('publications-pictures/carousel-preview.svg');
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
-        if(!empty($picture)){
+        if(!empty($picture) and file_exists(public_path("publications-pictures/{$this->id}/{$picture->name}"))){
           $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
         }
       }
