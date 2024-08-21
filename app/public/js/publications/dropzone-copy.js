@@ -152,7 +152,7 @@ class PublicationDropzone {
           }).catch(error => {
             console.error(error);
           });
-      }
+    }
 }
 
 // let publicationDropZone = new PublicationDropzone('dropzone-file');

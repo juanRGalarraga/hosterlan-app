@@ -115,8 +115,22 @@ class PublicationController extends Controller
             ['src' => asset('publications-pictures/carousel-preview.svg')],
             ['src' => ''],
         ];
-
         return response()->json($response);
+    }
+
+    public function getPreviewFiles(Request $request){
+        $filenames = $request->input('filename', []);
+        $src = $request->input('src', []);
+
+        if(!empty($filenames)){
+            $filenames = explode(",", $filenames);
+        }
+
+        if(!empty($src)){
+            $src = explode(",", $src);
+        }
+        
+        return view('publications.create-form-preview-files', compact('filenames', 'src'))->render();
     }
 
     /**
