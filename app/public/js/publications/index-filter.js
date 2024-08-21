@@ -29,6 +29,7 @@ class PublicationFilter extends PublicationList {
 
     constructor(){
         super();
+        this.initInputsFilter();
         this.loadDaterangePicker();
     }
 
@@ -43,7 +44,6 @@ class PublicationFilter extends PublicationList {
         this.bathroomCount = document.getElementById('bathroomCount');
         this.rentType = document.getElementById('rentType');
         this.withPets = document.getElementById('withPets');
-    
         this.initEvents();
     }
 
@@ -69,12 +69,26 @@ class PublicationFilter extends PublicationList {
         this.publication_state.onchange = (ev) => {
           applyFilter({state: ev.target.value});
         };
-        this.available_from.onchange = (ev) => {
-          applyFilter({availableFrom: ev.target.value});
-        };
-        this.available_to.onchange = (ev) => {
-          applyFilter({availableTo: ev.target.value});
-        };
+
+        let calendarPickerAvailableFrom = new jsCalendar.new(this.available_from);
+        calendarPickerAvailableFrom.onDateClick(function(event, date){
+          console.log(date);
+          console.log(event);
+          
+          applyFilter({available_from: date.toString()});
+        })
+
+        // this.available_from.onchange = (ev) => {
+        //   applyFilter({available_from: ev.target.value});
+        // };
+
+        let calendarPickerAvailableTo = new jsCalendar.new(this.available_to);
+        calendarPickerAvailableTo.onDateClick(function(event, date){
+          applyFilter({available_to: date.toString()});
+        })
+        // this.available_to.onchange = (ev) => {
+        //   applyFilter({available_to: ev.target.value});
+        // };
         this.roomCount.onchange = (ev) => {
           applyFilter({roomCount: ev.target.value});
         };
@@ -102,12 +116,11 @@ class PublicationFilter extends PublicationList {
     }
 
     loadDaterangePicker(){
-        document.getElementById('available_from').value = '';
-        document.getElementById('available_to').value = '';
+        // document.getElementById('available_from').value = '';
+        // document.getElementById('available_to').value = '';
     }
 }
 
-
-document.addEventListener('DOMContentLoaded', ev => {
-    new PublicationFilter();
+document.addEventListener('DOMContentLoaded', e => {
+  new PublicationFilter();
 });

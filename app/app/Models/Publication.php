@@ -58,6 +58,6 @@ class Publication extends Model
       return '';
     }
     public function publicationsAvailablesDays()
-    {return $this->hasmany(PublicationsAvailablesDays::class);
+    {return $this->hasmany(PublicationsAvailablesDays::class, 'publication_id', 'id');
     }
 }

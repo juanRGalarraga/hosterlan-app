@@ -6,7 +6,6 @@ class PublicationList {
 
   constructor(){
     this.loadOnClickToShow(this.listId);
-    this.initInputsFilter();
   }
 
   loadOnClickToShow(listId){

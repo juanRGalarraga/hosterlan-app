@@ -1,4 +1,5 @@
 @forelse($publications as $publication)
+
     <div>
         <x-booking-card id="{{$publication->id}}" class="hover:cursor-pointer clickeable-card" :imageSource="$publication->getFirstPicture()" :title="__($publication->title)" :description="__($publication->description)" :buttonText="__('')"></x-booking-card>
     </div>

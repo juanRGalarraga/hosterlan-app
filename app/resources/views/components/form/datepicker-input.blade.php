@@ -1,7 +1,7 @@
 <!-- To use this component we need to laod calendar.js plugin before -->
 <div>
     <label for="availableDayFrom" class="block text-sm font-medium text-gray-900 dark:text-gray-300">{{$label}}</label>
-    <div {{ $attributes->merge(['class' => 'wrapper-datepicker']) }}>
+    <div class="wrapper-datepicker">
         <input {{ $attributes->merge(['data-class' => 'black-theme rounded-lg', 'class'=>"w-full", "data-datepicker" => ""]) }}/>
     </div>
 </div>
