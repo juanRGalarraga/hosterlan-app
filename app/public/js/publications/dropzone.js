@@ -40,6 +40,7 @@ class PublicationDropzone {
             if(this.files.length > 0){
                 thisInstance.getFiles({filename: thisInstance.files, src: thisInstance.filesSrc});
             }
+            this.value = "";
         };
     }
 
@@ -76,7 +77,7 @@ class PublicationDropzone {
 		dt.items.add(theFile);
         input.files = dt.files;
 
-        this.form.insertAdjacentElement('beforebegin', input);
+        this.form.insertAdjacentElement('afterbegin', input);
 
     }
 

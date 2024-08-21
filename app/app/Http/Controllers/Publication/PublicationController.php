@@ -139,10 +139,13 @@ class PublicationController extends Controller
     public function store(PublicationUpdateRequest $request)
     {   
         $request->check($request->all());
-    
-        if(count($request->file('images')) < 1){
+        
+        // dd($request->file('files'));
+        if(!$request->file('files')){
+            $request->flash();
             return redirect()
-            ->withErrors(['images' => 'Upload even a photo'], 'images');
+            ->withErrors($request->errors())
+            ->withInput();
         }
 
         if($request->fails()){
@@ -161,7 +164,7 @@ class PublicationController extends Controller
                 throw new Exception("Error Create record");
             }
 
-            foreach ($request->file('images') as $key => $file) {
+            foreach ($request->file('files') as $key => $file) {
             
                 $isStored = $file->store(
                     "publications-pictures/{$publication->id}"

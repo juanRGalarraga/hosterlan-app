@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'mx-auto']) }}>
+<div {{ $attributes->merge(['class' => 'w-full']) }}>
     @if(!empty($label))
     <label for="{{$id}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $label }}</label>
     @endif
@@ -8,6 +8,13 @@
             {{$labelIcon}}
         </span>
         @endif
-        <input type="{{$type}}" id="{{$id}}" name="{{$name}}" placeholder="{{$placeholder}}" value="{{$value}}" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{$placeholder}}">
+        <input type="{{$type}}" id="{{$id}}" name="{{$name}}" placeholder="{{$placeholder}}" value="{{$value}}" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1  w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 minimal-input" placeholder="{{$placeholder}}">
     </div>
 </div>
+
+<style>
+    input[data-datepicker]{
+        margin: 0;
+        width: 100% !important;
+    }
+</style>

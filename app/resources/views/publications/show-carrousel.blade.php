@@ -7,7 +7,7 @@
     <div class="relative h-full overflow-hidden rounded-lg py-auto">
         @foreach ($images as $image)
             <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                <img src="{{$image->getUrl()}}" alt="...">
+                <img src="{{$image->getUrl()}}" class="w-fit mx-auto" alt="...">
             </div>
         @endforeach
     </div>
@@ -15,7 +15,7 @@
     <!-- Silde Control -->
     <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
         @for ($i=0; $i < $images->count(); $i++)
-            <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+            <button type="button" class="w-full h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
         @endfor
     </div>
 
