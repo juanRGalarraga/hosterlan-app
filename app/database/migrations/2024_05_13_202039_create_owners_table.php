@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -13,12 +14,7 @@ return new class extends Migration
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 125);
-            $table->string('username', 125);
-            $table->string('password', 400);
-            $table->string('email', 250)->index();
-            $table->json('options');
-            $table->float('rating');
+            $table->foreignIdFor(User::class);
             $table->timestamps();
         });
     }

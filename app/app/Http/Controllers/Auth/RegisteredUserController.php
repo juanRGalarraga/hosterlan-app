@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Owner;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -18,9 +19,23 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.register');
+        $type = $request->type;
+
+        if($type == 'owner'){
+            return view('auth.register-owner');
+        }
+
+        return view('auth.register-guest');
+    }
+
+    /**
+     * Display the registration view for user type selection
+     */
+    public function registerByTypeUser(): View
+    {
+        return view('auth.register-by-type');
     }
 
     /**
@@ -35,6 +50,11 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        $user = new Owner();
+        if($request->type == 'owner'){
+            
+        }
 
         $user = User::create([
             'name' => $request->name,
