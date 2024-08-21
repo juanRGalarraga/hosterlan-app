@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->float('price');
             $table->string('ubication');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('room_count');
             $table->integer('bathroom_count');
             $table->boolean('pets')->default(0);

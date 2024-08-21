@@ -31,6 +31,7 @@ class PublicationStoreRequest extends FormRequest
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
             'pets' => 'in:1,0',
+            'images' => 'required|min:1|max:10|image'
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PublicationsAvailablesDays;
-use App\Models\Picture;
+use App\Models\Publication\Picture;
 use Carbon\Carbon;
 
 class Publication extends Model
@@ -35,7 +35,7 @@ class Publication extends Model
       $filename = '';
       if($this->exists()){
         $picture = $this->pictures->find($id);
-        $filename = asset("publications-pictures/{$this->id}/{$picture->name}.{$picture->type}");
+        $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
       }
       return $filename;
     }
@@ -43,9 +43,9 @@ class Publication extends Model
     public function getFirstPicture(){
       $filename = '';
       if($this->exists()){
-        $picture = $this->pictures[0] ?? '';
+        $picture = $this->pictures->first() ?? '';
         if(!empty($picture)){
-          $filename = asset("publications-pictures/{$this->id}/{$picture->name}.{$picture->type}");
+          $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
         }
       }
       return $filename;

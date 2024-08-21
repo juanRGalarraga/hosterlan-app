@@ -20,16 +20,17 @@
         {{__('Propiedades disponibles')}}
     </x-slot:header>
 
-    <div class="flex flex-row pl-3 mt-3 w-fit">
-        
-        @include('publications.index-filters')
+    <div class="pl-3 mt-3 w-fit flex flex-row relative">
+        <div class="w-1/5 px-4 flex flex-col">
+            @include('publications.index-filters')
+        </div>
         
         <!-- <div class="flex flex-wrap justify-center mt-3 w-full"> -->
-        <div class="grid grid-cols-3 lg:grid-cols-4 gap-2" id="publicationMainlist">
+        <div class="w-2/3 grid grid-cols-4 grid-flow-row" id="publicationMainlist">
             @include('publications.list')
         </div>
     </div>
-    <div class="text-center flex justify-between">
+    <div class="text-center flex justify-center w-full">
         {{$publications->links()}}
     </div>
 </x-app-layout>

@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
+use App\Models\Publication\Picture;
 use App\Models\PublicationsAvailablesDays;
+use Exception;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Redirect;
-use Barryvdh\Debugbar\Facades\Debugbar;
+// use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
+// use Illuminate\Support\Facades\Storage;
 
 class PublicationController extends Controller
 {
@@ -109,29 +111,87 @@ class PublicationController extends Controller
         return view("publications.create");
     }
 
+    public function getCarousel(Request $request){
+        $images = $request->file('file');
+        $response[] = [
+            ['src' => asset('publications-pictures/carousel-preview.svg')],
+            ['src' => ''],
+        ];
+        return response()->json($response);
+    }
+
+    public function getPreviewFiles(Request $request){
+        $filenames = $request->input('filename', []);
+        $src = $request->input('src', []);
+
+        if(!empty($filenames)){
+            $filenames = explode(",", $filenames);
+        }
+
+        if(!empty($src)){
+            $src = explode(",", $src);
+        }
+        
+        return view('publications.create-form-preview-files', compact('filenames', 'src'))->render();
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PublicationStoreRequest $request)
-    {
-        Debugbar::info($request->all());
-        $validator = Validator::make($request->all(), $request->rules());
-
-        if($validator->fails()){
+    public function store(PublicationUpdateRequest $request)
+    {   
+        $request->check($request->all());
+        
+        // dd($request->file('files'));
+        if(!$request->file('files')){
             $request->flash();
             return redirect()
-            ->withErrors($validator->errors())
+            ->withErrors($request->errors())
             ->withInput();
         }
 
-        // if($request->files())
+        if($request->fails()){
+            $request->flash();
 
-        // Publication::pictures()->create([
-        //     'name' => '',
-        //     'publication_id' => ''
-        // ]);
-        
-        Publication::create($request->all());
+            return redirect()
+            ->withErrors($request->errors())
+            ->withInput();
+        }
+
+        $publication = Publication::create($request->all());
+
+        try {
+
+            if(!$publication->exists()){
+                throw new Exception("Error Create record");
+            }
+
+            foreach ($request->file('files') as $key => $file) {
+            
+                $isStored = $file->store(
+                    "publications-pictures/{$publication->id}"
+                );
+                
+                if(!$isStored){
+                    throw new WriteOperationFailedException("Error write file");
+                }
+
+                $publication->pictures()->save(
+                    new Picture([
+                        'name' => $file->hashName(),
+                        'publication_id' => $publication->id,
+                        'type' => $file->getType(),
+                    ])
+                );
+            }
+
+        } catch (WriteOperationFailedException $th) {
+            debugbar()->addException($th);
+            return abort(424);
+        } catch (Exception $ex) {
+            debugbar()->addException($ex);
+            return abort(500);
+        }
         
         return redirect()
         ->route('publications.index')

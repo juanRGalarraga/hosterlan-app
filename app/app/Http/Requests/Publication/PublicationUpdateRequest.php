@@ -3,9 +3,12 @@
 namespace App\Http\Requests\Publication;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Validator;
 
 class PublicationUpdateRequest extends FormRequest
 {
+
+    protected $validator = false;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,13 +25,25 @@ class PublicationUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => 'required|decimal:8,2',
+            'price' => 'required',
             'title' => 'required|string|max:150',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
             'room_count' => 'integer|min:0',
             'pets' => 'boolean',
-            'numbre_people' => 'integer|min:1'
+            'numbre_people' => 'integer|min:1',
         ];
+    }
+
+    public function check($data){
+        return $this->validator = Validator::make($data, $this->rules());
+    }
+
+    public function fails(){
+        return $this->validator->fails();
+    }
+
+    public function errors(){
+        return $this->validator->errors();
     }
 }

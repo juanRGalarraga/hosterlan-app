@@ -19,6 +19,5 @@
 
     <div class="flex flex-row my-max-h-screen">
         @include('publications.create-form')
-        @include('publications.create-preview')
     </div>
 </x-app-layout>

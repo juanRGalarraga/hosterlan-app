@@ -9,6 +9,6 @@
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">{{__('O arrástrala y suéltala aquí')}}</p>
         </div>
-        <input id="dropzone-file" type="file" class="hidden" />
+        <input id="dropzone-file" type="file" class="hidden" multiple/>
     </label>
 </div> 
