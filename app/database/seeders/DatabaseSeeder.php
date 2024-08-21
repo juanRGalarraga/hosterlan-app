@@ -11,7 +11,7 @@ use Illuminate\Database\Seeder;
 use App\Models\PublicationsAvailablesDays;
 use App\Models\Owner;
 use App\Models\Publication;
-use App\Models\Picture;
+use App\Models\Publication\Picture;
 use Database\Factories\PublicationsAvailablesDaysFactory;
 use Database\Factories\RentTypeFactory;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        // User::factory()
+
         Owner::factory()->count(30)->create();
         
         RentType::factory(count(PublicationRentType::cases()))->createMany($this->getRentTypesToFactory());

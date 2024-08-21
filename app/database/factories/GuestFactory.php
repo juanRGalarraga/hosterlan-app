@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use App\Models\User;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Guest>
  */
@@ -17,12 +17,7 @@ class GuestFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'=> fake()->name(),
-            'username'=> fake()->username(),
-            'password'=> bcrypt(fake()->password()),
-            'email'=> fake()->unique()->safeEmail(),
-            'options'=>[],
-            'rating'=>fake()->randomFloat(0,10)
+            'user_id' => User::factory()
         ];
     }
 }

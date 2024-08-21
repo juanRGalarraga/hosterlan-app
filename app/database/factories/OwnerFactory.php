@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use App\Models\User;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Owner>
  */
@@ -17,12 +17,7 @@ class OwnerFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'=> fake()->name(),
-            'username'=> fake()->username(),
-            'password'=> '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-            'email'=> fake()->unique()->safeEmail(),
-            'options'=> '{}',
-            'rating'=>fake()->randomFloat(2,0,8)
+            'user_id' => User::factory()
         ];
     }
 }
