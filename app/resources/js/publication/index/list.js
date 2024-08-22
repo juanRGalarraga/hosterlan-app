@@ -60,3 +60,5 @@ export default class PublicationList {
 
   }
 }
+
+export { PublicationList };

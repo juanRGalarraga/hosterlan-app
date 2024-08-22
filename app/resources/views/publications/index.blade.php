@@ -3,10 +3,9 @@
         <link  rel="stylesheet" type="text/css" href="/css/publications/index.css">
     @endpush
 
-    @push('custom-scripts')
-    <script type="module"  src="/js/publications/index.js"></script>
-    <script type="module" src="/js/publications/index-filter.js"></script>
-    @endpush
+    <x-slot:scripts>
+        @vite(['resources/js/publication/index/filters.js'])
+    </x-slot:scripts>
 
     <x-slot:header>
         {{__('Propiedades disponibles')}}
@@ -20,7 +19,7 @@
     </button>
 
     <!-- drawer component -->
-    <div id="drawer-navigation" class="mt-20 fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+    <div id="drawer-navigation" class="mt-20 fixed top-0 left-0 z-40 w-70 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
         <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">{{__('Filtros')}}</h5>
         <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -33,7 +32,7 @@
         </div>
     </div>
     <div class="pl-3 mt-3 w-full relative">
-        <div class="w-full grid grid-cols-4 grid-flow-row" id="publicationMainlist">
+        <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row" id="publicationMainlist">
             @include('publications.list')
         </div>
     </div>

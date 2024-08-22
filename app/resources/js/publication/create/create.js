@@ -1,4 +1,5 @@
-import Input from '../input';
+import Input from '../input.js';
+import PublicationDropzone from './dropzone.js';
 
 export default class PublicationCreate {
     form = null

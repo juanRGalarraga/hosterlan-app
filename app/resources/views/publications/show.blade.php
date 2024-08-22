@@ -1,8 +1,8 @@
 <x-app-layout :includeNav="false">
   
-  @push('custom-scripts')
-    <script type="module" src="/js/publications/show.js?v={{time()}}"></script>
-  @endpush
+  <x-slot:scripts>
+        @vite(['resources/js/publication/show/show.js'])
+  </x-slot:scripts>
 
   @push('custom-css')
     <link rel="stylesheet" href="/css/publications/show.css?v={{time()}}"/>

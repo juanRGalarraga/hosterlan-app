@@ -16,11 +16,14 @@
 
 
         <!-- Scripts -->
-        <script type="module" type="text/javascript" src="/js/input.js"></script>
-        <script type="module" type="text/javascript" src="/js/app.js"></script>
 
+        
         @stack('calendar-js')
         @stack('custom-css')
+        @stack('custom-scripts')
+        @if (isset($scripts))
+            {{ $scripts }}
+        @endif
 
     </head>
     <body class="font-sans antialiased">
@@ -44,7 +47,6 @@
                 {{ $slot }}
             </main>
         </div>
-        
-        @stack('custom-scripts')
+    
     </body>
 </html>

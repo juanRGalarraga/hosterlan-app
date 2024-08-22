@@ -1,8 +1,8 @@
+import PublicationList from './list.js';
+import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
+import Datepicker from 'flowbite-datepicker/Datepicker';
 
-import PublicationList from './index.js';
-import DateRangePicker from 'flowbite';
-
-export default class PublicationFilter extends PublicationList {
+class PublicationFilter extends PublicationList {
 
     inputPearch = null;
     inputPublicationState = null;
@@ -54,35 +54,38 @@ export default class PublicationFilter extends PublicationList {
         };
 
         let dateRangePicker = document.getElementById('dateRangePicker');
+        // let dateRangePickerTo = document.getElementById('available_to');
 
-        const options = {
-          format: 'yyyy/mm/dd'
+        let dateRangePickerJs = new DateRangePicker(dateRangePicker);
+        // let datePickerTo = new DateRangePicker(dateRangePickerTo);
+        console.log(dateRangePickerJs.datepickers[0].config);
+        dateRangePickerJs.datepickers[0].config.beforeShowDay = (a,b,c) => {
+          console.log(a,b,c);
+          
         }
-
-        const datePicker = new DateRangePicker(dateRangePicker, options);
-
-        datePicker.onchange = () => {
-          console.log(datePicker.getDate())
-        }
-
-        // let calendarPickerAvailableFrom = new jsCalendar.new(options);
-        // console.log(calendarPickerAvailableFrom);
         
-        // calendarPickerAvailableFrom.onDateClick(function(event, date){
-        //   applyFilter({available_from: date.toString()});
-        // })
+        // dateRangePickerJs.getDatepickerInstance().onShow(function(){
+        //   console.log("HI!");
+          
+        // });
 
-        this.available_from.onchange = (ev) => {
-          applyFilter({available_from: ev.target.value});
-        };
+        if(dateRangePickerJs?.inputs){
+          dateRangePickerJs.inputs.forEach(input => {
+            input.onchange = (ev) => {
+                console.log(input.value);
+                // applyFilter({available_from: ev.target.value});
+            };    
+          });
+        }
+        // console.log(dateRangePickerJs);
+        
+        // console.log(dateRangePickerJs.getDates())
 
-        // let calendarPickerAvailableTo = new jsCalendar.new(this.available_to);
-        // calendarPickerAvailableTo.onDateClick(function(event, date){
-        //   applyFilter({available_to: date.toString()});
-        // })
-        this.available_to.onchange = (ev) => {
-          applyFilter({available_to: ev.target.value});
-        };
+        // dateRangePickerJs.onchange = (ev) => {
+        //   console.log(dateRangePickerJs.getDates());
+        //   // applyFilter({available_from: ev.target.value});
+        // };
+
         this.roomCount.onchange = (ev) => {
           applyFilter({roomCount: ev.target.value});
         };
@@ -115,6 +118,4 @@ export default class PublicationFilter extends PublicationList {
     }
 }
 
-document.addEventListener('DOMContentLoaded', e => {
-  new PublicationFilter();
-});
+new PublicationFilter();

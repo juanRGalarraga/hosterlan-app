@@ -3,9 +3,11 @@
         <script src="/js/calendar/jsCalendar.min.js"></script>
         <script src="/js/calendar/jsCalendar.lang.es.js"></script>
         <script src="/js/calendar/jsCalendar.datepicker.min.js"></script>
-        <script src="/js/publications/dropzone.js"></script>
-        <script src="/js/publications/create.js?v={{time()}}"></script>
     @endpush
+
+    <x-slot:scripts>
+        @vite(['resources/js/publication/create/dropzone.js'])
+    </x-slot:scripts>
 
     @push('custom-css')
         <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.min.css">
