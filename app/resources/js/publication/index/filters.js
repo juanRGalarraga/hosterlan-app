@@ -53,39 +53,6 @@ class PublicationFilter extends PublicationList {
           applyFilter({state: ev.target.value});
         };
 
-        let dateRangePicker = document.getElementById('dateRangePicker');
-        // let dateRangePickerTo = document.getElementById('available_to');
-
-        let dateRangePickerJs = new DateRangePicker(dateRangePicker);
-        // let datePickerTo = new DateRangePicker(dateRangePickerTo);
-        console.log(dateRangePickerJs.datepickers[0].config);
-        dateRangePickerJs.datepickers[0].config.beforeShowDay = (a,b,c) => {
-          console.log(a,b,c);
-          
-        }
-        
-        // dateRangePickerJs.getDatepickerInstance().onShow(function(){
-        //   console.log("HI!");
-          
-        // });
-
-        if(dateRangePickerJs?.inputs){
-          dateRangePickerJs.inputs.forEach(input => {
-            input.onchange = (ev) => {
-                console.log(input.value);
-                // applyFilter({available_from: ev.target.value});
-            };    
-          });
-        }
-        // console.log(dateRangePickerJs);
-        
-        // console.log(dateRangePickerJs.getDates())
-
-        // dateRangePickerJs.onchange = (ev) => {
-        //   console.log(dateRangePickerJs.getDates());
-        //   // applyFilter({available_from: ev.target.value});
-        // };
-
         this.roomCount.onchange = (ev) => {
           applyFilter({roomCount: ev.target.value});
         };
@@ -113,9 +80,22 @@ class PublicationFilter extends PublicationList {
     }
 
     loadDaterangePicker(){
-        // document.getElementById('available_from').value = '';
-        // document.getElementById('available_to').value = '';
+        let dateRangePicker = document.getElementById('available_from');
+
+        let dateRangePickerJs = new Datepicker(dateRangePicker);
+
+        dateRangePickerJs.addEventListener('changeDate', e => {
+          console.log(e.target.value);
+        });
     }
 }
 
-new PublicationFilter();
+function handeDateChange(date){
+  console.log(date);
+  
+}
+
+
+document.addEventListener('DOMContentLoaded', e => {
+  new PublicationFilter();
+});
