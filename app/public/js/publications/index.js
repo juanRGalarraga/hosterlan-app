@@ -1,4 +1,4 @@
-class PublicationList {
+export default class PublicationList {
 
   mainCardList = null;
   listId = 'publicationMainlist';

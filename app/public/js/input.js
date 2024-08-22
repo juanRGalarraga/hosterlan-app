@@ -1,4 +1,4 @@
-class Input{
+export default class Input{
 
     input = null
 

@@ -8,7 +8,6 @@ use App\Enums\Publication\RentType as PublicationRentType;
 use App\Models\RentType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\PublicationsAvailablesDays;
 use App\Models\Owner;
 use App\Models\Publication;
 use App\Models\Picture;
@@ -25,21 +24,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Owner::factory()->count(30)->create();
+        
         RentType::factory(count(PublicationRentType::cases()))->createMany($this->getRentTypesToFactory());
 
         Publication::factory()
             ->has(Picture::factory()->count(4))
-            ->has(PublicationsAvailablesDays::factory()->count(1))
-            ->count(25)->create();
+            // ->has(new PublicationsAvailablesDaysFactory()->count(4))
+        ->count(25)->create();
 
-        //PublicationsAvailablesDays::factory()->count(7);
+        
+        
+        User::factory()->count(1)->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password')            
+        ]);
+        
 
-        Owner::factory()
-            ->has(User::factory()->count(1))
-            ->count(1)->create([
-                'email' => 'test@example.com',
-                'password' => Hash::make('password')    
-            ]);        
+
+        
+        
+
+        
     }
 
     private function getRentTypesToFactory(){

@@ -1,13 +1,11 @@
 <x-app-layout :includeNav="false">
   
   @push('custom-scripts')
-    <script src="/js/flowbite/flowbite.min.js"></script>
-    <script src="/js/publications/show.js?v={{time()}}"></script>
+    <script type="module" src="/js/publications/show.js?v={{time()}}"></script>
   @endpush
 
   @push('custom-css')
-    <link  rel="stylesheet" href="/css/swiper/swiper-bundle.min.css"/>
-    <link  rel="stylesheet" href="/css/publications/show.css?v={{time()}}"/>
+    <link rel="stylesheet" href="/css/publications/show.css?v={{time()}}"/>
   @endpush
 
   @php

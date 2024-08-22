@@ -1,20 +1,8 @@
-function formatDate(date) {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
-    const year = date.getFullYear();
 
-    return `${day}/${month}/${year}`;
-}
+import PublicationList from './index.js';
+import DateRangePicker from 'flowbite';
 
-// Función para sumar días a una fecha
-function addDays(date, days) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
-
-
-class PublicationFilter extends PublicationList {
+export default class PublicationFilter extends PublicationList {
 
     inputPearch = null;
     inputPublicationState = null;
@@ -71,7 +59,7 @@ class PublicationFilter extends PublicationList {
           format: 'yyyy/mm/dd'
         }
 
-        const datePicker = new Datepicker(dateRangePicker, options);
+        const datePicker = new DateRangePicker(dateRangePicker, options);
 
         datePicker.onchange = () => {
           console.log(datePicker.getDate())

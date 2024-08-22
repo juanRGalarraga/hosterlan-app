@@ -1,4 +1,4 @@
-class PublicationShow {
+export default class PublicationShow {
     buttonCloseId = 'buttonCloseView';
     buttonClose;
 

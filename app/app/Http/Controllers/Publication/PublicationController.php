@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
-use App\Models\Publication\Picture;
+use App\Models\Picture;
 use App\Models\PublicationsAvailablesDays;
 use Exception;
 use Illuminate\Http\Request;

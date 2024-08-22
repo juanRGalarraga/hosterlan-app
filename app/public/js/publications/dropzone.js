@@ -1,4 +1,4 @@
-class PublicationDropzone {
+export default class PublicationDropzone {
 
     input = null
     rootPreviewFiles = 'previewFiles'

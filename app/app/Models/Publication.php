@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PublicationsAvailablesDays;
-use App\Models\Publication\Picture;
+use App\Models\Picture;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Storage;
 class Publication extends Model
 {
     use HasFactory;
@@ -44,7 +44,8 @@ class Publication extends Model
       $filename = asset('publications-pictures/carousel-preview.svg');
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
-        if(!empty($picture) and file_exists(public_path("publications-pictures/{$this->id}/{$picture->name}"))){
+        $isFileExist = Storage::exists("publications-pictures/{$this->id}/{$picture->name}");
+        if(!empty($picture) and $isFileExist){
           $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
         }
       }

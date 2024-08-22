@@ -1,4 +1,6 @@
-class PublicationCreate {
+import Input from '../input';
+
+export default class PublicationCreate {
     form = null
     formId = "publicationForm"
     buttonToSendForm = null
