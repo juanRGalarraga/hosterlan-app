@@ -20,13 +20,13 @@
         {{__('Propiedades disponibles')}}
     </x-slot:header>
 
-    <div class="pl-3 mt-3 w-fit flex flex-row relative">
-        <div class="w-1/5 px-4 flex flex-col">
+    <div class="pl-3 mt-3 w-fit relative">
+        <div class="w-full px-4">
             @include('publications.index-filters')
         </div>
         
         <!-- <div class="flex flex-wrap justify-center mt-3 w-full"> -->
-        <div class="w-2/3 grid grid-cols-4 grid-flow-row" id="publicationMainlist">
+        <div class="w-full grid grid-cols-4 grid-flow-row" id="publicationMainlist">
             @include('publications.list')
         </div>
     </div>

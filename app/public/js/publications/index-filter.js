@@ -47,16 +47,11 @@ class PublicationFilter extends PublicationList {
         this.initEvents();
     }
 
-    appendFilter(name, value){
-
-    }
-
     initEvents(){
 
         let thisObj = this;
     
         const applyFilter = (filter) => {
-          thisObj.appendFilter(filter);
           thisObj.getList(filter);
         }
     
@@ -70,22 +65,33 @@ class PublicationFilter extends PublicationList {
           applyFilter({state: ev.target.value});
         };
 
-        let calendarPickerAvailableFrom = new jsCalendar.new(this.available_from);
-        calendarPickerAvailableFrom.onDateClick(function(event, date){
-          console.log(date);
-          console.log(event);
-          
-          applyFilter({available_from: date.toString()});
-        })
+        let dateRangePicker = document.getElementById('dateRangePicker');
+
+        const options = {
+          format: 'yyyy/mm/dd'
+        }
+
+        const datePicker = new Datepicker(dateRangePicker, options);
+
+        datePicker.onchange = () => {
+          console.log(datePicker.getDate())
+        }
+
+        // let calendarPickerAvailableFrom = new jsCalendar.new(options);
+        // console.log(calendarPickerAvailableFrom);
+        
+        // calendarPickerAvailableFrom.onDateClick(function(event, date){
+        //   applyFilter({available_from: date.toString()});
+        // })
 
         this.available_from.onchange = (ev) => {
           applyFilter({available_from: ev.target.value});
         };
 
-        let calendarPickerAvailableTo = new jsCalendar.new(this.available_to);
-        calendarPickerAvailableTo.onDateClick(function(event, date){
-          applyFilter({available_to: date.toString()});
-        })
+        // let calendarPickerAvailableTo = new jsCalendar.new(this.available_to);
+        // calendarPickerAvailableTo.onDateClick(function(event, date){
+        //   applyFilter({available_to: date.toString()});
+        // })
         this.available_to.onchange = (ev) => {
           applyFilter({available_to: ev.target.value});
         };
