@@ -19,17 +19,18 @@
     </button>
 
     <aside id="default-sidebar" class="mt-32 fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-        <ul class="space-y-2 font-medium">
-            <li>
-                @include('publications.index.filters')
-            </li>
-        </ul>
-    </div>
+        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+            <h5 id="drawer-navigation-label" class="text-base text-center my-3 font-semibold text-gray-500 uppercase dark:text-gray-400">{{__('Filtros')}}</h5>
+            <ul class="space-y-2 font-medium">
+                <li>
+                    @include('publications.index.filters')
+                </li>
+            </ul>
+        </div>
     </aside>
 
-    <div class="p-4 sm:ml-64 mt-10">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+    <div class="p-4 sm:ml-64 mt-10 min-h-screen">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 min-h-full">
             <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row" id="publicationMainlist">
                 @include('publications.index.card-list')
             </div>

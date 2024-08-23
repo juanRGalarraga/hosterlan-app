@@ -30,7 +30,7 @@ class PublicationFactory extends Factory
             'pets'=>fake()->boolean(),
             'number_people'=> fake()->numberBetween(1,10),
             'rent_type_id' => RentType::inRandomOrder()->first()->id,
-            'state'=> fake()->randomElement(RentTypeEnum::forMigration()),
+            // 'state'=> 
         ];
     }
 }

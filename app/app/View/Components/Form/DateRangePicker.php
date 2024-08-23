@@ -1,23 +1,24 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Form;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class FlowbiteDateRangePicker extends Component
+class DateRangePicker extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
-        string $id,
-        string $idDateFrom,
-        string $idDateTo,
+        public string $id,
+        public string $idDateFrom,
+        public string $idDateTo,
+        public string $format = 'd-m-Y'
     )
     {
-        
+
     }
 
     /**
@@ -25,6 +26,6 @@ class FlowbiteDateRangePicker extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.flowbite-daterangepicker');
+        return view('components.form.date-range-picker');
     }
 }

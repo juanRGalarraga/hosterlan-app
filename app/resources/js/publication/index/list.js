@@ -34,7 +34,7 @@ export default class PublicationList {
     
         url = `${url}?${queryString}`;
     }
-
+    console.log(url);
     fetch(url, dataToSend)
       .then((respuesta) => respuesta.blob())
       .then(blob => {
@@ -61,5 +61,3 @@ export default class PublicationList {
 
   }
 }
-
-export { PublicationList };

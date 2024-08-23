@@ -15,6 +15,7 @@ class PublicationFilter extends PublicationList {
     withPets
     filters = {}
     buttonApplyFilter
+    buttonClearFilter
 
     constructor(){
         super()
@@ -33,7 +34,13 @@ class PublicationFilter extends PublicationList {
         this.rentType = document.getElementById('rentType')
         this.withPets = document.getElementById('withPets')
         this.buttonApplyFilter = document.getElementById('buttonApplyFilter')
+        this.buttonClearFilter = document.getElementById('buttonClearFilter')
         this.loadButtonApplyFilter()
+        this.loadButtonClearFilter();
+
+        //This is because the first time is not necessary to send date values
+        this.available_since.value = '';
+        this.available_to.value = '';
     }
 
     loadButtonApplyFilter(){
@@ -41,10 +48,16 @@ class PublicationFilter extends PublicationList {
         this.buttonApplyFilter.onclick = function(event){
             thisInstance.getInputValues();
             console.log(thisInstance.filters);
-            
             if( !ObjectHelper.isEmpty(thisInstance.filters) ){
                 thisInstance.getList(thisInstance.filters)
             }
+        }
+    }
+
+    loadButtonClearFilter(){
+        let thisInstance = this
+        this.buttonClearFilter.onclick = function(event){
+            thisInstance.clearFilters();
         }
     }
 
@@ -59,6 +72,21 @@ class PublicationFilter extends PublicationList {
         this.appendToFilters('bathroomCount',     this.bathroomCount.value)
         this.appendToFilters('rentType',          this.rentType.value)
         this.appendToFilters('withPets',          this.withPets.value)
+    }
+
+    clearFilters(){
+        this.filters = {};
+        this.search.value = ''
+        this.available_since.value = ''
+        this.available_to.value = ''
+        this.price_min.value = ''
+        this.price_max.value = ''
+        this.publication_state[0].selected = true;
+        this.roomCount[0].selected = true;
+        this.bathroomCount[0].selected = true;
+        this.rentType[0].selected = true;
+        this.withPets.value = 'false'
+        this.withPets.checked = false
     }
 
     appendToFilters(name, value){

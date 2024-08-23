@@ -58,20 +58,32 @@ class PublicationController extends Controller
         }
 
         $availableSince = $request->input('available_since', '');
-        $availableSinceCarbon = new Carbon($availableSince);
-        $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
-        if($availableSinceFormated){
-            $queryBuilder->where(DB::raw('DATE(since)'), '>=', $availableSinceFormated);
+
+        if(!empty($availableSince)) {
+
+            $availableSinceCarbon = new Carbon($availableSince);
+            $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
+            if($availableSinceFormated){
+                $queryBuilder->where(DB::raw('DATE(since)'), '>=', $availableSinceFormated);
+            }
+
         }
 
         $availableTo = $request->input('available_to', '');
-        $availableToCarbon = new Carbon($availableTo);
-        $availableToFormated = $availableToCarbon->format('Y-m-d');
-        if($availableToFormated){
-            $queryBuilder->where(DB::raw('DATE(since)'), '<=', $availableToFormated);   
+
+        if(!empty($availableTo)) {
+
+            $availableToCarbon = new Carbon($availableTo);
+            $availableToFormated = $availableToCarbon->format('Y-m-d');
+            if($availableToFormated && $availableToFormated > $availableSinceFormated){
+                $queryBuilder->where(DB::raw('DATE(since)'), '<=', $availableToFormated);   
+            }
+
         }
 
         $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
+
+        debugbar()->info($queryBuilder->getQuery()->toRawSql());
        
         $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;

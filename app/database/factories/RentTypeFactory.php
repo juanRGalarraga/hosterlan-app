@@ -22,7 +22,7 @@ class RentTypeFactory extends Factory
             $rentTypes = RentTypeEnum::cases();
         }
 
-        $rentType = array_shift($rentType);
+        $rentType = array_shift($rentTypes);
 
         return [
             'name' => $rentType->value,
