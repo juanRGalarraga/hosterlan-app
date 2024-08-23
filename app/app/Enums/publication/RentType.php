@@ -3,7 +3,7 @@ namespace App\Enums\Publication;
 
 use App\Enums\BaseEnum;
 
-enum RentType: string {
+enum RentTypeEnum: string {
     
     use BaseEnum;
     case Cottage = 'Cabaña';

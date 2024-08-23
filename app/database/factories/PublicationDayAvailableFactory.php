@@ -22,7 +22,7 @@ class PublicationDayAvailableFactory extends Factory
     public function definition(): array
     {
         $since = fake()->dateTimeThisYear();
-        $to = $since->add(DateInterval::createFromDateString('7 day'));
+        $to = (clone $since)->modify('+7 days');
         return [
             'publication_id' => Publication::factory(),
             'since'=> $since,

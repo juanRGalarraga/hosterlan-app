@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Database\Factories\RentTypeFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\Publication\PublicationState;
-use App\Enums\Publication\RentType as PublicationRentType;
+use App\Enums\Publication\RentTypeEnum;
 use App\Models\RentType;
 
 /**
@@ -29,8 +29,8 @@ class PublicationFactory extends Factory
             'bathroom_count'=>fake()->numberBetween(1,10),
             'pets'=>fake()->boolean(),
             'number_people'=> fake()->numberBetween(1,10),
-            'rent_type_id' => fake()->randomKey(PublicationRentType::cases()),
-            'state'=> fake()->randomElement(PublicationState::forMigration()),
+            'rent_type_id' => RentType::inRandomOrder()->first()->id,
+            'state'=> fake()->randomElement(RentTypeEnum::forMigration()),
         ];
     }
 }

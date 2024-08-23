@@ -1,5 +1,5 @@
     @php
-    use App\Enums\Publication\RentType;
+    use App\Enums\Publication\RentTypeEnum;
 
     $optRoomCount = 4;
     $optBathroomCount = 4;
@@ -28,7 +28,7 @@
             </div>
         
             <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3">
-                @foreach(RentType::cases() as $key => $rentType)
+                @foreach(RentTypeEnum::cases() as $key => $rentType)
                     <x-form.select-input-option value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
                 @endforeach
             </x-form.select-input>

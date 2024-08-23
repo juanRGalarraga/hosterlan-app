@@ -1,3 +1,5 @@
+import ObjectHelper from "../../objectHelper";
+
 export default class PublicationList {
 
   mainCardList = null;
@@ -24,17 +26,16 @@ export default class PublicationList {
 
   getList(dataToSend = null){
     let thisObj = this;
-    const url = 'publications/list';
-    const params = dataToSend;
-
-    // Convert parameters to a query string
-    const queryString = new URLSearchParams(params).toString();
-
-    // Append query string to the URL
-    const fullUrl = `${url}?${queryString}`;
-
     let publicationMainlist = document.getElementById('publicationMainlist');
-    fetch(fullUrl, dataToSend)
+    let url = 'publications/list';
+
+    if( !ObjectHelper.isEmpty(dataToSend)){
+        const queryString = new URLSearchParams(dataToSend).toString();
+    
+        url = `${url}?${queryString}`;
+    }
+
+    fetch(url, dataToSend)
       .then((respuesta) => respuesta.blob())
       .then(blob => {
         blob.text().then(text => {

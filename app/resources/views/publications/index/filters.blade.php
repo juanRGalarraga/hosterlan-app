@@ -1,13 +1,13 @@
 
 @php
     use App\Enums\Publication\PublicationState;
-    use App\Enums\Publication\RentType;
+    use App\Enums\Publication\RentTypeEnum;
 @endphp
 
 <form name="formPublicationFilters" id="formPublicationFilters" >
     @csrf
     <div class="w-full text-center">
-        <x-primary-button class="mb-3" id="buttonApplyFilter">{{__('Aplicar')}}</x-primary-button>
+        <x-primary-button class="mb-3" type="button" id="buttonApplyFilter">{{__('Aplicar')}}</x-primary-button>
     </div>
 
     <div class="flex flex-row mb-3 col-span-1">
@@ -19,7 +19,7 @@
     
     <x-form.select-input id="rentType" name="rentType" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected>{{__('Tipo de renta')}}</x-form.select-input-option>
-        @foreach (RentType::cases() as $rentType)
+        @foreach (RentTypeEnum::cases() as $rentType)
             <x-form.select-input-option value="{{$rentType->name}}">{{$rentType->value}}</x-form.select-input-option>
         @endforeach
     </x-form.select-input>

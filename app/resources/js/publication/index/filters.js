@@ -1,6 +1,5 @@
 import PublicationList from './list.js';
-import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
-import Datepicker from 'flowbite-datepicker/Datepicker';
+import ObjectHelper from '../../objectHelper.js';
 
 class PublicationFilter extends PublicationList {
 
@@ -14,7 +13,7 @@ class PublicationFilter extends PublicationList {
     bathroomCount
     rentType
     withPets
-    filters = []
+    filters = {}
     buttonApplyFilter
 
     constructor(){
@@ -41,20 +40,37 @@ class PublicationFilter extends PublicationList {
         let thisInstance = this
         this.buttonApplyFilter.onclick = function(event){
             thisInstance.getInputValues();
+            console.log(thisInstance.filters);
+            
+            if( !ObjectHelper.isEmpty(thisInstance.filters) ){
+                thisInstance.getList(thisInstance.filters)
+            }
         }
     }
 
     getInputValues(){
-        this.filters.push({search:            this.search.value})
-        this.filters.push({publication_state: this.publication_state.value})
-        this.filters.push({available_since:    this.available_since.value})
-        this.filters.push({available_to:      this.available_to.value})
-        this.filters.push({price_min:         this.price_min.value})
-        this.filters.push({price_max:         this.price_max.value})
-        this.filters.push({roomCount:         this.roomCount.value})
-        this.filters.push({bathroomCount:     this.bathroomCount.value})
-        this.filters.push({rentType:          this.rentType.value})
-        this.filters.push({withPets:          this.withPets.value})
+        this.appendToFilters('search',            this.search.value)
+        this.appendToFilters('publication_state', this.publication_state.value)
+        this.appendToFilters('available_since',   this.available_since.value)
+        this.appendToFilters('available_to',      this.available_to.value)
+        this.appendToFilters('price_min',         this.price_min.value)
+        this.appendToFilters('price_max',         this.price_max.value)
+        this.appendToFilters('roomCount',         this.roomCount.value)
+        this.appendToFilters('bathroomCount',     this.bathroomCount.value)
+        this.appendToFilters('rentType',          this.rentType.value)
+        this.appendToFilters('withPets',          this.withPets.value)
+    }
+
+    appendToFilters(name, value){
+        
+        if(value.length < 1 || name.length < 1){
+            return;
+        }
+        
+        this.filters[name] = value;
+        /**
+         * TODO append to localstorage for persistence.
+         */
     }
 }
 

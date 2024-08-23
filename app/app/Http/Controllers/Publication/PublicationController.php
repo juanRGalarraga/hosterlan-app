@@ -13,7 +13,8 @@ use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
 use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
 use App\Models\PublicationDayAvailable;
-
+use Illuminate\Support\Facades\Validator;
+use DB;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -35,12 +36,14 @@ class PublicationController extends Controller
         
         $publication = new Publication();
         $queryBuilder = $publication->newQuery();
-        $queryBuilder->select('*');
+        $queryBuilder
+        ->select('*')
+        ->leftjoin(PublicationDayAvailable::tableName(), 'publications.id', '=', PublicationDayAvailable::tableName() . ".publication_id");
         
         $searchValue = $request->input('search');
         if(!empty($searchValue)){
 
-            $request->validate(['string', 'min:1'], $searchValue);
+            $request->validate(['search' => 'string|min:1']);
 
             $queryBuilder
             ->where('title', 'like', "%$searchValue%")
@@ -48,58 +51,28 @@ class PublicationController extends Controller
             ->orWhere('ubication', 'like', "%$searchValue%");
         }
 
-        $stateValue = $request->input('state');
+        $stateValue = $request->input('state', '');
         if(!is_null(PublicationState::tryFrom($stateValue))){
             $queryBuilder
                 ->where('state', $stateValue);
         }
-        
-        $available_since = $request->input('available_since');
-        $availableFromFormated = Carbon::createFromFormat('Y-m-d', $available_since);
-    
 
-        $queryBuilder->leftjoin('publications_availables_days', 'publications.id', '=', 'publications_availables_days.publication_id');
-        
-        
-        if(!is_null($availableFromFormated)){
-            $request->validate([
-                'available_since' => 'required|date',
-            ]);  
-
-            $queryBuilder
-               ->where('publications_availables_days.since', '>=', $availableFromFormated);
-                
-        }
-        $availableTo=$request->input('available_to');
-        $fechaTo= new carbon($availableTo);
-        $availableTo = Carbon::createFromFormat('d-m-Y', $availableTo)->format('Y-m-d');
-        if(!is_null($availableTo)){
-            $request->validate([
-                'available_to' => 'required|date|after_or_equal:available_since',
-            ]);  
-
-            $queryBuilder
-                ->where('publications_availables_days.to', '<=', $availableTo);
+        $availableSince = $request->input('available_since', '');
+        $availableSinceCarbon = new Carbon($availableSince);
+        $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
+        if($availableSinceFormated){
+            $queryBuilder->where(DB::raw('DATE(since)'), '>=', $availableSinceFormated);
         }
 
-        
-        
+        $availableTo = $request->input('available_to', '');
+        $availableToCarbon = new Carbon($availableTo);
+        $availableToFormated = $availableToCarbon->format('Y-m-d');
+        if($availableToFormated){
+            $queryBuilder->where(DB::raw('DATE(since)'), '<=', $availableToFormated);   
+        }
 
-        
-            
-        
-            
-            
-        
-        
-    
-
-
-        $publications = $queryBuilder->limit(25)->orderBy('created_at', 'desc')->get();
+        $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
        
-
-        // dd($queryBuilder->toRawSql());
-        // dd($publications);
         $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;
     }

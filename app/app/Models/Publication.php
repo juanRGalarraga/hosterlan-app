@@ -9,6 +9,7 @@ use App\Models\Picture;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use App\Models\RentType;
 class Publication extends Model
 {
     use HasFactory;
@@ -33,7 +34,7 @@ class Publication extends Model
     }
     
     public function rentType(){
-      return $this->hasOne(RentType::class);
+      return $this->belongsTo(RentType::class);
     }
 
     public function getUrlPicture(int $id){

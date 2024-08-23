@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Enums\Publication\RentType as PublicationRentType;
+use App\Enums\Publication\RentTypeEnum;
 use App\Models\RentType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -26,12 +26,15 @@ class DatabaseSeeder extends Seeder
     {
 
         Owner::factory()->count(30)->create();
-        
-        RentType::factory(count(PublicationRentType::cases()))->createMany($this->getRentTypesToFactory());
+
+        RentType::factory()
+            ->count(count(RentTypeEnum::cases()))
+            ->create();
 
         Publication::factory()
             ->count(10)
             ->hasPictures(rand(1,5))
+            ->hasRentType(1)
             ->hasDaysAvailable(rand(1, 5))
             ->create();
         
@@ -44,7 +47,7 @@ class DatabaseSeeder extends Seeder
 
     private function getRentTypesToFactory(){
         $rentTypes = new Collection();
-        foreach (PublicationRentType::cases() as $rentType) {
+        foreach (RentTypeEnum::cases() as $rentType) {
             $rentTypes->add(['name' => $rentType->value]);
         }
         return $rentTypes->all();
