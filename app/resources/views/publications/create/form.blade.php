@@ -13,7 +13,7 @@
             @csrf
             <h3 class="text-white font-bold text-lg mb-3">{{__('Nueva publicación')}}</h3>
 
-            @include('publications.create-form-dropzone')
+            @include('publications.create.form-dropzone')
 
             <div class="flex flex-row overflow-x-auto fixed-filters-zone overflow-y-hidden show-scroll mb-3 align-middle items-center" id="previewFiles">
             </div>

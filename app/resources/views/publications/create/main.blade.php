@@ -20,6 +20,6 @@
     </x-slot:header>
 
     <div class="flex flex-row my-max-h-screen">
-        @include('publications.create-form')
+        @include('publications.create.form')
     </div>
 </x-app-layout>

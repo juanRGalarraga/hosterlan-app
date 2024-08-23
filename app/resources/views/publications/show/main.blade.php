@@ -20,7 +20,7 @@
     </svg>
   </button>
 
-  @include('publications.show-carrousel')
+  @include('publications.show.carrousel')
 
   <!-- Lado derecho más pequeño con scroll independiente -->
   <div class="lg:w-1/4 w-full h-full bg-gray-700 p-4 flex flex-col justify-start overflow-y-auto scrollbar-hide">

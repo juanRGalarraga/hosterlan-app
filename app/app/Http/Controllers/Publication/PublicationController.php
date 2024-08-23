@@ -29,7 +29,7 @@ class PublicationController extends Controller
     public function index(Request $request)
     {
         $publications = Publication::latest()->paginate(25);
-        $html = view("publications.index", compact('publications'));
+        $html = view("publications.index.main", compact('publications'));
         return $html;
     }
 
@@ -100,7 +100,7 @@ class PublicationController extends Controller
 
         // dd($queryBuilder->toRawSql());
         // dd($publications);
-        $html = view("publications.list", compact('publications'))->render();
+        $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;
     }
    
@@ -110,17 +110,17 @@ class PublicationController extends Controller
      */
     public function create()
     {
-        return view("publications.create");
+        return view("publications.create.main");
     }
 
-    public function getCarousel(Request $request){
-        $images = $request->file('file');
-        $response[] = [
-            ['src' => asset('publications-pictures/carousel-preview.svg')],
-            ['src' => ''],
-        ];
-        return response()->json($response);
-    }
+    // public function getCarousel(Request $request){
+    //     $images = $request->file('file');
+    //     $response[] = [
+    //         ['src' => asset('publications-pictures/carousel-preview.svg')],
+    //         ['src' => ''],
+    //     ];
+    //     return response()->json($response);
+    // }
 
     public function getPreviewFiles(Request $request){
         $filenames = $request->input('filename', []);
@@ -134,7 +134,7 @@ class PublicationController extends Controller
             $src = explode(",", $src);
         }
         
-        return view('publications.create-form-preview-files', compact('filenames', 'src'))->render();
+        return view('publications.create.form-preview-files', compact('filenames', 'src'))->render();
     }
 
     /**
@@ -196,7 +196,7 @@ class PublicationController extends Controller
         }
         
         return redirect()
-        ->route('publications.index')
+        ->route('publications.index.main')
         ->withSuccess(__('La publicacion ha sido creada exitosamente'));
     }
 
@@ -205,7 +205,7 @@ class PublicationController extends Controller
      */
     public function show(Publication $publication)
     {
-        return view('publications.show', [
+        return view('publications.show.main', [
             'publication' => $publication
         ]);
     }
@@ -215,7 +215,7 @@ class PublicationController extends Controller
      */
     public function edit(Publication $publication)
     {
-        return view('publications.edit', [
+        return view('publications.edit.main', [
             'publication' => $publication
         ]);
     }
@@ -236,7 +236,7 @@ class PublicationController extends Controller
     public function destroy(Publication $publication)
     {
         $publication->delete();
-        return redirect()->route('publications.index')
+        return redirect()->route('publications.index.main')
                 ->withSuccess(_('Publicacion eliminada exitosamente'));
     }
 }

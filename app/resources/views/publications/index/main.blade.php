@@ -27,13 +27,13 @@
         </button>
         <div class="py-4 overflow-y-auto">
             <ul class="space-y-2 font-medium">
-                @include('publications.index-filters')
+                @include('publications.filters')
             </ul>
         </div>
     </div>
     <div class="pl-3 mt-3 w-full relative">
         <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row" id="publicationMainlist">
-            @include('publications.list')
+            @include('publications.card-list')
         </div>
     </div>
     <div class="text-center flex justify-center w-full">
