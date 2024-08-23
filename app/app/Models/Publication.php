@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PublicationsAvailablesDays;
+use App\Models\PublicationAvailableDay;
 use App\Models\Picture;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -68,6 +68,6 @@ class Publication extends Model
       return '';
     }
     public function publicationsAvailablesDays()
-    {return $this->hasmany(PublicationsAvailablesDays::class, 'publication_id', 'id');
+    {return $this->hasMany(PublicationAvailableDay::class);
     }
 }

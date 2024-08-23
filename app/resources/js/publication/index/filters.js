@@ -14,7 +14,7 @@ class PublicationFilter extends PublicationList {
     inputPathroomCount = null
     inputPentType = null
     inputPithPets = null
-    filters
+    filters = []
     buttonApplyFilter
 
     constructor(){
@@ -57,7 +57,6 @@ class PublicationFilter extends PublicationList {
         this.filters.push({withPets:          this.withPets.value})
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', e => {
   new PublicationFilter();

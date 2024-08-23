@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PublicationsAvailablesDays extends Model
+class PublicationAvailableDay extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -16,6 +16,6 @@ class PublicationsAvailablesDays extends Model
     ];
     public function publication()
     {
-        return $this->belongsTo(Publication::class, 'publication_id');
+        return $this->belongsTo(Publication::class);
     }
 }

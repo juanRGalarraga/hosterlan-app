@@ -7,14 +7,12 @@ use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
-use App\Models\PublicationsAvailablesDays;
 use Exception;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
-// use Illuminate\Support\Facades\Validator;
 use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
-// use Illuminate\Support\Facades\Storage;
+use App\Models\PublicationAvailableDay;
 
 class PublicationController extends Controller
 {
@@ -34,13 +32,16 @@ class PublicationController extends Controller
     }
 
     public function getList(Request $request){
-        // $request->validate(['search' => 'string|max:250']);
         
         $publication = new Publication();
         $queryBuilder = $publication->newQuery();
+        $queryBuilder->select('*');
         
         $searchValue = $request->input('search');
-        if(is_string($searchValue) && !empty($searchValue)){
+        if(!empty($searchValue)){
+
+            $request->validate(['string', 'min:1'], $searchValue);
+
             $queryBuilder
             ->where('title', 'like', "%$searchValue%")
             ->orWhere('description', 'like', "%$searchValue%")
@@ -52,7 +53,6 @@ class PublicationController extends Controller
             $queryBuilder
                 ->where('state', $stateValue);
         }
-
         
         $available_from = $request->input('available_from');
         $availableFromFormated = Carbon::createFromFormat('Y-m-d', $available_from);
