@@ -1,6 +1,7 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 relative" style="position: fixed; top: 0; width: 100%; z-index: 999;">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <x-form.minimal-input class="my-3 w-[40rem] mx-auto" type="text" id="search" name="search" placeholder="{{__('Buscar')}}"></x-form.minimal-input>
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->

@@ -78,21 +78,6 @@ class PublicationFilter extends PublicationList {
           }
         };
     }
-
-    loadDaterangePicker(){
-        let dateRangePicker = document.getElementById('available_from');
-
-        let dateRangePickerJs = new Datepicker(dateRangePicker);
-
-        dateRangePickerJs.addEventListener('changeDate', e => {
-          console.log(e.target.value);
-        });
-    }
-}
-
-function handeDateChange(date){
-  console.log(date);
-  
 }
 
 

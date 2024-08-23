@@ -42,13 +42,22 @@ class Publication extends Model
 
     public function getFirstPicture(){
       $filename = asset('publications-pictures/carousel-preview.svg');
+      
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
-        $isFileExist = Storage::exists("publications-pictures/{$this->id}/{$picture->name}");
-        if(!empty($picture) and $isFileExist){
-          $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
+
+        if(!$picture){
+          return $filename;
+        }
+        
+        $path = "publications-pictures/{$this->id}/{$picture->name}";
+        $isFileExist = Storage::exists($path);
+        
+        if($isFileExist){
+          return asset($path);
         }
       }
+
       return $filename;
     }
 

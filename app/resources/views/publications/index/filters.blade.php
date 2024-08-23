@@ -6,8 +6,6 @@
 
 <form name="formPublicationFilters" id="formPublicationFilters" >
     @csrf
-    
-    <x-form.minimal-input class="mb-3 col-span-1" type="text" id="search" name="search" placeholder="{{__('Buscar')}}"></x-form.minimal-input>
 
     <div class="flex flex-row mb-3 col-span-1">
         <x-form.minimal-input class="mr-2 w-1/2" id="price_min" name="price_min" type="text" placeholder="{{__('Precio min.')}}"></x-form.minimal-input>
