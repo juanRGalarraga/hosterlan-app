@@ -4,79 +4,57 @@ import Datepicker from 'flowbite-datepicker/Datepicker';
 
 class PublicationFilter extends PublicationList {
 
-    inputPearch = null;
-    inputPublicationState = null;
-    inputPvailableFrom = null;
-    inputPvailableTo = null;
-    inputPriceMin = null;
-    inputPriceMax = null;
-    inputPoomCount = null;
-    inputPathroomCount = null;
-    inputPentType = null;
-    inputPithPets = null;
+    inputPearch = null
+    inputPublicationState = null
+    inputPvailableFrom = null
+    inputPvailableTo = null
+    inputPriceMin = null
+    inputPriceMax = null
+    inputPoomCount = null
+    inputPathroomCount = null
+    inputPentType = null
+    inputPithPets = null
+    filters
+    buttonApplyFilter
 
     constructor(){
-        super();
-        this.initInputsFilter();
-        this.loadDaterangePicker();
+        super()
+        this.initFilters()
     }
 
-    initInputsFilter(){
-        this.search = document.getElementById('search');
-        this.publication_state = document.getElementById('publication_state');
-        this.available_from = document.getElementById('available_from');
-        this.available_to = document.getElementById('available_to');
-        this.price_min = document.getElementById('price_min');
-        this.price_max = document.getElementById('price_max');
-        this.roomCount = document.getElementById('roomCount');
-        this.bathroomCount = document.getElementById('bathroomCount');
-        this.rentType = document.getElementById('rentType');
-        this.withPets = document.getElementById('withPets');
-        this.initEvents();
+    initFilters(){
+        this.search = document.getElementById('search')
+        this.publication_state = document.getElementById('publication_state')
+        this.available_from = document.getElementById('available_from')
+        this.available_to = document.getElementById('available_to')
+        this.price_min = document.getElementById('price_min')
+        this.price_max = document.getElementById('price_max')
+        this.roomCount = document.getElementById('roomCount')
+        this.bathroomCount = document.getElementById('bathroomCount')
+        this.rentType = document.getElementById('rentType')
+        this.withPets = document.getElementById('withPets')
+        this.buttonApplyFilter = document.getElementById('buttonApplyFilter')
+        this.loadButtonApplyFilter()
     }
 
-    initEvents(){
-
-        let thisObj = this;
-    
-        const applyFilter = (filter) => {
-          thisObj.getList(filter);
+    loadButtonApplyFilter(){
+        let thisInstance = this
+        this.buttonApplyFilter.onclick = function(event){
+            thisInstance.getInputValues();
         }
-    
-        this.search.onkeyup = function(ev){
-          if(ev.key == PublicationList.KEY_ENTER) {
-            applyFilter({search: ev.target.value});
-          }
-        }
-    
-        this.publication_state.onchange = (ev) => {
-          applyFilter({state: ev.target.value});
-        };
+    }
 
-        this.roomCount.onchange = (ev) => {
-          applyFilter({roomCount: ev.target.value});
-        };
-        this.bathroomCount.onchange = (ev) => {
-          applyFilter({bathroomCount: ev.target.value});
-        };
-        this.rentType.onchange = (ev) => {
-          applyFilter({rentType: ev.target.value});
-        };
-        this.withPets.onchange = (ev) => {
-          applyFilter({withPets: ev.target.value});
-        };
-    
-        this.price_min.onkeyup = (ev) => {
-          if(ev.key == PublicationList.KEY_ENTER) {
-            applyFilter({price_min: ev.target.value});
-          }
-        };
-    
-        this.price_max.onkeyup = (ev) => {
-          if(ev.key == PublicationList.KEY_ENTER) {
-            applyFilter({price_max: ev.target.value});
-          }
-        };
+    getInputValues(){
+        this.filters.push({search:            this.search.value})
+        this.filters.push({publication_state: this.publication_state.value})
+        this.filters.push({available_from:    this.available_from.value})
+        this.filters.push({available_to:      this.available_to.value})
+        this.filters.push({price_min:         this.price_min.value})
+        this.filters.push({price_max:         this.price_max.value})
+        this.filters.push({roomCount:         this.roomCount.value})
+        this.filters.push({bathroomCount:     this.bathroomCount.value})
+        this.filters.push({rentType:          this.rentType.value})
+        this.filters.push({withPets:          this.withPets.value})
     }
 }
 

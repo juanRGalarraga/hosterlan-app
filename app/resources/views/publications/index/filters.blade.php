@@ -6,6 +6,9 @@
 
 <form name="formPublicationFilters" id="formPublicationFilters" >
     @csrf
+    <div class="w-full text-center">
+        <x-primary-button class="mb-3" id="buttonApplyFilter">{{__('Aplicar')}}</x-primary-button>
+    </div>
 
     <div class="flex flex-row mb-3 col-span-1">
         <x-form.minimal-input class="mr-2 w-1/2" id="price_min" name="price_min" type="text" placeholder="{{__('Precio min.')}}"></x-form.minimal-input>
