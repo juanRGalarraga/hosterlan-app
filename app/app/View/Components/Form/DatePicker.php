@@ -1,24 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Form;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class FilePreview extends Component
+class DatePicker extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(
-        string $filename,
-        string $previewSrc = '',
-        string $imgClassName = '',
-        ?Closure $deleteAction = null
-    )
+    public function __construct()
     {
-        
+        //
     }
 
     /**
@@ -26,6 +21,6 @@ class FilePreview extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.file-preview');
+        return view('components.form.date-picker');
     }
 }

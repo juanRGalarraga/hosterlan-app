@@ -1,6 +1,3 @@
-import Input from '../input.js';
-import PublicationDropzone from './dropzone.js';
-
 export default class PublicationCreate {
     form = null
     formId = "publicationForm"
@@ -48,7 +45,3 @@ export default class PublicationCreate {
         });
     }
 }
-
-let price = new Input('price');
-
-price.checkFormatNumber();

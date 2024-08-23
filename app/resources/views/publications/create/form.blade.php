@@ -11,23 +11,21 @@
     <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone">
         <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <h3 class="text-white font-bold text-lg mb-3">{{__('Nueva publicación')}}</h3>
+
+            <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
+            <x-input-error :messages="$errors->first('title')" />
 
             @include('publications.create.form-dropzone')
 
-            <div class="flex flex-row overflow-x-auto fixed-filters-zone overflow-y-hidden show-scroll mb-3 align-middle items-center" id="previewFiles">
+            <div class="" id="previewFiles">
             </div>
 
-            <x-form.minimal-input name="title" id="title" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mb-3"></x-form.minimal-input>
-            <x-input-error :messages="$errors->first('title')" />
-
-            <x-form.label text="Disponibilidad"></x-form.label>
-            <div class="flex flex-row mb-3">
-                <x-form.datepicker-input id="available_from" value="{{old('available_from')}}" name="available_from" :label="__('Desde')" class="text-white w-full" value=""></x-form.datepicker-input>
-                <x-form.datepicker-input id="available_to" value="{{old('available_to')}}" name="available_to" :label="__('Hasta')" class="text-white ml-[2px] w-full" value=""></x-form.datepicker-input>
+            <x-input-label class="text-center mb-3">Disponibilidad</x-input-label>
+            <div class="justify-center flex">
+                <x-form.date-range-picker idDateFrom="" idDateTo="" id=""></x-form.date-range-picker>
             </div>
         
-            <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3">
+            <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3 w-full">
                 @foreach(RentTypeEnum::cases() as $key => $rentType)
                     <x-form.select-input-option value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
                 @endforeach
@@ -57,9 +55,9 @@
             <x-form.minimal-input name="ubication" id="ubication" value="{{old('ubication')}}" type="text" label="{{__('Ubicación de la propiedad')}}" class="mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('ubication')" />
 
-            <div>
-                <label for="description" class="block text-sm font-medium mb-3 text-gray-300">{{__('Descripción del alquiler')}}</label>
-                <textarea name="description" id="description" cols="10" rows="3" class="w-full text-gray-900 bg-gray-200 border border-gray-300 rounded-md dark:bg-gray-600 dark:text-white dark:border-gray-600">{{old('description')}}</textarea>
+            <div class="my-4">
+                <label for="description" class="block text-sm font-medium text-gray-900 dark:text-white">Your message</label>
+                <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{__('Descripción del alquiler...')}}">{{old('description')}}</textarea>
             </div>
             <x-input-error :messages="$errors->first('description')" />
         

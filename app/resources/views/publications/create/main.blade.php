@@ -1,10 +1,4 @@
-<x-app-layout>
-    @push('custom-scripts')
-        <script src="/js/calendar/jsCalendar.min.js"></script>
-        <script src="/js/calendar/jsCalendar.lang.es.js"></script>
-        <script src="/js/calendar/jsCalendar.datepicker.min.js"></script>
-    @endpush
-
+<x-app-layout :includeSearchNav="false">
     <x-slot:scripts>
         @vite(['resources/js/publication/create/dropzone.js'])
     </x-slot:scripts>

@@ -1,4 +1,6 @@
-export default class PublicationDropzone {
+import Input from '../../input.js';
+
+class PublicationDropzone {
 
     input = null
     rootPreviewFiles = 'previewFiles'
@@ -45,7 +47,6 @@ export default class PublicationDropzone {
     }
 
     getFiles(dataTosend = null) {
-        
         let thisInstance = this;
 
         let baseUrl = 'getPreviewFiles';
@@ -87,6 +88,7 @@ export default class PublicationDropzone {
         if(buttons) {
             buttons.forEach(button => {
                 button.onclick = () => {
+                    debugger;
                     thisInstance.deleteFile(button.getAttribute('data-filename'));
                 } 
             });
@@ -113,5 +115,8 @@ export default class PublicationDropzone {
     }
 }
 
-let publicationDropZone = new PublicationDropzone('dropzone-file');
-// publicationDropZone.getFiles();
+new PublicationDropzone('dropzone-file');
+
+let price = new Input('price');
+
+price.checkFormatNumber();
