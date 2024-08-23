@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
 use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
-use App\Models\PublicationAvailableDay;
+use App\Models\PublicationDayAvailable;
 
 class PublicationController extends Controller
 {
@@ -54,8 +54,8 @@ class PublicationController extends Controller
                 ->where('state', $stateValue);
         }
         
-        $available_from = $request->input('available_from');
-        $availableFromFormated = Carbon::createFromFormat('Y-m-d', $available_from);
+        $available_since = $request->input('available_since');
+        $availableFromFormated = Carbon::createFromFormat('Y-m-d', $available_since);
     
 
         $queryBuilder->leftjoin('publications_availables_days', 'publications.id', '=', 'publications_availables_days.publication_id');
@@ -63,7 +63,7 @@ class PublicationController extends Controller
         
         if(!is_null($availableFromFormated)){
             $request->validate([
-                'available_from' => 'required|date',
+                'available_since' => 'required|date',
             ]);  
 
             $queryBuilder
@@ -75,7 +75,7 @@ class PublicationController extends Controller
         $availableTo = Carbon::createFromFormat('d-m-Y', $availableTo)->format('Y-m-d');
         if(!is_null($availableTo)){
             $request->validate([
-                'available_to' => 'required|date|after_or_equal:available_from',
+                'available_to' => 'required|date|after_or_equal:available_since',
             ]);  
 
             $queryBuilder

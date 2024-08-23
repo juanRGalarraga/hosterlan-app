@@ -15,7 +15,7 @@
         <x-form.minimal-input class="w-1/2" id="price_max" name="price_max" type="text" placeholder="{{__('Precio máx.')}}"></x-form.minimal-input>
     </div>
 
-    <x-form.flowbite-daterangepicker id="dateRangePicker" idDateFrom="available_from" idDateTo="available_to"></x-form.flowbite-daterangepicker>
+    <x-form.flowbite-daterangepicker id="dateRangePicker" idDateFrom="available_since" idDateTo="available_to"></x-form.flowbite-daterangepicker>
     
     <x-form.select-input id="rentType" name="rentType" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected>{{__('Tipo de renta')}}</x-form.select-input-option>

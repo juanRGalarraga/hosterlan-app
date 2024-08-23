@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PublicationAvailableDay;
+use App\Models\PublicationDayAvailable;
 use App\Models\Picture;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 class Publication extends Model
 {
@@ -22,6 +23,10 @@ class Publication extends Model
       'pets',
       'number_people'
     ];
+
+    public function daysAvailable() : HasMany {
+        return $this->hasMany(PublicationDayAvailable::class);
+    }
 
     public function pictures(){
       return $this->hasMany(Picture::class);
@@ -66,8 +71,5 @@ class Publication extends Model
         return Carbon::createFromTimestamp($this->created_at)->format('l jS \\of F Y h:i:s A');
       }
       return '';
-    }
-    public function publicationsAvailablesDays()
-    {return $this->hasMany(PublicationAvailableDay::class);
     }
 }

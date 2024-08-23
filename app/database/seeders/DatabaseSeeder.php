@@ -11,7 +11,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Owner;
 use App\Models\Publication;
 use App\Models\Picture;
-use App\Models\PublicationAvailableDay;
+use App\Models\PublicationDayAvailable;
 use Database\Factories\RentTypeFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -24,15 +24,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
         Owner::factory()->count(30)->create();
         
         RentType::factory(count(PublicationRentType::cases()))->createMany($this->getRentTypesToFactory());
 
         Publication::factory()
-            ->has(Picture::factory()->count(4))
-            ->has(PublicationAvailableDay::factory(4)->count(4))
-        ->count(25)->create();        
+            ->count(10)
+            ->hasPictures(rand(1,5))
+            ->hasDaysAvailable(rand(1, 5))
+            ->create();
         
         User::factory()->count(1)->create([
             'email' => 'test@example.com',

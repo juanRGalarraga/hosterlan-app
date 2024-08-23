@@ -3,14 +3,15 @@
 namespace Database\Factories;
 
 use App\Enums\Publication\PublicationState;
+use App\Models\Publication;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\PublicationAvailableDay;
+use App\Models\PublicationDayAvailable;
 use \DateInterval;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PublicationAvailableDay>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PublicationDayAvailable>
  */
-class PublicationAvailableDayFactory extends Factory
+class PublicationDayAvailableFactory extends Factory
 {
     
     /**
@@ -23,6 +24,7 @@ class PublicationAvailableDayFactory extends Factory
         $since = fake()->dateTimeThisYear();
         $to = $since->add(DateInterval::createFromDateString('7 day'));
         return [
+            'publication_id' => Publication::factory(),
             'since'=> $since,
             'to'=> $to,
             'state'=> fake()->randomElement(PublicationState::forMigration())

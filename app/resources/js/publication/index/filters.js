@@ -4,16 +4,16 @@ import Datepicker from 'flowbite-datepicker/Datepicker';
 
 class PublicationFilter extends PublicationList {
 
-    inputPearch = null
-    inputPublicationState = null
-    inputPvailableFrom = null
-    inputPvailableTo = null
-    inputPriceMin = null
-    inputPriceMax = null
-    inputPoomCount = null
-    inputPathroomCount = null
-    inputPentType = null
-    inputPithPets = null
+    search
+    publication_state
+    available_since
+    available_to
+    price_min
+    price_max
+    roomCount
+    bathroomCount
+    rentType
+    withPets
     filters = []
     buttonApplyFilter
 
@@ -25,7 +25,7 @@ class PublicationFilter extends PublicationList {
     initFilters(){
         this.search = document.getElementById('search')
         this.publication_state = document.getElementById('publication_state')
-        this.available_from = document.getElementById('available_from')
+        this.available_since = document.getElementById('available_since')
         this.available_to = document.getElementById('available_to')
         this.price_min = document.getElementById('price_min')
         this.price_max = document.getElementById('price_max')
@@ -47,7 +47,7 @@ class PublicationFilter extends PublicationList {
     getInputValues(){
         this.filters.push({search:            this.search.value})
         this.filters.push({publication_state: this.publication_state.value})
-        this.filters.push({available_from:    this.available_from.value})
+        this.filters.push({available_since:    this.available_since.value})
         this.filters.push({available_to:      this.available_to.value})
         this.filters.push({price_min:         this.price_min.value})
         this.filters.push({price_max:         this.price_max.value})
