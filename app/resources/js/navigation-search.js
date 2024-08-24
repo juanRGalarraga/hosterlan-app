@@ -1,4 +1,4 @@
-import PublicationList from "./publication/index/list";
+import PublicationList from "./publications/index/list";
 
 export default class NavigationSearch {
 
@@ -9,7 +9,7 @@ export default class NavigationSearch {
     constructor(){
         this.inputEl = document.getElementById(this.inputId)
         if( !(this.inputEl instanceof HTMLInputElement) || this.inputEl.type != 'text'){
-            return console.error('inputEl not found')
+            return;
         }
 
         this.publicationList = new PublicationList

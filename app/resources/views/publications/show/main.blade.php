@@ -1,12 +1,11 @@
 <x-app-layout :includeNav="false">
   
   <x-slot:scripts>
-        @vite(['resources/js/publication/show/show.js'])
+        @vite([
+            'resources/js/publications/show/show.js',
+            'resources/css/publications/show/show.css',
+        ])
   </x-slot:scripts>
-
-  @push('custom-css')
-    <link rel="stylesheet" href="/css/publications/show.css?v={{time()}}"/>
-  @endpush
 
   @php
     $currencyFormat = env('CURRENCY_FORMAT', '$');

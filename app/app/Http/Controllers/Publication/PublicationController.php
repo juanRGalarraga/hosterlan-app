@@ -15,6 +15,8 @@ use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
 use App\Models\PublicationDayAvailable;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Arr;
+use Illuminate\Support\Facades\Log;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -108,18 +110,13 @@ class PublicationController extends Controller
     // }
 
     public function getPreviewFiles(Request $request){
-        $filenames = $request->input('filename', []);
-        $src = $request->input('src', []);
-
-        if(!empty($filenames)){
-            $filenames = explode(",", $filenames);
-        }
-
-        if(!empty($src)){
-            $src = explode(",", $src);
+        $files = $request->all();
+        if( !Arr::isAssoc($files) && count($files) < 1){
+            Log::notice('Any files to render');
+            return '';
         }
         
-        return view('publications.create.form-preview-files', compact('filenames', 'src'))->render();
+        return view('publications.create.form-preview-files', compact('files'))->render();
     }
 
     /**

@@ -8,7 +8,7 @@
 @endphp
 
 <div class="flex flex-col w-1/2 mx-auto" id="description">
-    <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden show-scroll fixed-filters-zone">
+    <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll">
         <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -17,7 +17,8 @@
 
             @include('publications.create.form-dropzone')
 
-            <div class="" id="previewFiles">
+            <div class="flex overflow-y-hidden overflow-x-auto mcss-hover-show-scroll mcss-hide-scroll space-x-2" id="previewFiles">
+            
             </div>
 
             <x-input-label class="text-center mb-3">Disponibilidad</x-input-label>

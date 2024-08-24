@@ -1,13 +1,10 @@
 <x-app-layout :includeSearchNav="false">
     <x-slot:scripts>
-        @vite(['resources/js/publication/create/dropzone.js'])
+        @vite([
+            'resources/js/publications/create/dropzone.js',
+            'resources/css/publications/create/create.css',
+        ])
     </x-slot:scripts>
-
-    @push('custom-css')
-        <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.min.css">
-        <link rel="stylesheet" type="text/css" href="/css/calendar/jsCalendar.darkseries.min.css">
-        <link rel="stylesheet" href="/css/publications/create.css">
-    @endpush
 
     <x-slot:header>
         {{__('Publicar propiedad')}}

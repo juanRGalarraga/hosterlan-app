@@ -1,10 +1,9 @@
 <x-app-layout>
-    @push('custom-css')
-        <link  rel="stylesheet" type="text/css" href="/css/publications/index.css">
-    @endpush
-
     <x-slot:scripts>
-        @vite(['resources/js/publication/index/filters.js'])
+        @vite([
+            'resources/js/publications/index/filters.js',
+            'resources/css/publications/index/index.css'
+        ])
     </x-slot:scripts>
 
     <x-slot:header>
