@@ -1,13 +1,14 @@
-import Input from '../../input.js';
 import SimpleHash from '../../simpleHash.js';
+import Alert from '../../utilities/alert.js';
 
-class PublicationDropzone {
-
+export default class PublicationFile {
     input = null
     rootPreviewFiles = 'previewFiles'
     form = 'publicationForm'
     files = {}
     inputForm
+    maxFilesUpload = 5
+    alertWarningMaxAllowedFiles
 
     constructor(inputId){
         this.input = document.getElementById(inputId)
@@ -24,19 +25,27 @@ class PublicationDropzone {
         if(!this.rootPreviewFiles){
             throw new Error("rootPreviewFiles not found");
         }
+        
+        this.alertWarningMaxAllowedFiles = new Alert().init('alertWarningMaxAllowedFiles');
 
         this.loadOnchange();
-        this.getFiles();
+        // this.getFiles();
     }
 
     loadOnchange() {
         let thisInstance = this
         this.input.onchange = function(event) {
             Array.from(event.target.files).forEach(file => {
-                const blobURL = URL.createObjectURL(file);
-                let hashId = SimpleHash.generate(file.name)
-                thisInstance.files[hashId] = blobURL;
-                thisInstance.createInputForm(file, hashId);
+                
+                if( !thisInstance.thisExceedMaxAllowedFiles() ){
+
+                    const blobURL = URL.createObjectURL(file);
+                    let hashId = SimpleHash.generate(file.name)
+                    thisInstance.files[hashId] = blobURL;
+                    thisInstance.createInputForm(file, hashId);
+
+                } 
+
             });
 
             thisInstance.getFiles(thisInstance.files);
@@ -105,8 +114,27 @@ class PublicationDropzone {
         this.getFiles(this.files);
     }
 
-    generateUniqueString() {
-        return crypto.randomUUID();
+    thisExceedMaxAllowedFiles(){
+        return Object.keys(this.files).length > this.maxFilesUpload
+    }
+
+
+    /**
+     * Method for only debug purposes
+     */
+
+    fillField(){
+        document.getElementById('title').value = "Oportunidad de cabaña!!";
+        document.getElementById('rent_type_id').options[1].selected = true;
+        document.getElementById('room_count').options[2].selected = true;
+        document.getElementById('bathroom_count').options[3].selected = true;
+        document.getElementById('number_people').options[3].selected = true;
+        document.getElementById('price').value = 2000;
+        document.getElementById('ubication').value = 'Gualeguaychú';
+        document.getElementById('description').value = 'Cabaña con 2 habitaciones, amueblada. Gran oportunidad';
+        document.getElementById('pets').checked = true;
+        document.getElementById('available_since').value = '06/03/2024';
+        document.getElementById('available_to').value = '06/04/2024';
     }
 
     fillExample(){
@@ -128,9 +156,3 @@ class PublicationDropzone {
         }
     }
 }
-
-new PublicationDropzone('dropzone-file');
-
-let price = new Input('price');
-
-price.checkFormatNumber();

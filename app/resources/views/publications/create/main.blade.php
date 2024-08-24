@@ -1,7 +1,7 @@
 <x-app-layout :includeSearchNav="false">
     <x-slot:scripts>
         @vite([
-            'resources/js/publications/create/dropzone.js',
+            'resources/js/publications/create/main.js',
             'resources/css/publications/create/create.css',
         ])
     </x-slot:scripts>

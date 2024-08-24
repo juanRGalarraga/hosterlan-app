@@ -4,16 +4,19 @@
     $optRoomCount = 4;
     $optBathroomCount = 4;
     $optNumberPeople = 10;
+    $maxAllowedFiles = env('MAX_ALLOWED_FILES', 5);
     //Storage::disk('local')->put('example.txt', 'Contents');
 @endphp
 
-<div class="flex flex-col w-1/2 mx-auto" id="description">
+<div class="flex flex-col w-1/2 mx-auto">
     <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll">
         <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
+
+            <x-alert.warning id="alertWarningMaxAllowedFiles">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
 
             @include('publications.create.form-dropzone')
 
@@ -23,7 +26,7 @@
 
             <x-input-label class="text-center mb-3">Disponibilidad</x-input-label>
             <div class="justify-center flex">
-                <x-form.date-range-picker idDateFrom="" idDateTo="" id=""></x-form.date-range-picker>
+                <x-form.date-range-picker idDateFrom="available_since" idDateTo="available_to" id="dateRangePicker"></x-form.date-range-picker>
             </div>
         
             <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3 w-full">
@@ -32,19 +35,19 @@
                 @endforeach
             </x-form.select-input>
         
-            <x-form.select-input id="room_count" value="{{old('room_count')}}" name="room_count" label="{{__('Habitaciones')}}" class="mb-3">
+            <x-form.select-input id="room_count" value="{{old('room_count')}}" name="room_count" label="{{__('Habitaciones')}}" class="mb-3 w-full">
                 @for ($i=1;$i<=$optRoomCount;$i++)
                     <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
                 @endfor
             </x-form.select-input>
         
-            <x-form.select-input id="bathroom_count" value="{{old('bathroom_count')}}" name="bathroom_count" label="{{__('Baños')}}" class="mb-3">
+            <x-form.select-input id="bathroom_count" value="{{old('bathroom_count')}}" name="bathroom_count" label="{{__('Baños')}}" class="mb-3 w-full">
                 @for ($i=1;$i<=$optBathroomCount;$i++)
                     <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
                 @endfor
             </x-form.select-input>
 
-            <x-form.select-input id="number_people" value="{{old('number_people')}}" name="number_people" label="{{__('Máx. personas')}}" class="mb-3">
+            <x-form.select-input id="number_people" value="{{old('number_people')}}" name="number_people" label="{{__('Máx. personas')}}" class="mb-3 w-full">
                 @for ($i=1;$i<=$optNumberPeople;$i++)
                     <x-form.select-input-option value="{{$i}}">{{$i}}</x-form.select-input-option>
                 @endfor
