@@ -9,7 +9,8 @@ class AppLayout extends Component
 {
 
     public function __construct(
-        public bool $includeNav = true
+        public bool $includeNav = true,
+        public bool $includeSearchNav = true
     )
     {
         

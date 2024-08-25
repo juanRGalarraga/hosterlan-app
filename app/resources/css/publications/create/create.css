@@ -1,0 +1,18 @@
+.mcss-hide-scroll {
+    scrollbar-width: none;
+}
+
+.mcss-hover-show-scroll:hover {
+    /* overflow-y: auto; */
+    scrollbar-width: thin !important;
+    background-color: #101727; 
+    scrollbar-color: white #676767;
+    scroll-behavior: smooth;
+}
+
+.my-max-h-screen{
+    max-height: calc(100vh - 70px);
+}
+.my-h-screen{
+    height: calc(100vh - 70px);
+}

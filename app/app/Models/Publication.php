@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PublicationsAvailablesDays;
-use App\Models\Publication\Picture;
+use App\Models\PublicationDayAvailable;
+use App\Models\Picture;
 use Carbon\Carbon;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use App\Models\RentType;
 class Publication extends Model
 {
     use HasFactory;
@@ -23,12 +25,16 @@ class Publication extends Model
       'number_people'
     ];
 
+    public function daysAvailable() : HasMany {
+        return $this->hasMany(PublicationDayAvailable::class);
+    }
+
     public function pictures(){
       return $this->hasMany(Picture::class);
     }
     
     public function rentType(){
-      return $this->hasOne(RentType::class);
+      return $this->belongsTo(RentType::class);
     }
 
     public function getUrlPicture(int $id){
@@ -41,23 +47,32 @@ class Publication extends Model
     }
 
     public function getFirstPicture(){
-      $filename = '';
+      $defaultPath = asset('publications-pictures/carousel-preview.svg');
+      
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
-        if(!empty($picture)){
-          $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
+
+        if(!$picture->exists){
+          return $defaultPath;
         }
+        
+        $path = "publications-pictures/{$this->id}/{$picture->name}";
+        $isFileExist = file_exists(public_path($path));
+        
+        if($isFileExist){
+          return asset($path);
+        }
+        
       }
-      return $filename;
+
+      return $defaultPath;
     }
 
     public function getFormattedUpdateAt(){
+      Carbon::setLocale('es');
       if($this->exists()){
         return Carbon::createFromTimestamp($this->created_at)->format('l jS \\of F Y h:i:s A');
       }
       return '';
-    }
-    public function publicationsAvailablesDays()
-    {return $this->hasmany(PublicationsAvailablesDays::class);
     }
 }
