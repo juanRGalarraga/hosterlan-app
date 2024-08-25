@@ -47,13 +47,13 @@ class Publication extends Model
     }
 
     public function getFirstPicture(){
-      $filename = asset('publications-pictures/carousel-preview.svg');
+      $defaultPath = asset('publications-pictures/carousel-preview.svg');
       
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
 
-        if(!$picture){
-          return $filename;
+        if(!$picture->exists){
+          return $defaultPath;
         }
         
         $path = "publications-pictures/{$this->id}/{$picture->name}";
@@ -65,10 +65,11 @@ class Publication extends Model
         
       }
 
-      return $filename;
+      return $defaultPath;
     }
 
     public function getFormattedUpdateAt(){
+      Carbon::setLocale('es');
       if($this->exists()){
         return Carbon::createFromTimestamp($this->created_at)->format('l jS \\of F Y h:i:s A');
       }
