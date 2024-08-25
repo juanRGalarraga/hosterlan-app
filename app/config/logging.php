@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\CustomizeFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -61,7 +62,7 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'tap' => [App\Logging\CustomizeFormatter::class],
+            'tap' => [CustomizeFormatter::class],
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,

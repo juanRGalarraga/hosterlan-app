@@ -10,12 +10,7 @@ class Owner extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'username',
-        'password',
-        'email',
-        'options',
-        'rating'
+        'user_id',
     ];
 
     public function user(){

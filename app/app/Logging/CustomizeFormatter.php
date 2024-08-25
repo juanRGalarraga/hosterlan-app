@@ -9,10 +9,15 @@ class CustomizeFormatter {
     public function __invoke(Logger $logger): void
     {
         foreach ($logger->getHandlers() as $handler) {
+
             $handler->setFormatter(new LineFormatter(
-                '[%datetime%] %channel%.%level_name%: %message% %context% %extra%'
+                '[%datetime%] %channel%.%level_name%: %message% %context% %extra%' . PHP_EOL,
+                'Y-m-d',
+                true,
+                true,
+                true
             ));
-            
+
         }
     }
 
