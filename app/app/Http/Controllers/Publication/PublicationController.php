@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Publication;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
-use App\Models\Publication\Picture;
-use App\Models\PublicationsAvailablesDays;
+use App\Models\Picture;
 use Exception;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
-// use Illuminate\Support\Facades\Validator;
 use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
-// use Illuminate\Support\Facades\Storage;
-
+use App\Models\PublicationDayAvailable;
+use DB;
+use Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -29,74 +29,64 @@ class PublicationController extends Controller
     public function index(Request $request)
     {
         $publications = Publication::latest()->paginate(25);
-        $html = view("publications.index", compact('publications'));
+        $html = view("publications.index.main", compact('publications'));
         return $html;
     }
 
     public function getList(Request $request){
-        // $request->validate(['search' => 'string|max:250']);
         
         $publication = new Publication();
         $queryBuilder = $publication->newQuery();
+        $queryBuilder
+        ->select('*')
+        ->leftjoin(PublicationDayAvailable::tableName(), 'publications.id', '=', PublicationDayAvailable::tableName() . ".publication_id");
         
         $searchValue = $request->input('search');
-        if(is_string($searchValue) && !empty($searchValue)){
+        if(!empty($searchValue)){
+
+            $request->validate(['search' => 'string|min:1']);
+
             $queryBuilder
             ->where('title', 'like', "%$searchValue%")
             ->orWhere('description', 'like', "%$searchValue%")
             ->orWhere('ubication', 'like', "%$searchValue%");
         }
 
-        $stateValue = $request->input('state');
+        $stateValue = $request->input('state', '');
         if(!is_null(PublicationState::tryFrom($stateValue))){
             $queryBuilder
                 ->where('state', $stateValue);
         }
-        $availableFrom = $request->input('available_from');
-        $carbonFecha= new Carbon($availableFrom);
 
-        $queryBuilder->leftJoin('publications_available_days', 'publication.id', '=', 'publications_available_days.publication_id');
-        
-        if(!is_null($availableFrom)){
-            $request->validated([
-                'available_from' => 'required|date',
-            ]);  
+        $availableSince = $request->input('available_since', '');
 
-            $queryBuilder
-                ->where('publications_available_days.since', '>=', $availableFrom);
-                
-        }
-        $availableTo=$request->input('available_to');
-        $carbonFecha2= new Carbon($availableTo);
-        if(!is_null($availableTo)){
-            $request->validated([
-                'available_to' => 'required|date|after_or_equal:available_from',
-            ]);  
+        if(!empty($availableSince)) {
 
-            $queryBuilder
-                ->where('publications_available_days.to', '<=', $availableTo);
-                
+            $availableSinceCarbon = new Carbon($availableSince);
+            $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
+            if($availableSinceFormated){
+                $queryBuilder->where(DB::raw('DATE(since)'), '>=', $availableSinceFormated);
+            }
+
         }
 
-        
-        
+        $availableTo = $request->input('available_to', '');
 
-        
-            
-        
-            
-            
-        
-        
-            //fijarme si es un fecha valida y transforma a formato datetime
-    
+        if(!empty($availableTo)) {
 
+            $availableToCarbon = new Carbon($availableTo);
+            $availableToFormated = $availableToCarbon->format('Y-m-d');
+            if($availableToFormated && $availableToFormated > $availableSinceFormated){
+                $queryBuilder->where(DB::raw('DATE(since)'), '<=', $availableToFormated);   
+            }
 
-        $publications = $queryBuilder->limit(25)->orderBy('created_at', 'desc')->get();
+        }
 
-        // dd($queryBuilder->toRawSql());
-        // dd($publications);
-        $html = view("publications.list", compact('publications'))->render();
+        $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
+
+        debugbar()->info($queryBuilder->getQuery()->toRawSql());
+       
+        $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;
     }
    
@@ -106,31 +96,26 @@ class PublicationController extends Controller
      */
     public function create()
     {
-        return view("publications.create");
+        return view("publications.create.main");
     }
 
-    public function getCarousel(Request $request){
-        $images = $request->file('file');
-        $response[] = [
-            ['src' => asset('publications-pictures/carousel-preview.svg')],
-            ['src' => ''],
-        ];
-        return response()->json($response);
-    }
+    // public function getCarousel(Request $request){
+    //     $images = $request->file('file');
+    //     $response[] = [
+    //         ['src' => asset('publications-pictures/carousel-preview.svg')],
+    //         ['src' => ''],
+    //     ];
+    //     return response()->json($response);
+    // }
 
     public function getPreviewFiles(Request $request){
-        $filenames = $request->input('filename', []);
-        $src = $request->input('src', []);
-
-        if(!empty($filenames)){
-            $filenames = explode(",", $filenames);
-        }
-
-        if(!empty($src)){
-            $src = explode(",", $src);
+        $files = $request->all();
+        if( !Arr::isAssoc($files) && count($files) < 1){
+            Log::notice('Any files to render');
+            return '';
         }
         
-        return view('publications.create-form-preview-files', compact('filenames', 'src'))->render();
+        return view('publications.create.form-preview-files', compact('files'))->render();
     }
 
     /**
@@ -165,9 +150,11 @@ class PublicationController extends Controller
             }
 
             foreach ($request->file('files') as $key => $file) {
-            
+                
+                // $isStored = Storage::putFile("publications-pictures/{$publication->id}", $file);
                 $isStored = $file->store(
-                    "publications-pictures/{$publication->id}"
+                    "{$publication->id}",
+                    'publications-pictures'
                 );
                 
                 if(!$isStored){
@@ -178,7 +165,7 @@ class PublicationController extends Controller
                     new Picture([
                         'name' => $file->hashName(),
                         'publication_id' => $publication->id,
-                        'type' => $file->getType(),
+                        'type' => $file->getMimeType(),
                     ])
                 );
             }
@@ -201,7 +188,7 @@ class PublicationController extends Controller
      */
     public function show(Publication $publication)
     {
-        return view('publications.show', [
+        return view('publications.show.main', [
             'publication' => $publication
         ]);
     }
@@ -211,7 +198,7 @@ class PublicationController extends Controller
      */
     public function edit(Publication $publication)
     {
-        return view('publications.edit', [
+        return view('publications.edit.main', [
             'publication' => $publication
         ]);
     }
@@ -232,7 +219,7 @@ class PublicationController extends Controller
     public function destroy(Publication $publication)
     {
         $publication->delete();
-        return redirect()->route('publications.index')
+        return redirect()->route('publications.index.main')
                 ->withSuccess(_('Publicacion eliminada exitosamente'));
     }
 }

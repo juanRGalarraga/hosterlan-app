@@ -7,20 +7,19 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="/css/main.css">
-        <link rel="stylesheet" type="text/css" href="/css/flowbite/flowbite.min.css">
-
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <script src="/js/flowbite/flowbite.min.js"></script>
-        <script type="text/javascript" src="/js/input.js"></script>
 
-        @stack('calendar-js')
+        
         @stack('custom-css')
+        @if (isset($scripts))
+            {{ $scripts }}
+        @endif
 
     </head>
     <body class="font-sans antialiased">
@@ -44,7 +43,6 @@
                 {{ $slot }}
             </main>
         </div>
-        
-        @stack('custom-scripts')
+    
     </body>
 </html>
