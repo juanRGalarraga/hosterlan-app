@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Publication;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
@@ -13,10 +12,10 @@ use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
 use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
 use App\Models\PublicationDayAvailable;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -151,9 +150,11 @@ class PublicationController extends Controller
             }
 
             foreach ($request->file('files') as $key => $file) {
-            
+                
+                // $isStored = Storage::putFile("publications-pictures/{$publication->id}", $file);
                 $isStored = $file->store(
-                    "publications-pictures/{$publication->id}"
+                    "{$publication->id}",
+                    'publications-pictures'
                 );
                 
                 if(!$isStored){
@@ -164,7 +165,7 @@ class PublicationController extends Controller
                     new Picture([
                         'name' => $file->hashName(),
                         'publication_id' => $publication->id,
-                        'type' => $file->getType(),
+                        'type' => $file->getMimeType(),
                     ])
                 );
             }
@@ -178,7 +179,7 @@ class PublicationController extends Controller
         }
         
         return redirect()
-        ->route('publications.index.main')
+        ->route('publications.index')
         ->withSuccess(__('La publicacion ha sido creada exitosamente'));
     }
 

@@ -29,7 +29,6 @@ export default class PublicationFile {
         this.alertWarningMaxAllowedFiles = new Alert().init('alertWarningMaxAllowedFiles');
 
         this.loadOnchange();
-        // this.getFiles();
     }
 
     loadOnchange() {

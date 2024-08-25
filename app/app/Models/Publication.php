@@ -57,11 +57,12 @@ class Publication extends Model
         }
         
         $path = "publications-pictures/{$this->id}/{$picture->name}";
-        $isFileExist = Storage::exists($path);
+        $isFileExist = file_exists(public_path($path));
         
         if($isFileExist){
           return asset($path);
         }
+        
       }
 
       return $filename;

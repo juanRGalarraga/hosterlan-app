@@ -16,7 +16,7 @@
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
 
-            <x-alert.warning id="alertWarningMaxAllowedFiles">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
+            <x-alert.warning id="alertWarningMaxAllowedFiles" class="hidden">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
 
             @include('publications.create.form-dropzone')
 
