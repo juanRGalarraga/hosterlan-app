@@ -41,13 +41,13 @@ class Publication extends Model
       $filename = '';
       if($this->exists()){
         $picture = $this->pictures->find($id);
-        $filename = asset("publications-pictures/{$this->id}/{$picture->name}");
+        $filename = asset("publication-pictures/{$this->id}/{$picture->name}");
       }
       return $filename;
     }
 
     public function getFirstPicture(){
-      $defaultPath = asset('publications-pictures/carousel-preview.svg');
+      $defaultPath = asset('publication-pictures/' . Picture::DEFAULT_PICTURE);
       
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
@@ -56,7 +56,7 @@ class Publication extends Model
           return $defaultPath;
         }
         
-        $path = "publications-pictures/{$this->id}/{$picture->name}";
+        $path = "publication-pictures/{$this->id}/{$picture->name}";
         $isFileExist = file_exists(public_path($path));
         
         if($isFileExist){

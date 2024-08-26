@@ -15,6 +15,8 @@ class Picture extends Model
       'type',
       'publication_id'
     ];
+
+    const DEFAULT_PICTURE = env('DEFAULT_PICTURE', 'default.svg');
     
     public function publication(){
       return $this->belongsTo(Publication::class);
@@ -23,7 +25,7 @@ class Picture extends Model
     public function getUrl(){
       $filename = '';
       if($this->exists()){
-        $filename = asset("publications-pictures/{$this->publication->id}/{$this->name}");
+        $filename = asset("publication-pictures/{$this->publication->id}/{$this->name}");
       }
       return $filename;
     }

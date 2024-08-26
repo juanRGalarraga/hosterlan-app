@@ -145,7 +145,7 @@ class PublicationController extends Controller
                 
                 $isStored = $file->store(
                     "{$publication->id}",
-                    'publications-pictures'
+                    'publication-pictures'
                 );
                 
                 if(!$isStored){
