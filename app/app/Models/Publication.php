@@ -52,7 +52,7 @@ class Publication extends Model
       if($this->exists()){
         $picture = $this->pictures->first() ?? '';
 
-        if(!$picture->exists){
+        if(!($picture instanceof Picture)){
           return $defaultPath;
         }
         

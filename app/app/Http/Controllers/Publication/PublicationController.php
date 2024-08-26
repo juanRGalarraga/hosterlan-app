@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Enums\Publication\PublicationState;
 use Carbon\Carbon;
+use Illuminate\Support\MessageBag;
 use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
 use App\Models\PublicationDayAvailable;
 use DB;
@@ -58,6 +59,7 @@ class PublicationController extends Controller
                 ->where('state', $stateValue);
         }
 
+
         $availableSince = $request->input('available_since', '');
 
         if(!empty($availableSince)) {
@@ -83,8 +85,6 @@ class PublicationController extends Controller
         }
 
         $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
-
-        debugbar()->info($queryBuilder->getQuery()->toRawSql());
        
         $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;
@@ -98,15 +98,6 @@ class PublicationController extends Controller
     {
         return view("publications.create.main");
     }
-
-    // public function getCarousel(Request $request){
-    //     $images = $request->file('file');
-    //     $response[] = [
-    //         ['src' => asset('publications-pictures/carousel-preview.svg')],
-    //         ['src' => ''],
-    //     ];
-    //     return response()->json($response);
-    // }
 
     public function getPreviewFiles(Request $request){
         $files = $request->all();
@@ -124,26 +115,27 @@ class PublicationController extends Controller
     public function store(PublicationUpdateRequest $request)
     {   
         $request->check($request->all());
+
+        if($request->fails() || ($request->file('files') < 1) ){
+
+            $messageBag = new MessageBag();
+            $messageBag->merge($request->errors());
+
+            if(($request->file('files') < 1)){
+                $messageBag->add('pictures', __('Debe cargar al menos una imagen'));
+            }
+
+            $request->flash();
+
+            return redirect()
+            ->withErrors($messageBag)
+            ->withInput();
+        }
+
         
-        // dd($request->file('files'));
-        if(!$request->file('files')){
-            $request->flash();
-            return redirect()
-            ->withErrors($request->errors())
-            ->withInput();
-        }
+        Db::transaction(function() use($request){
 
-        if($request->fails()){
-            $request->flash();
-
-            return redirect()
-            ->withErrors($request->errors())
-            ->withInput();
-        }
-
-        $publication = Publication::create($request->all());
-
-        try {
+            $publication = Publication::create($request->all());
 
             if(!$publication->exists()){
                 throw new Exception("Error Create record");
@@ -151,14 +143,14 @@ class PublicationController extends Controller
 
             foreach ($request->file('files') as $key => $file) {
                 
-                // $isStored = Storage::putFile("publications-pictures/{$publication->id}", $file);
                 $isStored = $file->store(
                     "{$publication->id}",
                     'publications-pictures'
                 );
                 
                 if(!$isStored){
-                    throw new WriteOperationFailedException("Error write file");
+                    Log::alert("Error al almacenar los archivos de la publicacion");
+                    report("Error Processing Request");
                 }
 
                 $publication->pictures()->save(
@@ -169,14 +161,7 @@ class PublicationController extends Controller
                     ])
                 );
             }
-
-        } catch (WriteOperationFailedException $th) {
-            debugbar()->addException($th);
-            return abort(424);
-        } catch (Exception $ex) {
-            debugbar()->addException($ex);
-            return abort(500);
-        }
+        });
         
         return redirect()
         ->route('publications.index')
