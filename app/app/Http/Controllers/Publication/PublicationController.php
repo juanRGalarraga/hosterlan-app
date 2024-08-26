@@ -82,6 +82,8 @@ class PublicationController extends Controller
 
         }
 
+        
+
         $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
        
         $html = view("publications.index.card-list", compact('publications'))->render();
@@ -109,7 +111,7 @@ class PublicationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+     */ 
     public function store(PublicationUpdateRequest $request)
     {   
         $request->check($request->all());
