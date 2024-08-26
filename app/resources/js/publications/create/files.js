@@ -41,7 +41,7 @@ export default class PublicationFile {
                     const blobURL = URL.createObjectURL(file);
                     let hashId = SimpleHash.generate(file.name)
                     thisInstance.files[hashId] = blobURL;
-                    thisInstance.createInputForm(file, hashId);
+                    thisInstance.createInputFile(file, hashId);
 
                 } 
 
@@ -73,7 +73,7 @@ export default class PublicationFile {
         });
     }
 
-    createInputForm(theFile, id){
+    createInputFile(theFile, id){
         let input = document.createElement('input');
         input.setAttribute('type', 'file');
         input.setAttribute('name', 'files[]');

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
-use Exception;
 use Illuminate\Http\Request;
 use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
