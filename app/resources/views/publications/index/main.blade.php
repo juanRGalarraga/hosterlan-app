@@ -18,9 +18,9 @@
     </button>
 
     <aside id="default-sidebar" class="mt-32 fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-3 py-4 bg-gray-50 dark:bg-gray-800 overflow-y-auto show-scroll fixed-filters-zone">
             <h5 id="drawer-navigation-label" class="text-base text-center my-3 font-semibold text-gray-500 uppercase dark:text-gray-400">{{__('Filtros')}}</h5>
-            <ul class="space-y-2 font-medium">
+            <ul class="space-y-2 font-medium h-screen">
                 <li>
                     @include('publications.index.filters')
                 </li>
@@ -29,19 +29,7 @@
     </aside>
 
     <div class="p-4 sm:ml-72 mt-10 min-h-screen">
-        @if($publications->count() >= 1)
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 min-h-full">
-            <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row" id="publicationMainlist">
-                @include('publications.index.card-list')
-            </div>
-        </div>
-        @else
-        <div class="w-full flex justify-center m-auto align-middle mt-10">
-            <span class="text-danger w-full">
-                <x-utils.not-found-result title="No se encontraron resultados" subtitle="Intenta ajustar tus filtros o busca con términos diferentes."></x-utils.not-found-result>
-            </span>
-        </div>
-        @endif
+        @include('publications.index.card-list')
         <div class="text-center flex justify-center w-full mt-2">
             {{$publications->links()}}
         </div>
