@@ -18,9 +18,9 @@
     </button>
 
     <aside id="default-sidebar" class="mt-32 fixed top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-3 py-4 bg-gray-50 dark:bg-gray-800 overflow-y-auto show-scroll fixed-filters-zone">
             <h5 id="drawer-navigation-label" class="text-base text-center my-3 font-semibold text-gray-500 uppercase dark:text-gray-400">{{__('Filtros')}}</h5>
-            <ul class="space-y-2 font-medium">
+            <ul class="space-y-2 font-medium h-screen">
                 <li>
                     @include('publications.index.filters')
                 </li>

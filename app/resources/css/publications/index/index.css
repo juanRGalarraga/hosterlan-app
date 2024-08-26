@@ -19,3 +19,8 @@
 ::view-transition-new(root) {
   animation-duration: 1s;
 }
+
+.mycss-overflow-y{
+  overflow-y: auto;
+  
+}
