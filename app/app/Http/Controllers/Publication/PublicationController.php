@@ -11,7 +11,9 @@ use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
 use Illuminate\Support\MessageBag;
 use App\Models\PublicationDayAvailable;
-use DB;
+use Illuminate\Support\Facades\DB;
+// class DB extends Illuminate\Support\Facades\Facade
+
 use Arr;
 use Illuminate\Support\Facades\Log;
 class PublicationController extends Controller
