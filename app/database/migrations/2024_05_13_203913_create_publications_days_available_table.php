@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Publication::class)->constrained('publications')->onDelete('cascade');
             $table->datetime('since');
             $table->datetime('to');
-            $table->enum('state', StateEnum::forMigration())->default(StateEnum::Available->value);
+            $table->enum('state', StateEnum::forMigration())->default(StateEnum::Published->value);
             $table->timestamps();
         });
     }
