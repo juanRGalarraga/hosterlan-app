@@ -12,9 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Support\MessageBag;
 use App\Models\PublicationDayAvailable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Arr;
 // class DB extends Illuminate\Support\Facades\Facade
-
-use Arr;
 use Illuminate\Support\Facades\Log;
 class PublicationController extends Controller
 {

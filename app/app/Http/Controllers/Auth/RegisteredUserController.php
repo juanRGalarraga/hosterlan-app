@@ -17,7 +17,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use App\Enums\User\Type as UserType;
 use Illuminate\View\View;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
