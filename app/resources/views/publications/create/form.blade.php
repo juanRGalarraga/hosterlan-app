@@ -18,6 +18,12 @@
 
             <x-alert.warning id="alertWarningMaxAllowedFiles" class="hidden">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
 
+            @if($errors->first('pictures'))
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                {{$errors->first('pictures')}}
+            </div>
+            @endif
+
             @include('publications.create.form-dropzone')
 
             <div class="flex overflow-y-hidden overflow-x-auto mcss-hover-show-scroll mcss-hide-scroll space-x-2" id="previewFiles">

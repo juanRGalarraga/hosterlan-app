@@ -127,7 +127,7 @@ class PublicationController extends Controller
 
             $request->flash();
 
-            return redirect()
+            return redirect(route('publications.create'))
             ->withErrors($messageBag)
             ->withInput();
         }
