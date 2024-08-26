@@ -8,15 +8,13 @@ use App\Models\Publication;
 use App\Models\Picture;
 use Exception;
 use Illuminate\Http\Request;
-use App\Enums\Publication\PublicationState;
+use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
 use Illuminate\Support\MessageBag;
-use SebastianBergmann\CodeCoverage\Driver\WriteOperationFailedException;
 use App\Models\PublicationDayAvailable;
 use DB;
 use Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 class PublicationController extends Controller
 {
     public function __construct()
@@ -54,7 +52,7 @@ class PublicationController extends Controller
         }
 
         $stateValue = $request->input('state', '');
-        if(!is_null(PublicationState::tryFrom($stateValue))){
+        if(!is_null(StateEnum::tryFrom($stateValue))){
             $queryBuilder
                 ->where('state', $stateValue);
         }
@@ -137,9 +135,11 @@ class PublicationController extends Controller
 
             $publication = Publication::create($request->all());
 
-            if(!$publication->exists()){
-                throw new Exception("Error Create record");
-            }
+            PublicationDayAvailable::create([
+                'publication_id' => $publication->id,
+                'since' => $request->available_since,
+                'to ' => $request->available_to,
+            ]);
 
             foreach ($request->file('files') as $key => $file) {
                 
@@ -160,6 +160,7 @@ class PublicationController extends Controller
                         'type' => $file->getMimeType(),
                     ])
                 );
+                
             }
         });
         

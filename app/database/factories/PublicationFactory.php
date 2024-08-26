@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Database\Factories\RentTypeFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Enums\Publication\PublicationState;
+use App\Enums\Publication\StateEnum;
 use App\Enums\Publication\RentTypeEnum;
 use App\Models\RentType;
 

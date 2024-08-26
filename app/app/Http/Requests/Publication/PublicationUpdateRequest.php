@@ -29,6 +29,8 @@ class PublicationUpdateRequest extends FormRequest
             'title' => 'required|string|max:150',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
+            'available_since' => 'required|date',
+            'available_to' => 'required|after_or_equal:available_since',
             'room_count' => 'integer|min:0',
             'pets' => 'boolean',
             'numbre_people' => 'integer|min:1',

@@ -1,6 +1,6 @@
 
 @php
-    use App\Enums\Publication\PublicationState;
+    use App\Enums\Publication\AvailableDayEnum;
     use App\Enums\Publication\RentTypeEnum;
 @endphp
 
@@ -44,7 +44,7 @@
 
     <x-form.select-input id="publication_state" name="publication_state" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected value="">{{__('Estado')}}</x-form.select-input-option>
-        @foreach (PublicationState::cases() as $publication)
+        @foreach (AvailableDayEnum::cases() as $publication)
         <x-form.select-input-option placeholder="{{__('Filtrar por')}}" value="{{$publication->name}}">{{__($publication->value)}}</x-form.select-input-option>
         @endforeach
     </x-form.select-input>

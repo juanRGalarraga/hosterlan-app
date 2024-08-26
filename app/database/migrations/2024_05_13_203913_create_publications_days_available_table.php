@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\Publication\PublicationState;
+use App\Enums\Publication\StateEnum;
 use App\Models\Publication;
 
 return new class extends Migration
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Publication::class)->constrained('publications')->onDelete('cascade');
             $table->datetime('since');
             $table->datetime('to');
-            $table->enum('state', PublicationState::forMigration())->default(PublicationState::Available->value);
+            $table->enum('state', StateEnum::forMigration())->default(StateEnum::Available->value);
             $table->timestamps();
         });
     }

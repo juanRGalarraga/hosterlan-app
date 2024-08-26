@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Enums\Publication\PublicationState;
+use App\Enums\Publication\StateEnum;
 class TestCommand extends Command
 {
     /**
@@ -25,6 +25,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        print_r(PublicationState::forMigration());
+        print_r(StateEnum::forMigration());
     }
 }
