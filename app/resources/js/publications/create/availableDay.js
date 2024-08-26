@@ -1,4 +1,6 @@
 import ContextMenu from "../../contextMenu";
+import SimpleHash from '../../simpleHash';
+import String from "../../utilities/string";
 
 export default class AvailableDay {
 
@@ -6,12 +8,23 @@ export default class AvailableDay {
     inputSince
     inputTo
     contextMenu
+    dates = {}
 
     constructor(){
         this.getInputDates({sinceId: 'available_since', toId: 'available_to'});
         this.loadButtonAddDates('buttonAddDates');
         this.contextMenu = new ContextMenu();
         this.contextMenu.createContextMenu();
+    }
+
+    loadOptionsContextMenu() {
+        this.contextMenu.addDeleteAction(function () {
+            
+        });
+
+        this.contextMenu.addModifyAction(function () {
+            
+        });
     }
 
     getInputDates({sinceId, toId}){
@@ -48,11 +61,19 @@ export default class AvailableDay {
             return;
         }
 
+        let dateMap = SimpleHash.generate(`${since}:${to}`);
+        
+        if (this.dates.hasOwnProperty(dateMap)) {
+            return;
+        }
+
         let value = `${since} hasta ${since}`;
-        this.createInput('available_days', 'availableDays[]', value);
+        this.createInput('available_days', 'availableDays[]', dateMap, value);
+
+        this.dates[dateMap] = {since,to};
     }
     
-    createInput(rootId, name, value){
+    createInput(rootId, name, id, value){
 
         let rootElement = document.getElementById(rootId);
         if( !(rootElement instanceof HTMLDivElement) ){
@@ -65,6 +86,8 @@ export default class AvailableDay {
         input.setAttribute('name', `${name}`);
         input.setAttribute('value', value);
         input.setAttribute('title', value);
+        input.setAttribute('id', SimpleHash.generate(value));
+
         input.className = 
         `availableDaysClickeable rounded-none rounded-r-lg 
         bg-gray-50 border text-gray-900 

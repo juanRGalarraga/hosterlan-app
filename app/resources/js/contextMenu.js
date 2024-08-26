@@ -25,7 +25,12 @@ export default class ContextMenu {
         let thisInstance = this
 
         this.clickeableZone.addEventListener('contextmenu', (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
+
+            if (this.clickeableZone?.id) {
+                thisInstance.contextMenu.setAttribute(this.clickeableZone.id);
+            }
+
             thisInstance.contextMenu.style.top = `${e.clientY}px`;
             thisInstance.contextMenu.style.left = `${e.clientX}px`;
             thisInstance.contextMenu.classList.remove('hidden');
