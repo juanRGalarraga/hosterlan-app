@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 // class DB extends Illuminate\Support\Facades\Facade
 use Illuminate\Support\Facades\Log;
+use App\Models\RentType;
+use Illuminate\Database\Query\JoinClause;
+
 class PublicationController extends Controller
 {
     public function __construct()
@@ -35,10 +38,12 @@ class PublicationController extends Controller
     public function getList(Request $request){
         
         $publication = new Publication();
-        $queryBuilder = $publication->newQuery();
-        $queryBuilder
-        ->select('*')
-        ->leftjoin(PublicationDayAvailable::tableName(), 'publications.id', '=', PublicationDayAvailable::tableName() . ".publication_id");
+        $queryBuilder = $publication
+                        ->newQuery()
+                        ->select('p.*')
+                        ->from(Publication::tableName() . ' as p')
+                        ->join(RentType::tableName() . ' as rt', 'rent_type_id', '=', 'rt.id')
+                        ->leftjoin(PublicationDayAvailable::tableName() . " as pda", 'pda.publication_id', '=', 'p.id');
         
         $searchValue = $request->input('search');
         if(!empty($searchValue)){
@@ -46,26 +51,24 @@ class PublicationController extends Controller
             $request->validate(['search' => 'string|min:1']);
 
             $queryBuilder
-            ->where('title', 'like', "%$searchValue%")
-            ->orWhere('description', 'like', "%$searchValue%")
-            ->orWhere('ubication', 'like', "%$searchValue%");
+            ->where('p.title', 'like', "%$searchValue%")
+            ->orWhere('p.description', 'like', "%$searchValue%")
+            ->orWhere('p.ubication', 'like', "%$searchValue%");
         }
 
         $stateValue = $request->input('state', '');
         if(!is_null(StateEnum::tryFrom($stateValue))){
             $queryBuilder
-                ->where('state', $stateValue);
+                ->where('pda.state', $stateValue);
         }
-
 
         $availableSince = $request->input('available_since', '');
 
         if(!empty($availableSince)) {
-
             $availableSinceCarbon = new Carbon($availableSince);
             $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
             if($availableSinceFormated){
-                $queryBuilder->where(DB::raw('DATE(since)'), '>=', $availableSinceFormated);
+                $queryBuilder->where(DB::raw('DATE(pda.since)'), '>=', $availableSinceFormated);
             }
 
         }
@@ -73,18 +76,28 @@ class PublicationController extends Controller
         $availableTo = $request->input('available_to', '');
 
         if(!empty($availableTo)) {
-
             $availableToCarbon = new Carbon($availableTo);
             $availableToFormated = $availableToCarbon->format('Y-m-d');
             if($availableToFormated && $availableToFormated > $availableSinceFormated){
-                $queryBuilder->where(DB::raw('DATE(since)'), '<=', $availableToFormated);   
+                $queryBuilder->where(DB::raw('DATE(pda.to)'), '<=', $availableToFormated);
             }
 
         }
 
-        $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
-       
-        $html = view("publications.index.card-list", compact('publications'))->render();
+        $rentType = $request->input('rentType');
+        if(is_numeric($rentType)){
+            $queryBuilder->where('p.rent_type_id', '=', $rentType);
+        }
+
+        $roomCount = $request->input('roomCount');
+        if (is_numeric($roomCount)) {
+            $queryBuilder->where('p.room_count', '=', $roomCount);
+        }
+
+        $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
+        $query = $queryBuilder->getQuery()->toRawSql();
+    //    dump($queryBuilder->getQuery()->ddRawSql());
+        $html = view("publications.index.card-list", compact('publications', 'query'))->render();
         return $html;
     }
    
@@ -109,7 +122,7 @@ class PublicationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+     */ 
     public function store(PublicationUpdateRequest $request)
     {   
         $request->check($request->all());

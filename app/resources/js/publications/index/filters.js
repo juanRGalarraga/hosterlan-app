@@ -47,7 +47,6 @@ class PublicationFilter extends PublicationList {
         let thisInstance = this
         this.buttonApplyFilter.onclick = function(event){
             thisInstance.getInputValues();
-            console.log(thisInstance.filters);
             if( !ObjectHelper.isEmpty(thisInstance.filters) ){
                 thisInstance.getList(thisInstance.filters)
             }
@@ -58,6 +57,7 @@ class PublicationFilter extends PublicationList {
         let thisInstance = this
         this.buttonClearFilter.onclick = function(event){
             thisInstance.clearFilters();
+            thisInstance.getList();
         }
     }
 
