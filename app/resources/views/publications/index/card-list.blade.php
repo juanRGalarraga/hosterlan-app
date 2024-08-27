@@ -1,7 +1,5 @@
 @php
-if(isset($query) && env('APP_DEBUG')){
-    dump($query);
-}
+
 @endphp
 @if($publications->count() >= 1)
 <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 min-h-full">
