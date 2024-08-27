@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('pets')->default(0);
             $table->integer('number_people');
             $table->enum('state', StateEnum::forMigration())->default(StateEnum::Published->name);
-            $table->foreignIdFor(RentType::class)->default(0);
+            $table->foreignIdFor(RentType::class);
             $table->timestamps();
         });
     }

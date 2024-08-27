@@ -10,7 +10,6 @@ trait BaseEnum {
     public static function forMigration(): array {
         return collect(self::cases())
             ->map(function ($enum) {
-                if (property_exists($enum, "value")) return $enum->value;
                 return $enum->name;
             })
             ->values()
@@ -18,7 +17,7 @@ trait BaseEnum {
     }
     
     /**
-     * Search case by name
+     * Get case by name and get value
      * @param string $name
      * @throws \ValueError
      * @return string

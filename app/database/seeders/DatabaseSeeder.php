@@ -43,12 +43,4 @@ class DatabaseSeeder extends Seeder
             ->hasDaysAvailable(rand(1, 5))
             ->create();
     }
-
-    private function getRentTypesToFactory(){
-        $rentTypes = new Collection();
-        foreach (RentTypeEnum::cases() as $rentType) {
-            $rentTypes->add(['name' => $rentType->value]);
-        }
-        return $rentTypes->all();
-    }
 }
