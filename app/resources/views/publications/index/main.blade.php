@@ -29,7 +29,9 @@
     </aside>
 
     <div class="p-4 sm:ml-72 mt-10 min-h-screen">
-        @include('publications.index.card-list')
+        <div id="publicationMainlist">
+            @include('publications.index.card-list')
+        </div>
         <div class="text-center flex justify-center w-full mt-2">
             {{$publications->links()}}
         </div>

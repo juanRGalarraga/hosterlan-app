@@ -2,6 +2,7 @@
 @php
     use App\Enums\Publication\AvailableDayEnum;
     use App\Enums\Publication\RentTypeEnum;
+    use App\Models\RentType;
 @endphp
 
 <form name="formPublicationFilters" id="formPublicationFilters" >
@@ -20,14 +21,13 @@
     
     <x-form.select-input id="rentType" name="rentType" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected>{{__('Tipo de renta')}}</x-form.select-input-option>
-        @foreach (RentTypeEnum::cases() as $rentType)
-            <x-form.select-input-option value="{{$rentType->name}}">{{$rentType->value}}</x-form.select-input-option>
+        @foreach (RentType::all(['id', 'name']) as $rentType)
+            <x-form.select-input-option value="{{$rentType->id}}">{{$rentType->name}}</x-form.select-input-option>
         @endforeach
     </x-form.select-input>
 
     <x-form.select-input id="roomCount" name="roomCount" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected>{{__('Cantidad de habitaciones')}}</x-form.select-input-option>
-        <x-form.select-input-option value="1">1</x-form.select-input-option>
         <x-form.select-input-option value="1">1</x-form.select-input-option>
         <x-form.select-input-option value="2">2</x-form.select-input-option>
         <x-form.select-input-option value="3">3</x-form.select-input-option>

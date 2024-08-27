@@ -2,6 +2,8 @@ export default class ObjectHelper {
     
     static isEmpty(obj){
 
+        if(!obj) return false;
+
         if (Object.keys(obj).length === 0) {
             return true;
         }

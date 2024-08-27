@@ -8,11 +8,11 @@ use App\Models\PublicationDayAvailable;
 use App\Models\Picture;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
+use App\Traits\CanGetTableNameStatically;
 use App\Models\RentType;
 class Publication extends Model
 {
-    use HasFactory;
+    use HasFactory, CanGetTableNameStatically;
     protected $fillable = [
       'price',
       'title',
