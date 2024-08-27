@@ -94,6 +94,25 @@ class PublicationController extends Controller
             $queryBuilder->where('p.room_count', '=', $roomCount);
         }
 
+        $bathroomCount= $request->input('bathroomCount');
+        if (is_numeric($bathroomCount)) {
+            $queryBuilder->where('p.bathroom_count', '=', $bathroomCount);
+            }
+        $withPets=$request->input('withPets');
+            if(is_numeric($withPets)){
+                $queryBuilder->where('p.pets', '=', $withPets);
+            }
+            $priceMin = $request->input('price_min');
+            if (is_numeric($priceMin)) {
+                $queryBuilder->where('p.price', '>=', $priceMin);
+            }
+        
+           
+            $priceMax = $request->input('price_max');
+            if (is_numeric($priceMax)) {
+                $queryBuilder->where('p.price', '<=', $priceMax);
+            }    
+
         $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
         $query = $queryBuilder->getQuery()->toRawSql();
     //    dump($queryBuilder->getQuery()->ddRawSql());
