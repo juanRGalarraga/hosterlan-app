@@ -1,3 +1,4 @@
+{{dump($publications->count())}}
 @if($publications->count() >= 1)
 <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 min-h-full">
     <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 lg:grid-cols-2 xl:grid-cols-4 grid-flow-row" id="publicationMainlist">

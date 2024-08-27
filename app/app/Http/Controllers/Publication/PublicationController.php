@@ -12,9 +12,11 @@ use Carbon\Carbon;
 use Illuminate\Support\MessageBag;
 use App\Models\PublicationDayAvailable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Arr;
+use Illuminate\Support\Arr;
 // class DB extends Illuminate\Support\Facades\Facade
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\Isset_;
+
 class PublicationController extends Controller
 {
     public function __construct()
@@ -81,7 +83,18 @@ class PublicationController extends Controller
             }
 
         }
+        $rentType = $request->input('rentType', '');
+        if(isset($rentType) && is_int($rentType)){
+            $queryBuilder->where('rent_type_id', '=', $rentType);
+        }
 
+        $roomCount = $request->input('roomCount', '');
+
+        // Validar que roomCount sea un número y no esté vacío
+        if (is_numeric($roomCount)) {
+            
+            $queryBuilder->where('room_count', '=', $roomCount);
+        }
         
 
         $publications = $queryBuilder->limit(25)->orderBy('publications.created_at', 'desc')->get();
