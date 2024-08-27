@@ -49,7 +49,7 @@ export default class ContextMenu {
             this.contextMenu = document.getElementById(contextMenu);
         }
 
-        if( !(contextMenu instanceof HTMLElement) ){
+        if( !(this.contextMenu instanceof HTMLElement) ){
             this.contextMenu = this.createDefaultContextMenu();
         }
 
