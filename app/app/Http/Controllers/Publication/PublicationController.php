@@ -57,7 +57,7 @@ class PublicationController extends Controller
         }
 
         $stateValue = $request->input('state', '');
-        if(!is_null(StateEnum::tryFrom($stateValue))){
+        if(!is_null(StateEnum::fromName($stateValue))){
             $queryBuilder
                 ->where('pda.state', $stateValue);
         }

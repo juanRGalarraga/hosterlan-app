@@ -21,9 +21,14 @@ class Publication extends Model
       'room_count',
       'bathroom_count',
       'rent_type_id',
+      'user_id',
       'pets',
       'number_people'
     ];
+
+    public function user(){
+        return $this->hasOne(User::class);
+    }
 
     public function daysAvailable() : HasMany {
         return $this->hasMany(PublicationDayAvailable::class);

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Guest;
 use App\Models\Owner;
+use App\Models\Publication;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function publication(){
+        return $this->belongsTo(Publication::class);
+    }
 
     public function owner(){
         return $this->hasOne(Owner::class);

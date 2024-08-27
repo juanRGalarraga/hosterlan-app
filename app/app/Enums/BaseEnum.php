@@ -16,4 +16,20 @@ trait BaseEnum {
             ->values()
             ->toArray();
     }
+    
+    /**
+     * Search case by name
+     * @param string $name
+     * @throws \ValueError
+     * @return string
+     */
+    public static function fromName(string $name): string
+    {
+        foreach (self::cases() as $case) {
+            if( $name === $case->name ){
+                return $case->value;
+            }
+        }
+        throw new \ValueError("$name is not a valid backing value for enum " . self::class );
+    }
 }

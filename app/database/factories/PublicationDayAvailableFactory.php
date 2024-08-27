@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Publication\StateEnum;
+use App\Enums\Publication\AvailableDayEnum;
 use App\Models\Publication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\PublicationDayAvailable;
@@ -27,7 +27,7 @@ class PublicationDayAvailableFactory extends Factory
             'publication_id' => Publication::factory(),
             'since'=> $since,
             'to'=> $to,
-            'state'=> fake()->randomElement(StateEnum::forMigration())
+            'state'=> fake()->randomElement(AvailableDayEnum::forMigration())
         ];
     }
 }

@@ -24,12 +24,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        Owner::factory()->count(30)->create();
-
         RentType::factory()
             ->count(count(RentTypeEnum::cases()))
             ->create();
+
+        User::factory()
+            ->count(1)
+            ->hasOwner(1)
+            ->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password')            
+        ]);
 
         Publication::factory()
             ->count(10)
@@ -37,12 +42,6 @@ class DatabaseSeeder extends Seeder
             ->hasRentType(1)
             ->hasDaysAvailable(rand(1, 5))
             ->create();
-        
-        User::factory()->count(1)->create([
-            'email' => 'test@example.com',
-            'password' => Hash::make('password')            
-        ]);
-
     }
 
     private function getRentTypesToFactory(){

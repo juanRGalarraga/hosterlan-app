@@ -5,6 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Enums\Publication\StateEnum;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -15,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->float('price');
             $table->string('ubication');
@@ -23,7 +25,7 @@ return new class extends Migration
             $table->integer('bathroom_count');
             $table->boolean('pets')->default(0);
             $table->integer('number_people');
-            $table->enum('state', StateEnum::forMigration())->default(StateEnum::Published->value);
+            $table->enum('state', StateEnum::forMigration())->default(StateEnum::Published->name);
             $table->foreignIdFor(RentType::class)->default(0);
             $table->timestamps();
         });
