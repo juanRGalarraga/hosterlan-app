@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Publication\PublicationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Publication\PublicationController;
 
 /**
  * Publication endpoints
@@ -14,4 +14,5 @@ Route::get('publications/{publication}', [PublicationController::class, 'show'])
 Route::match(['put', 'patch'], 'publications/{publication}', [PublicationController::class, 'update'])->name('publications.update');
 Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
 Route::get('publications/{publication}', [PublicationController::class, 'edit'])->name('publications.edit');
-Route::match(['post', 'get'], 'publications/create/step/{step}', [PublicationController::class, 'getStep'])->name('publications.create');
+Route::put('publications/create', [PublicationController::class, 'store'])->name('publications.store');
+Route::match(['get', 'post'], 'publications/create/{step}', [PublicationController::class, 'create'])->name('publications.create');

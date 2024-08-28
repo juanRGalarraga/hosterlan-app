@@ -120,30 +120,12 @@ class PublicationController extends Controller
         return $html;
     }
 
-    public function getStep(Request $request){
-        $method =  [$this, PublicationStep::getStep($request->step)::method()];
+    public function create(Request $request){
 
-        // if(!method_exists($this, $method)){
-        //     return abort(500);
-        // }
-
-        $method();
-    }
-
-    public function createFirstStep(){
-
-    }
-
-    public function createSecondStep(){
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view("publications.create.main");
+        if(!PublicationStep::getStep($request->step)){
+            return abort(500);
+        }
+        return view(PublicationStep::getStep($request->step)::view());
     }
 
     public function getPreviewFiles(Request $request){
