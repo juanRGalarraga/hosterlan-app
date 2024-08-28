@@ -121,13 +121,13 @@ class PublicationController extends Controller
     }
 
     public function getStep(Request $request){
-        $method = PublicationStep::getStep($request->step)::method();
+        $method =  [$this, PublicationStep::getStep($request->step)::method()];
 
-        if(!method_exists($this, $method)){
-            return abort(500);
-        }
+        // if(!method_exists($this, $method)){
+        //     return abort(500);
+        // }
 
-        call_user_func(PublicationStep::getStep($request->step)::method());
+        $method();
     }
 
     public function createFirstStep(){

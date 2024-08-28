@@ -7,7 +7,7 @@ use Ramsey\Collection\Exception\InvalidPropertyOrMethod;
 
 class PublicationStep {
 
-    static string $step = [];
+    static array $step = [];
 
     private const STEPS = [
         1 => ['method' => 'createFirstStep', 'view' => 'publications.create.form'],
