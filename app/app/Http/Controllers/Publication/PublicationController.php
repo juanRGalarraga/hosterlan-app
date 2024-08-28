@@ -13,10 +13,10 @@ use Illuminate\Support\MessageBag;
 use App\Models\PublicationDayAvailable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
-// class DB extends Illuminate\Support\Facades\Facade
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
-use Illuminate\Database\Query\JoinClause;
+use App\Http\Controllers\Publication\PublicationStep;
+
 
 class PublicationController extends Controller
 {
@@ -119,7 +119,24 @@ class PublicationController extends Controller
         $html = view("publications.index.card-list", compact('publications', 'query'))->render();
         return $html;
     }
-   
+
+    public function getStep(Request $request){
+        $method = PublicationStep::getStep($request->step)::method();
+
+        if(!method_exists($this, $method)){
+            return abort(500);
+        }
+
+        call_user_func(PublicationStep::getStep($request->step)::method());
+    }
+
+    public function createFirstStep(){
+
+    }
+
+    public function createSecondStep(){
+        
+    }
 
     /**
      * Show the form for creating a new resource.

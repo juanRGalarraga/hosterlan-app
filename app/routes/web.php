@@ -31,12 +31,5 @@ Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit')
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::get('publications/list', [PublicationController::class, 'getList'])->name('publication.list');
-Route::get('publications/getPreviewFiles', [PublicationController::class, 'getPreviewFiles']);
-Route::resource('publications', PublicationController::class);
-
-Route::get('/test', function(){
-    return view('test');
-});
-
+require __DIR__ . '/publication.php';
 require __DIR__.'/auth.php';
