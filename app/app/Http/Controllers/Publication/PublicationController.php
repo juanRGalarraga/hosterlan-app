@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
@@ -45,19 +46,23 @@ class PublicationController extends Controller
                         ->join(RentType::tableName() . ' as rt', 'rent_type_id', '=', 'rt.id')
                         ->leftjoin(PublicationDayAvailable::tableName() . " as pda", 'pda.publication_id', '=', 'p.id');
         
-        $searchValue = $request->input('search');
-        if(!empty($searchValue)){
+        $searchValue = $request->string('search');
+        if($searchValue->isNotEmpty()){
 
             $request->validate(['search' => 'string|min:1']);
 
             $queryBuilder
-            ->where('p.title', 'like', "%$searchValue%")
-            ->orWhere('p.description', 'like', "%$searchValue%")
-            ->orWhere('p.ubication', 'like', "%$searchValue%");
+            ->where(function(Builder $query) use ($searchValue) {
+                $query
+                    ->where('p.title', 'like', "%$searchValue%")
+                    ->orWhere('p.description', 'like', "%$searchValue%")
+                    ->orWhere('p.ubication', 'like', "%$searchValue%");
+            });
+            
         }
 
-        $stateValue = $request->input('state', '');
-        if(!is_null(StateEnum::fromName($stateValue))){
+        $stateValue = $request->enum('state', StateEnum::class);
+        if(isset($stateValue)){
             $queryBuilder
                 ->where('pda.state', $stateValue);
         }
@@ -73,7 +78,7 @@ class PublicationController extends Controller
 
         }
 
-        $availableTo = $request->input('available_to', '');
+        $availableTo = $request->date('available_to', '');
 
         if(!empty($availableTo)) {
             $availableToCarbon = new Carbon($availableTo);
@@ -81,7 +86,6 @@ class PublicationController extends Controller
             if($availableToFormated && $availableToFormated > $availableSinceFormated){
                 $queryBuilder->where(DB::raw('DATE(pda.to)'), '<=', $availableToFormated);
             }
-
         }
 
         $rentType = $request->input('rentType');
