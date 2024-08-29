@@ -2,7 +2,7 @@ export default class ObjectHelper {
     
     static isEmpty(obj){
 
-        if(!obj) return false;
+        if(!obj || typeof obj != "object") return false;
 
         if (Object.keys(obj).length === 0) {
             return true;

@@ -1,5 +1,5 @@
 import SimpleHash from '../../simpleHash.js';
-import Alert from '../../utilities/alert.js';
+import Alert from '../../components/alert.js';
 
 export default class PublicationFile {
     input = null

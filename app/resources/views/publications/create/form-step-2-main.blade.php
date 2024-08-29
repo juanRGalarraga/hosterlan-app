@@ -1,8 +1,7 @@
 <x-app-layout :includeSearchNav="false">
     <x-slot:scripts>
         @vite([
-            'resources/js/publications/create/main.js',
-            'resources/css/publications/create/create.css',
+            'resources/js/publications/create/form-step-2.js',
         ])
     </x-slot:scripts>
 

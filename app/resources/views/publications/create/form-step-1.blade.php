@@ -30,12 +30,6 @@
             
             </div>
 
-            <x-input-label class="text-center mb-3">Disponibilidad</x-input-label>
-            <div class="justify-center flex">
-                <x-form.date-range-picker idDateFrom="available_since" idDateTo="available_to" id="dateRangePicker"></x-form.date-range-picker>
-                <x-primary-button type="button" class="ml-3" id="buttonAddDates">{{__('Añadir')}}</x-primary-button>
-            </div>
-
             <div id="available_days" class="w-fit my-4 mx-auto grid grid-cols-2 xl:grid-cols-4 gap-x-2 gap-y-1"></div>
         
             <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3 w-full">
