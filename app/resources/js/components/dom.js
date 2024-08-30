@@ -4,6 +4,27 @@ export default class DOM {
 
     static element
 
+
+    /**
+     * Capture and element for the id or for the instance
+     * @param {string|HTMLElement} element 
+     * @returns {HTMLElement}
+     * @throws {Error}
+     */
+    static captureElement(element){
+        let ele = element;
+        if(typeof element == "string"){
+            ele = document.getElementById(element)
+        }
+console.log(element);
+console.log(ele);
+
+        if(!(ele instanceof HTMLElement)){
+            throw new Error("Element not found");
+        }
+        return ele;
+    }
+
     static createElement(element){
         if(typeof element != "string"){
             throw new Error("Element must be an string");

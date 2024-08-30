@@ -3,8 +3,8 @@ import {
     SimpleHash, 
     Table, 
     Div, 
+    DOM,
     Input,
-    Anchor,
     Button,
     Label } from '../../components/main';
 
@@ -70,15 +70,11 @@ export default class AvailableDay {
         }
     }
 
-    loadButtonRemoveDates(buttonId){
+    loadButtonRemoveDates(buttonOrId){
         let thisInstance = this;
 
-        let button = document.getElementById(buttonId);
-        
-        if(!(button instanceof HTMLButtonElement)) {
-            throw new Error("button not gound");
-        }
-
+        let button = DOM.captureElement(buttonOrId);
+    
         button.onclick = () => {
             console.log("Button clicked");
         }
@@ -100,9 +96,7 @@ export default class AvailableDay {
             return;
         }
 
-        let row = this.createRow(dateMap, since, to);
-
-        this.tableDates.appendChild(row);
+        this.createRow(dateMap, since, to);
 
         this.dates[dateMap] = {since,to};
     }
@@ -119,12 +113,8 @@ export default class AvailableDay {
             class : 'flex items-center'
         }
 
-        let parent = this
-
         let row = 
         Table.tr( (tr) => {
-            console.log(tr);
-            
             tr.td(
 
                 Div.create( (div) => {
@@ -138,10 +128,12 @@ export default class AvailableDay {
 
             tr.th(dateTo, {class:'px-6 py-4'});
 
-            tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline'}), {class:'w-4'});
+            tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline w-4', type: 'button', id:`button-${id}`}));
         },
         trAttributes);
+
+        this.tableDates.appendChild(row);
         
-        return row;
+        this.loadButtonRemoveDates(`button-${id}`);
     }
 }
