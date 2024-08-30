@@ -1,19 +1,19 @@
-import Util from "./util";
+import DOM from "./dom";
 import Table from "./table";
 
 export default class Component {
 
-    static createComponent({tagName, attributes= {}, child = null}){
-        let element = Util.createElement(tagName);
+    static create({tagName, attributes= {}, child = null}){
+        let element = DOM.createElement(tagName);
 
-        Util.addAtributes(element, attributes);
+        DOM.addAtributes(element, attributes);
 
         element = Component.extendProto(element);
 
         if(child instanceof HTMLElement){
-            Util.$(element).append(child);
+            DOM.$(element).append(child);
         } else if(typeof child == "string"){
-            Util.$(element).text(child);
+            DOM.$(element).text(child);
         } else if(typeof child == "function"){
             child(element);
         }
@@ -23,10 +23,10 @@ export default class Component {
 
     static extendProto(element){
         element.__proto__.td = function(child, attributes = {}) {
-            element.appendChild(Table.td(child, attributes))
+            DOM.$(element).append((Table.td(child, attributes)))
         };
         element.__proto__.th = function(child, attributes = {}) {
-            element.appendChild(Table.th(child, attributes))
+            DOM.$(element).append(Table.th(child, attributes))
         };
         return element;
     }

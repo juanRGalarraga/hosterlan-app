@@ -1,6 +1,6 @@
 import ObjectHelper from "../utilities/objectHelper";
 
-export default class Util {
+export default class DOM {
 
     static element
 
@@ -38,7 +38,7 @@ export default class Util {
                 throw new Error("Attributes must be an object");
             }
             for (const name in attributes) {
-                Util.addAtribute(element,{name: name, value: attributes[name]});
+                DOM.addAtribute(element,{name: name, value: attributes[name]});
             }
         }
 
@@ -59,23 +59,23 @@ export default class Util {
     }
 
     static append(child){
-        if(!(Util.element instanceof HTMLElement)){
+        if(!(DOM.element instanceof HTMLElement)){
             throw new Error("element must be an HTMLElement");
         }
         if(!(child instanceof HTMLElement)){
             throw new Error("Child must be an HTMLElement");
         }
-        Util.element.insertAdjacentElement('beforeend', child)
+        DOM.element.insertAdjacentElement('beforeend', child)
     }
 
     static text(child){
-        if(!(Util.element instanceof HTMLElement)){
+        if(!(DOM.element instanceof HTMLElement)){
             throw new Error("element must be an HTMLElement");
         }
         if(typeof child != "string"){
             throw new Error("Child must be a string");
         }
-        Util.element.insertAdjacentText('beforeend', child)
+        DOM.element.insertAdjacentText('beforeend', child)
     }
 
 
@@ -83,8 +83,8 @@ export default class Util {
         if(!(element instanceof HTMLElement)){
             throw new Error("element must be an HTMLElement");
         }
-        Util.element = element
-        return Util;
+        DOM.element = element
+        return DOM;
     }
 
 

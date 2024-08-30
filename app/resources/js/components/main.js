@@ -3,7 +3,7 @@ import Div from "./div";
 import Input from "./input";
 import Label from "./label";
 import Table from "./table";
-import Util from "./util";
+import DOM from "./dom";
 import SimpleHash from "../simpleHash";
 import Anchor from "./anchor";
 import Search from "./search";
@@ -16,7 +16,7 @@ export {
     Input,
     Label,
     Table,
-    Util,
+    DOM,
     Anchor,
     Search,
     Button,

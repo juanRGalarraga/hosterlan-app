@@ -1,9 +1,9 @@
 import Component from "./component";
 
-export default class Label {
+export default class Label extends Component {
 
     static create(text, attributes = {}){
-        return Component.createComponent({tagName: 'label', attributes, text});
+        return Label.create({tagName: 'label', attributes, text});
     }
 
 }

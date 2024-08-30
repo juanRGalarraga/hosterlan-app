@@ -1,7 +1,7 @@
 import Component from "./component";
 
-export default class Button {
+export default class Button extends Component {
     static create(child, attributes = {}){
-        return Component.createComponent({tagName: 'button', attributes, child})
+        return Button.create({tagName: 'button', attributes, child})
     }
 }

@@ -1,9 +1,9 @@
 import Component from "./component"
 
-export default class Div {
+export default class Div extends Component {
 
     static create(child, attributes = {}){
-        return Component.createComponent({tagName: 'div', attributes, child})
+        return Div.create({tagName: 'div', attributes, child})
     }
 
 }
