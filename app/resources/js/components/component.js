@@ -5,6 +5,9 @@ import Label from "./label";
 import Table from "./table";
 import Util from "./util";
 import SimpleHash from "../simpleHash";
+import Anchor from "./anchor";
+import Search from "./search";
+import ObjectHelper from "../utilities/objectHelper";
 
 export {
     ContextMenu,
@@ -13,5 +16,8 @@ export {
     Label,
     Table,
     Util,
-    SimpleHash
+    Anchor,
+    Search,
+    SimpleHash,
+    ObjectHelper
 }

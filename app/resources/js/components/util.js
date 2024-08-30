@@ -1,4 +1,4 @@
-import ObjectHelper from "../objectHelper";
+import ObjectHelper from "../utilities/objectHelper";
 
 export default class Util {
 

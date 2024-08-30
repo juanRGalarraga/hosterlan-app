@@ -2,9 +2,11 @@ import Util from "./util";
 
 export default class Table {
 
-    static td(child){
+    static td(child = null, attributes = {}){
 
         let td = Util.createElement('td');
+
+        Util.addAtributes(td, attributes);
 
         Util.addClass(td, 'w-4', 'p-4');
 
@@ -19,27 +21,35 @@ export default class Table {
         return td;
     }
 
-    static th(content = null){
+    static th(child = null, attributes = {}){
 
         let th = Util.createElement('th');
 
-        Util.addClass(th, 'px-6','py-4','font-medium','text-gray-900','whitespace-nowrap','dark:text-white');
+        Util.addAtributes(th, attributes);
 
-        if(content instanceof HTMLElement){
-            th.appendChild(content);
+        if(child instanceof HTMLElement){
+            th.appendChild(child);
+        } else if(typeof child == "string"){
+            th.insertAdjacentText('beforeend', child);
+        } else if(typeof child == "function"){
+            child(th);
         }
 
         return th;
     }
 
-    static tr(child = null){
+    static tr(child = null, attributes = {}){
 
         let tr = Util.createElement('tr');
 
-        Util.addClass(tr, 'w-bg-white','border-b','dark:bg-gray-800','dark:border-gray-700','hover:bg-gray-50','dark:hover:bg-gray-600');
+        Util.addAtributes(tr, attributes);
 
-        tr.__proto__.td = function(element) {
-            tr.appendChild(Table.td(element))
+        tr.__proto__.td = function(element, attributes = {}) {
+            tr.appendChild(Table.td(element, attributes))
+        };
+
+        tr.__proto__.th = function(element, attributes = {}) {
+            tr.appendChild(Table.th(element, attributes))
         };
 
         if(child instanceof HTMLTableCellElement){

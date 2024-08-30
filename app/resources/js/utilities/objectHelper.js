@@ -30,4 +30,18 @@ export default class ObjectHelper {
         return true;
     }
 
+    
+    static searchPropertyByValue(obj, valorBuscado) {
+        for (const propiedad in obj) {
+          if (obj.hasOwnProperty(propiedad)) {
+            const valores = Object.values(obj[propiedad]);
+      
+            if (valores.includes(valorBuscado)) {
+              return propiedad;
+            }
+          }
+        }
+      
+        return null; // Devuelve null si no se encuentra el valor
+      }
 }
