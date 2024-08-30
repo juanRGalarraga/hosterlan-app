@@ -32,7 +32,6 @@
             </tr>
         </thead>
         <tbody id="tableDates">
-           
         </tbody>
     </table>
 </div>

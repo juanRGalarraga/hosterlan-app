@@ -3,6 +3,7 @@ export default class Search {
     inputEl
     publicationList
     keyToSearch = 'Enter'
+    inputExists = false
 
     constructor(inputId){
 
@@ -12,8 +13,13 @@ export default class Search {
 
         this.inputEl = document.getElementById(inputId)
         if( !(this.inputEl instanceof HTMLInputElement) || this.inputEl.type != 'text'){
+            this.inputExists = false;
             return;
         }
+    }
+
+    exists(){
+        return this.inputExists;
     }
 
     setKeyToSearch(key){

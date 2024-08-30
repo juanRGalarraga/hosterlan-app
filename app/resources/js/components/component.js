@@ -1,23 +1,33 @@
-import ContextMenu from "./contextMenu";
-import Div from "./div";
-import Input from "./input";
-import Label from "./label";
-import Table from "./table";
 import Util from "./util";
-import SimpleHash from "../simpleHash";
-import Anchor from "./anchor";
-import Search from "./search";
-import ObjectHelper from "../utilities/objectHelper";
+import Table from "./table";
 
-export {
-    ContextMenu,
-    Div,
-    Input,
-    Label,
-    Table,
-    Util,
-    Anchor,
-    Search,
-    SimpleHash,
-    ObjectHelper
+export default class Component {
+
+    static createComponent({tagName, attributes= {}, child = null}){
+        let element = Util.createElement(tagName);
+
+        Util.addAtributes(element, attributes);
+
+        element = Component.extendProto(element);
+
+        if(child instanceof HTMLElement){
+            Util.$(element).append(child);
+        } else if(typeof child == "string"){
+            Util.$(element).text(child);
+        } else if(typeof child == "function"){
+            child(element);
+        }
+
+        return element;
+    }
+
+    static extendProto(element){
+        element.__proto__.td = function(child, attributes = {}) {
+            element.appendChild(Table.td(child, attributes))
+        };
+        element.__proto__.th = function(child, attributes = {}) {
+            element.appendChild(Table.th(child, attributes))
+        };
+        return element;
+    }
 }

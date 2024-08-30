@@ -1,4 +1,4 @@
-import Util from "./util";
+import Component from "./component";
 
 export default class Input{
 
@@ -33,11 +33,9 @@ export default class Input{
         }
     }
 
-    static create(attributes){
+    static create(child = null, attributes = {}){
 
-        let input = Util.createElement('input');
-
-        Util.addAtributes(input, attributes);
+        let input = Component.createComponent({tagName: 'input', attributes, child})
 
         if(!attributes['class'] ?? ''){
             input.className = 

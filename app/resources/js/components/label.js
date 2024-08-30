@@ -1,17 +1,9 @@
-import Util from "./util";
+import Component from "./component";
 
 export default class Label {
 
     static create(text, attributes = {}){
-        if(typeof text !== "string"){
-            throw new Error("Text must be string type");
-        }
-
-        let label = Util.createElement('label');
-
-        Util.addAtributes(label, attributes);
-
-        return label;
+        return Component.createComponent({tagName: 'label', attributes, text});
     }
 
 }

@@ -2,9 +2,7 @@ import ObjectHelper from "../utilities/objectHelper";
 
 export default class Util {
 
-    constructor(){
-       
-    }
+    static element
 
     static createElement(element){
         if(typeof element != "string"){
@@ -59,5 +57,36 @@ export default class Util {
 
         return element.setAttribute(name, value);
     }
+
+    static append(child){
+        if(!(Util.element instanceof HTMLElement)){
+            throw new Error("element must be an HTMLElement");
+        }
+        if(!(child instanceof HTMLElement)){
+            throw new Error("Child must be an HTMLElement");
+        }
+        Util.element.insertAdjacentElement('beforeend', child)
+    }
+
+    static text(child){
+        if(!(Util.element instanceof HTMLElement)){
+            throw new Error("element must be an HTMLElement");
+        }
+        if(typeof child != "string"){
+            throw new Error("Child must be a string");
+        }
+        Util.element.insertAdjacentText('beforeend', child)
+    }
+
+
+    static $(element){
+        if(!(element instanceof HTMLElement)){
+            throw new Error("element must be an HTMLElement");
+        }
+        Util.element = element
+        return Util;
+    }
+
+
 
 }

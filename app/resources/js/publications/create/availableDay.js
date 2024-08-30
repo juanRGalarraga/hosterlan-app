@@ -5,9 +5,8 @@ import {
     Div, 
     Input,
     Anchor,
-    Search,
-    ObjectHelper,
-    Label } from '../../components/component';
+    Button,
+    Label } from '../../components/main';
 
 export default class AvailableDay {
 
@@ -71,9 +70,24 @@ export default class AvailableDay {
         }
     }
 
-    addDates(){
-        let since = this.inputSince?.value;
-        let to = this.inputTo?.value;
+    loadButtonRemoveDates(buttonId){
+        let thisInstance = this;
+
+        let button = document.getElementById(buttonId);
+        
+        if(!(button instanceof HTMLButtonElement)) {
+            throw new Error("button not gound");
+        }
+
+        button.onclick = () => {
+            console.log("Button clicked");
+        }
+    }
+
+    addDates(dateSince=null, dateTo=null){
+
+        let since = dateSince ?? this.inputSince?.value;
+        let to = dateTo ?? this.inputTo?.value;
     
         if((typeof since != "string" || typeof to != "string")
             || (since.length < 1 || to.length < 1)){
@@ -109,10 +123,12 @@ export default class AvailableDay {
 
         let row = 
         Table.tr( (tr) => {
+            console.log(tr);
+            
             tr.td(
 
                 Div.create( (div) => {
-                    div.appendChild(Input.create({id, type:'checkbox', class: inputClassName}))
+                    div.appendChild(Input.create(null, {id, type:'checkbox', class: inputClassName}))
                     div.appendChild(Label.create('checkbox', {class:'sr-only', for: id}))
                 }, divAttributes ),
 
@@ -122,10 +138,9 @@ export default class AvailableDay {
 
             tr.th(dateTo, {class:'px-6 py-4'});
 
-            tr.td(Anchor.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline'}));
+            tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline'}));
         },
         trAttributes);
-        console.log(row);
         
         return row;
     }
