@@ -21,7 +21,18 @@ export default class Component {
         return element;
     }
 
+    /**
+     * This method is useful to generate a td element into parent element.
+     * When is neccessary use a callback in create() method, this allow to 
+     * call the appendChild method in it.
+     * @param HTMLElement element 
+     * @returns 
+     */
     static extendProto(element){
+        if(!(element instanceof HTMLElement)){
+            throw new Error("element must be an HTMLElement");
+        }
+
         element.__proto__.td = function(child, attributes = {}) {
             DOM.$(element).append((Table.td(child, attributes)))
         };
