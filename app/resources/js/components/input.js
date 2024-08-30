@@ -1,6 +1,6 @@
 import Component from "./component";
 
-export default class Input extends Component {
+export default class Input {
 
     input = null
 
@@ -35,7 +35,7 @@ export default class Input extends Component {
 
     static create(child = null, attributes = {}){
 
-        let input = Input.create({tagName: 'input', attributes, child})
+        let input = Component.create({tagName: 'input', attributes, child})
 
         if(!attributes['class'] ?? ''){
             input.className = 

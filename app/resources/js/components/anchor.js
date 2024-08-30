@@ -1,8 +1,8 @@
 import Component from "./component";
 
-export default class Anchor extends Component {
+export default class Anchor {
 
     static create(child, attributes = {}){
-        return Anchor.create({tagName: 'a', attributes, child})
+        return Component.create({tagName: 'a', attributes, child})
     }
 }

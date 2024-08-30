@@ -138,7 +138,7 @@ export default class AvailableDay {
 
             tr.th(dateTo, {class:'px-6 py-4'});
 
-            tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline'}));
+            tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline'}), {class:'w-4'});
         },
         trAttributes);
         

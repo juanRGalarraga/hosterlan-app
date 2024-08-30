@@ -1,5 +1,5 @@
-import DOM from "./dom";
 import Table from "./table";
+import DOM from "./dom";
 
 export default class Component {
 
@@ -34,10 +34,10 @@ export default class Component {
         }
 
         element.__proto__.td = function(child, attributes = {}) {
-            DOM.$(element).append((Table.td(child, attributes)))
+            element.appendChild(Table.td(child, attributes))
         };
         element.__proto__.th = function(child, attributes = {}) {
-            DOM.$(element).append(Table.th(child, attributes))
+            element.appendChild(Table.th(child, attributes))
         };
         return element;
     }
