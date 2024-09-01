@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Support\Facades\Validator;
 
 trait ValidatorRequest {
-    protected $validatorCheck = false;
+    protected $validatorCheck;
     public function check($data){
         return $this->validatorCheck = Validator::make($data, $this->rules());
     }

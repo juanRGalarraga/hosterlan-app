@@ -57,7 +57,15 @@ return [
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
+            'path' => storage_path('logs/debug.log'),
             'ignore_exceptions' => false,
+            'level' => 'debug',
+        ],
+
+        'debugger' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/debugger.log'),
+            'level' => 'info'
         ],
 
         'single' => [

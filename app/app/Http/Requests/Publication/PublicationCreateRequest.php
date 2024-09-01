@@ -3,12 +3,9 @@
 namespace App\Http\Requests\Publication;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\ValidatorRequest;
-class PublicationStoreRequest extends FormRequest
+
+class PublicationCreateRequest extends FormRequest
 {
-
-    // use ValidatorRequest;
-
     /**
      * Determine if the user is authorized to make this request.
      */

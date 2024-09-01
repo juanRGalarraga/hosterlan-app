@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Publication;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
@@ -17,8 +16,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
-use App\Http\Controllers\Publication\PublicationStep;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 
 class PublicationController extends Controller
@@ -126,35 +127,46 @@ class PublicationController extends Controller
         return $html;
     }
 
-    public function create(Request $request){
+    public function createStep2(Request $request){
+// dd($request->all());
+        $validated = Validator::make($request->all(), [
+            'title' => 'required|string|max:150',
+            'price' => 'required|numeric',
+            'rent_type_id' => 'required|integer',
+            'room_count' => 'integer',
+            'bathroom_count' => 'integer',
+            'number_people' => 'required|integer',
+            'ubication' => 'string|max:250',
+            'description' => 'string|nullable',
+            'pets' => 'in:1,0',
+            'files' => 'required|max:2048',
+            'files.*' => 'required|max:2048|file'
+        ], ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
         
-        if($request->routeIs('publications.create') && $request->step == 2){
-            $validated = Validator::make($request->all(), [
-                'title' => 'required|string|max:150',
-                'price' => 'required|integer|decimal:0,2',
-                'rent_type_id' => 'required|integer',
-                'room_count' => 'integer',
-                'bathroom_count' => 'integer',
-                'number_people' => 'required|integer',
-                'ubication' => 'string|max:250',
-                'description' => 'string|nullable',
-                'pets' => 'in:1,0',
-                'images' => 'required|min:1|max:10|image'
-            ]);
-            
-            if($validated->fails()){
-                $request->flash();
+        if( $validated->fails() || !$request->file('files')){
+            $request->flash();
+            return redirect()
+            ->route('publications.create1', 1)
+            ->withErrors($validated->errors())
+            ->withInput();
+        }
+        
+        $publicationTempId = Session::getId() . '-publicationtemp';
 
-                return redirect(route('publications.create', 1))
-                ->withErrors($validated->errors())
-                ->withInput();
-            }
+        Session::remove($publicationTempId);
+        Storage::disk('publication-pictures')->deleteDirectory("temp/$publicationTempId");
+
+        foreach ($request->file('files') as $key => $file) {
+            $file->store("public/publication-pictures/temp/$publicationTempId/");
         }
 
-        if(!PublicationStep::getStep($request->step)){
-            return abort(500);
-        }
-        return view(PublicationStep::getStep($request->step)::view());
+        Session::put($publicationTempId, $request->except(['files']));
+
+        return view('publications.create.form-step-2-main');
+    }
+
+    public function createStep1(){
+        return view('publications.create.form-step-1-main');
     }
 
     public function getPreviewFiles(Request $request){

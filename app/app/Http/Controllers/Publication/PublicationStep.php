@@ -14,9 +14,9 @@ class PublicationStep {
         2 => ['view' => 'publications.create.form-step-2-main']
     ];
 
-    public static function getStep(string $step) : self {
+    public static function getStep(string $step) : self | false {
         if(!isset(self::STEPS[$step])){
-            throw new InvalidPropertyOrMethod("Ivalid argument. Step not exists");
+            return false;
         }
 
         self::$step = self::STEPS[$step];
