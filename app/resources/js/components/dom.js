@@ -16,8 +16,6 @@ export default class DOM {
         if(typeof element == "string"){
             ele = document.getElementById(element)
         }
-console.log(element);
-console.log(ele);
 
         if(!(ele instanceof HTMLElement)){
             throw new Error("Element not found");
@@ -99,12 +97,25 @@ console.log(ele);
         DOM.element.insertAdjacentText('beforeend', child)
     }
 
+    /**
+     * Receive one or two parameters. If it receive one, it returns
+     * the attribute´s value. If it receives two, it sets it.
+     * @param  {string|mixed} attributes 
+     * @returns 
+     */
+    static attr(...attributes){
+        let [nameAttr, valueAttr] = attributes;
+        if(nameAttr && valueAttr !== null){
+            DOM.element.setAttribute(nameAttr, valueAttr);
+            return;
+        }
+
+        return DOM.element.getAttribute(nameAttr);
+    }
+
 
     static $(element){
-        if(!(element instanceof HTMLElement)){
-            throw new Error("element must be an HTMLElement");
-        }
-        DOM.element = element
+        DOM.element = DOM.captureElement(element);
         return DOM;
     }
 

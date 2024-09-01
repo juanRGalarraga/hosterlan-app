@@ -1,17 +1,28 @@
+import DOM from "./dom"
 export default class ContextMenu {
 
     contextMenu
     clickeableZone
     deleteAction
     modifyAction
+    options= {
+        clickeableZoneElement: null,
+        withModifier: true,
+        withDeleter: true
+    }
 
-    setClickeableZone(clickeableZoneElement){
-        this.clickeableZone = clickeableZoneElement;
+    constructor(options){
+        this.options = Object.assign({}, this.options, options)
+    }
 
-        if(typeof clickeableZoneElement == "string"){
-            if(!clickeableZoneElement.startsWith('#')){
-                clickeableZoneElement = `#${clickeableZoneElement}`;
-                this.clickeableZone = document.querySelector(clickeableZoneElement)
+    setClickeableZone(clicleableZone = null){
+
+        this.clickeableZone = clicleableZone;
+
+        if(typeof this.options.clickeableZoneElement == "string"){
+            if(!this.options.clickeableZoneElement.startsWith('#')){
+                this.options.clickeableZoneElement = `#${this.options.clickeableZoneElement}`;
+                this.clickeableZone = document.querySelector(this.options.clickeableZoneElement)
             }
         }
     
@@ -26,14 +37,10 @@ export default class ContextMenu {
 
         this.clickeableZone.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-
-            if (this.clickeableZone?.id) {
-                thisInstance.contextMenu.setAttribute(this.clickeableZone.id);
-            }
-
+            thisInstance.contextMenu.setAttribute('id', e.target.getAttribute('data-id'));
             thisInstance.contextMenu.style.top = `${e.clientY}px`;
             thisInstance.contextMenu.style.left = `${e.clientX}px`;
-            thisInstance.contextMenu.classList.remove('hidden');
+            thisInstance.contextMenu.classList.remove('hidden');            
         });
 
         document.addEventListener('click', () => {
@@ -42,7 +49,6 @@ export default class ContextMenu {
     }
 
     createContextMenu(contextMenu = null){
-
         this.contextMenu = contextMenu;
 
         if(typeof contextMenu == "string"){
@@ -63,17 +69,34 @@ export default class ContextMenu {
         let ul = document.createElement('ul');
         ul.className = "list-none p-0 m-0";
 
-        let liModify = document.createElement('li');
-        liModify.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer mycss-text-black";
-        liModify.insertAdjacentText('afterbegin', 'Modificar');
+        if(this.options.withModifier){
+            let liModify = document.createElement('li');
+            liModify.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer mycss-text-black";
+            liModify.insertAdjacentText('afterbegin', 'Modificar');
+            ul.appendChild(liModify)
+            if(typeof this.options.modifyAction == 'function'){
+                liDelete.onclick = () => {
+                    this.options.modifyAction.call(this, this.clickeableZone);
+                }
+            }
+        }
 
-        let liDelete = document.createElement('li');
-        liDelete.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer mycss-text-black";
-        liDelete.insertAdjacentText('afterbegin', 'Eliminar');
+        if(this.options.withDeleter){
+            let liDelete = document.createElement('li');
+            liDelete.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer mycss-text-black";
+            liDelete.insertAdjacentText('afterbegin', 'Eliminar');
+            if(typeof this.options.deleteAction == 'function'){
+                liDelete.onclick = () => {
+                    this.options.deleteAction.call(this, this.clickeableZone);
+                }
+            }
 
-        ul.appendChild(liDelete)
-        ul.appendChild(liModify)
+            ul.appendChild(liDelete)
+        }
+
         contextMenu.appendChild(ul);
+
+
 
         return contextMenu;
     }
@@ -81,23 +104,4 @@ export default class ContextMenu {
     hiddenContextMenu(){
         this.contextMenu.classList.add('hidden');
     }
-
-    addDeleteAction(callback){
-        deleteAction.click = (e) => {
-            callback();
-            thisInstance.hiddenContextMenu();
-        }
-    }
-
-    addModifyAction(callback){
-        if(typeof callback != "function"){
-            return console.error();
-        }
-
-        modifyAction.click = (e) => {
-            callback();
-            thisInstance.hiddenContextMenu();
-        }
-    }
-
 }

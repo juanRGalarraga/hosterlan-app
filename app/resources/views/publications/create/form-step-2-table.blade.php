@@ -20,14 +20,11 @@
                         <label for="checkbox-all-search" class="sr-only">checkbox</label>
                     </div>
                 </th>
-                <th scope="col" class="px-6 py-3">
-                    Desde
+                <th scope="col" class="px-6">
+                    {{__('Desde')}}
                 </th>
-                <th scope="col" class="px-6 py-3">
-                    Hasta
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Acciones
+                <th scope="col" class="px-6">
+                    {{__('Hasta')}}
                 </th>
             </tr>
         </thead>

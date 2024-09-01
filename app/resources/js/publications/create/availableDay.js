@@ -14,30 +14,27 @@ export default class AvailableDay {
     inputSince
     inputTo
     contextMenu
-    dates = {}
+    static dates = {}
     search
     tableDates = 'tableDates'
 
     constructor(){
         this.getInputDates({sinceId: 'available_since', toId: 'available_to'});
         this.loadButtonAddDates('buttonAddDates');
-        this.contextMenu = new ContextMenu();
+        this.contextMenu = new ContextMenu({
+            withModifier: false,
+            deleteAction: function(clickeableZone){
+                clickeableZone.remove();
+                delete AvailableDay.dates[clickeableZone.id];
+            }
+        });
+
         this.contextMenu.createContextMenu();
 
         // this.search = new Search('table-search');
         // this.search.loadListener((input) => {
         //     ObjectHelper.searchPropertyByValue(input.value);
         // });
-    }
-
-    loadOptionsContextMenu() {
-        this.contextMenu.addDeleteAction(function () {
-            
-        });
-
-        this.contextMenu.addModifyAction(function () {
-            
-        });
     }
 
     getInputDates({sinceId, toId}){
@@ -71,12 +68,10 @@ export default class AvailableDay {
     }
 
     loadButtonRemoveDates(buttonOrId){
-        let thisInstance = this;
-
         let button = DOM.captureElement(buttonOrId);
     
         button.onclick = () => {
-            console.log("Button clicked");
+            this.removeDates(DOM.$(button).attr('data-date'))
         }
     }
 
@@ -92,22 +87,24 @@ export default class AvailableDay {
 
         let dateMap = SimpleHash.generate(`${since}:${to}`);
         
-        if (this.dates.hasOwnProperty(dateMap)) {
+        if (AvailableDay.dates.hasOwnProperty(dateMap)) {
             return;
         }
 
         this.createRow(dateMap, since, to);
 
-        this.dates[dateMap] = {since,to};
+        AvailableDay.dates[dateMap] = {since,to};
     }
 
     createRow(id, dateSince, dateTo){
+        let hashId = SimpleHash.generate(`${dateSince}:${dateTo}`)
         let inputClassName = 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600';
         let trAttributes = {
             class: 'bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600',
+            id: hashId
         }
         let tdAttributes = {
-            class: 'w-4 p-4'
+            class: 'px-6 py-3',
         }
         let divAttributes = {
             class : 'flex items-center'
@@ -120,20 +117,29 @@ export default class AvailableDay {
                 Div.create( (div) => {
                     div.appendChild(Input.create(null, {id, type:'checkbox', class: inputClassName}))
                     div.appendChild(Label.create('checkbox', {class:'sr-only', for: id}))
-                }, divAttributes ),
+                }, divAttributes ), tdAttributes)
 
-            tdAttributes )
+            tr.th(dateSince, tdAttributes);
 
-            tr.th(dateSince, {scope:'row', class:'px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'});
+            tr.th(dateTo, tdAttributes);
 
-            tr.th(dateTo, {class:'px-6 py-4'});
+            // tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline px-6 py-3', type: 'button', id:`button-${id}`}));
 
-            tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline w-4', type: 'button', id:`button-${id}`}));
-        },
-        trAttributes);
+        }, trAttributes);
+
+        this.contextMenu.setClickeableZone(row)
+
+        this.contextMenu.loadContextMenu();
+
+        
+        // console.log(this.contextMenu.contextMenu.id);
+        
 
         this.tableDates.appendChild(row);
+
         
-        this.loadButtonRemoveDates(`button-${id}`);
+        // this.loadButtonRemoveDates(`button-${id}`);
+
+        return row;
     }
 }
