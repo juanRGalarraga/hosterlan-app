@@ -3,12 +3,13 @@
 namespace App\Http\Requests\Publication;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ValidatorRequest;
 
 class PublicationUpdateRequest extends FormRequest
 {
 
-    protected $validator = false;
+    use ValidatorRequest;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -35,17 +36,5 @@ class PublicationUpdateRequest extends FormRequest
             'pets' => 'boolean',
             'numbre_people' => 'integer|min:1',
         ];
-    }
-
-    public function check($data){
-        return $this->validator = Validator::make($data, $this->rules());
-    }
-
-    public function fails(){
-        return $this->validator->fails();
-    }
-
-    public function errors(){
-        return $this->validator->errors();
     }
 }

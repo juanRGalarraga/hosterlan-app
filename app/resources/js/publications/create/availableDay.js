@@ -5,7 +5,6 @@ import {
     Div, 
     DOM,
     Input,
-    Button,
     Label } from '../../components/main';
 
 export default class AvailableDay {
@@ -123,22 +122,13 @@ export default class AvailableDay {
 
             tr.th(dateTo, tdAttributes);
 
-            // tr.td(Button.create('Borrar', {class:'font-medium text-blue-600 dark:text-blue-500 hover:underline px-6 py-3', type: 'button', id:`button-${id}`}));
-
         }, trAttributes);
 
         this.contextMenu.setClickeableZone(row)
 
         this.contextMenu.loadContextMenu();
 
-        
-        // console.log(this.contextMenu.contextMenu.id);
-        
-
         this.tableDates.appendChild(row);
-
-        
-        // this.loadButtonRemoveDates(`button-${id}`);
 
         return row;
     }

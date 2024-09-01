@@ -16,7 +16,7 @@
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
 
-            <x-alert.warning id="alertWarningMaxAllowedFiles" class="hidden">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
+            <x-alert.warning id="alertWarningMaxAllowedFiles" class="{{$errors->first('images') ? '' : 'hidden'}}">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
 
             @if($errors->first('pictures'))
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Publication;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
@@ -17,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
 use App\Http\Controllers\Publication\PublicationStep;
+use Validator;
 
 
 class PublicationController extends Controller
@@ -125,6 +127,29 @@ class PublicationController extends Controller
     }
 
     public function create(Request $request){
+        
+        if($request->routeIs('publications.create') && $request->step == 2){
+            $validated = Validator::make($request->all(), [
+                'title' => 'required|string|max:150',
+                'price' => 'required|integer|decimal:0,2',
+                'rent_type_id' => 'required|integer',
+                'room_count' => 'integer',
+                'bathroom_count' => 'integer',
+                'number_people' => 'required|integer',
+                'ubication' => 'string|max:250',
+                'description' => 'string|nullable',
+                'pets' => 'in:1,0',
+                'images' => 'required|min:1|max:10|image'
+            ]);
+            
+            if($validated->fails()){
+                $request->flash();
+
+                return redirect(route('publications.create', 1))
+                ->withErrors($validated->errors())
+                ->withInput();
+            }
+        }
 
         if(!PublicationStep::getStep($request->step)){
             return abort(500);
