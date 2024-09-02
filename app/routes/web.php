@@ -3,8 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Publication\PublicationController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-
+use App\Mail\Email;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,9 @@ Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.
 
 require __DIR__ . '/publication.php';
 require __DIR__.'/auth.php';
+Route::get('registro',function(){
+    Mail::to('nicolas@gmail.com')->send(new Email);
+
+    return "mensaje enviado";
+
+})->name('registro');
