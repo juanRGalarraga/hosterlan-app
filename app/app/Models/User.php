@@ -10,10 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Guest;
 use App\Models\Owner;
 use App\Models\Publication;
+use Illuminate\Auth\MustVerifyEmail;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.

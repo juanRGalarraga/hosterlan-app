@@ -6,3 +6,15 @@
 ::view-transition-new(root) {
   animation-duration: 1s;
 }
+
+.mcss-hide-scroll {
+  scrollbar-width: none;
+}
+
+.mcss-hover-show-scroll:hover {
+  /* overflow-y: auto; */
+  scrollbar-width: thin !important;
+  background-color: #101727; 
+  scrollbar-color: white #676767;
+  scroll-behavior: smooth;
+}

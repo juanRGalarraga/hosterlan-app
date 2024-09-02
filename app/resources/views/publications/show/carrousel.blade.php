@@ -2,12 +2,12 @@
     $images = $publication->pictures;
 @endphp
 
-<div id="default-carousel" class="relative w-3/4 h-screen ml-auto my-auto" data-carousel="static">
+<div id="default-carousel" class="relative w-[70%] h-screen ml-auto" data-carousel="static">
     <!-- Carousel wrapper -->
     <div class="relative h-full overflow-hidden rounded-lg">
         @foreach ($images as $image)
-            <div class="hidden duration-700 ease-in-out pt-[15rem]" data-carousel-item>
-                <img src="{{$image->getUrl()}}" class="py-auto" alt="...">
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="{{$image->getUrl()}}" class="w-full h-full" alt="...">
             </div>
         @endforeach
     </div>
