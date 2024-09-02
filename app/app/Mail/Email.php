@@ -5,12 +5,11 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Email extends Mailable
+class Email extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +18,7 @@ class Email extends Mailable
      */
     public function __construct()
     {
-        //
+        // Constructor vacío si no necesitas pasar datos
     }
 
     /**
@@ -28,8 +27,7 @@ class Email extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new  Address('nicolas@gmail.com','Nicolas Fernanadez'),
-            subject: 'Se Resgistro Correctamente',
+            subject: 'Se Registró Correctamente',
         );
     }
 

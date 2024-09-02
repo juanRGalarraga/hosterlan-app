@@ -29,12 +29,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/connection-close', function(Request $request){
-    Log::channel('debugger')->info("USER " . Auth::user()->id . " ABANDONO LA PAGINA");
-    $sessionPublicationId = Session::getId() . '-publicationtemp';
-    Session::remove($sessionPublicationId);
-    Storage::disk('local')->deleteDirectory('publications-pictures/temp/' . Session::getId());
-});
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -42,9 +36,8 @@ Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.
 
 require __DIR__ . '/publication.php';
 require __DIR__.'/auth.php';
-Route::get('registro',function(){
-    Mail::to('nicolas@gmail.com')->send(new Email);
-
-    return "mensaje enviado";
-
+Route::get('registro', function() {
+    // Encolar el correo
+    Mail::to('nicolas@gmail.com')->queue(new Email());
+    return "Mensaje encolado";
 })->name('registro');
