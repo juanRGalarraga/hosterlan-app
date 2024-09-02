@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
+use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Models\Publication;
 use App\Models\Picture;
+use Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Enums\Publication\StateEnum;
@@ -20,6 +23,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 
 
 class PublicationController extends Controller
@@ -128,7 +132,7 @@ class PublicationController extends Controller
     }
 
     public function createStep2(Request $request){
-// dd($request->all());
+
         $validated = Validator::make($request->all(), [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
@@ -145,18 +149,16 @@ class PublicationController extends Controller
         
         if( $validated->fails() || !$request->file('files')){
             $request->flash();
-            return redirect()
-            ->route('publications.create1', 1)
-            ->withErrors($validated->errors())
-            ->withInput();
+
+            return view('publications.create.form-step-2-main');
         }
         
-        $publicationTempId = Session::getId() . '-publicationtemp';
+        $publicationTempId = $this->getMd5TemporalyKey();
 
         Session::remove($publicationTempId);
         Storage::disk('publication-pictures')->deleteDirectory("temp/$publicationTempId");
 
-        foreach ($request->file('files') as $key => $file) {
+        foreach ($request->file('files') as $file) {
             $file->store("public/publication-pictures/temp/$publicationTempId/");
         }
 
@@ -182,54 +184,63 @@ class PublicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */ 
-    public function store(PublicationUpdateRequest $request)
+    public function store(Request $request)
     {   
-        $request->check($request->all());
-
-        if($request->fails() || ($request->file('files') < 1) ){
-
-            $messageBag = new MessageBag();
-            $messageBag->merge($request->errors());
-
-            if(($request->file('files') < 1)){
-                $messageBag->add('pictures', __('Debe cargar al menos una imagen'));
-            }
-
+        $validator = Validator::make($request->all(), [
+            'days' => 'required|array',
+            'days.*.since' => 'required|date',
+            'days.*.to' => 'required|date'
+        ], ['days' => 'Select even one date available']);
+        
+        if($validator->fails()){
             $request->flash();
 
-            return redirect(route('publications.create'))
-            ->withErrors($messageBag)
+            return redirect(route('publications.create2'))
+            ->withErrors($validator->errors())
             ->withInput();
         }
 
-        
-        Db::transaction(function() use($request){
+        $publicationTempId = $this->getMd5TemporalyKey();
 
-            $publication = Publication::create($request->all());
+        $files = File::files(storage_path("app/public/publication-pictures/temp/$publicationTempId"));
+        // $files = Storage::disk('publication-pictures')->files("temp/$publicationTempId");
+        $data = Session::get($publicationTempId, null);
+        $days = $request->input('days');
+        debugbar()->info(storage_path('app/public/publication-pictures/temp/'));
+        if(!($files && $data && $days)){
+            return abort(500);
+        }
 
-            PublicationDayAvailable::create([
-                'publication_id' => $publication->id,
-                'since' => $request->available_since,
-                'to ' => $request->available_to,
-            ]);
+        Db::transaction(function() use($files, $data, $days){
 
-            foreach ($request->file('files') as $key => $file) {
+            $data['user_id'] = Auth::user()->id;
+
+            $publication = Publication::create($data);
+
+            foreach ($days as $key => $availableDays) {
+                PublicationDayAvailable::create([
+                    'publication_id' => $publication->id,
+                    'since' => \DateTime::createFromFormat('d/m/Y', $availableDays['since'])->format('Y-m-d'),
+                    'to' => \DateTime::createFromFormat('d/m/Y', $availableDays['to'])->format('Y-m-d'),
+                ]);
+            }
+
+
+            foreach ($files as $key => $file) {
+                $isStored = Storage::disk('publication-pictures')->move($file->getRealPath(), $publication->id);
                 
-                $isStored = $file->store(
-                    "{$publication->id}",
-                    'publication-pictures'
-                );
-                
+                // ->put("$publication->id/", file_get_contents($file->getRealPath()));
+                debugbar()->warning($file->getPathname(), $file->getRealPath());
                 if(!$isStored){
                     Log::alert("Error al almacenar los archivos de la publicacion");
-                    report("Error Processing Request");
+                    return report(throw new CannotWriteFileException("Error Processing Request file"));
                 }
 
                 $publication->pictures()->save(
                     new Picture([
-                        'name' => $file->hashName(),
+                        'name' => $file->getFilename(),
                         'publication_id' => $publication->id,
-                        'type' => $file->getMimeType(),
+                        'type' => $file->getExtension(),
                     ])
                 );
                 
@@ -279,5 +290,9 @@ class PublicationController extends Controller
         $publication->delete();
         return redirect()->route('publications.index.main')
                 ->withSuccess(_('Publicacion eliminada exitosamente'));
+    }
+
+    private function getMd5TemporalyKey(){
+        return md5(Auth::user()->id . "-publicationtemp");   
     }
 }

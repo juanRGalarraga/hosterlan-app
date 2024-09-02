@@ -16,6 +16,7 @@ export default class AvailableDay {
     static dates = {}
     search
     tableDates = 'tableDates'
+    form
 
     constructor(){
         this.getInputDates({sinceId: 'available_since', toId: 'available_to'});
@@ -30,6 +31,7 @@ export default class AvailableDay {
 
         this.contextMenu.createContextMenu();
 
+        this.form = DOM.captureElement('publicationStep2Form');
         // this.search = new Search('table-search');
         // this.search.loadListener((input) => {
         //     ObjectHelper.searchPropertyByValue(input.value);
@@ -127,6 +129,12 @@ export default class AvailableDay {
         this.contextMenu.setClickeableZone(row)
 
         this.contextMenu.loadContextMenu();
+
+        let inputSince = Input.create('availableDays', {name: `days[${hashId}][since]`, type:'text', hidden:'true', class: 'hidden', value:dateSince});
+        let inputTo = Input.create('availableDays', {name: `days[${hashId}][to]`, type:'text', hidden:'true', class: 'hidden', value:dateTo});
+
+        this.form.insertAdjacentElement('beforeend', inputSince);
+        this.form.insertAdjacentElement('beforeend', inputTo);
 
         this.tableDates.appendChild(row);
 

@@ -7,7 +7,7 @@ use App\Http\Requests\ValidatorRequest;
 class PublicationStoreRequest extends FormRequest
 {
 
-    // use ValidatorRequest;
+    use ValidatorRequest;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +25,8 @@ class PublicationStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:150',
-            'price' => 'required|integer|decimal:0,2',
-            'rent_type_id' => 'required|integer',
-            'room_count' => 'integer',
-            'bathroom_count' => 'integer',
-            'number_people' => 'required|integer',
-            'ubication' => 'string|max:250',
-            'description' => 'string|nullable',
-            'pets' => 'in:1,0',
-            'images' => 'required|min:1|max:10|image'
+            'to.*' => 'required|date',
+            'since.*' => 'required|date'
         ];
     }
 }
