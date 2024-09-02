@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
@@ -109,20 +110,21 @@ class PublicationController extends Controller
         if (is_numeric($bathroomCount)) {
             $queryBuilder->where('p.bathroom_count', '=', $bathroomCount);
             }
+
         $withPets=$request->input('withPets');
-            if(is_numeric($withPets)){
-                $queryBuilder->where('p.pets', '=', $withPets);
-            }
-            $priceMin = $request->input('price_min');
-            if (is_numeric($priceMin)) {
-                $queryBuilder->where('p.price', '>=', $priceMin);
-            }
+        if(is_numeric($withPets)){
+            $queryBuilder->where('p.pets', '=', $withPets);
+        }
+
+        $priceMin = $request->input('price_min');
+        if (is_numeric($priceMin)) {
+            $queryBuilder->where('p.price', '>=', $priceMin);
+        }
         
-           
-            $priceMax = $request->input('price_max');
-            if (is_numeric($priceMax)) {
-                $queryBuilder->where('p.price', '<=', $priceMax);
-            }    
+        $priceMax = $request->input('price_max');
+        if (is_numeric($priceMax)) {
+            $queryBuilder->where('p.price', '<=', $priceMax);
+        }    
 
         $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
         $query = $queryBuilder->getQuery()->toRawSql();
@@ -131,7 +133,11 @@ class PublicationController extends Controller
         return $html;
     }
 
-    public function createStep2(Request $request){
+    public function getStep1(){
+        return view('publications.create.form-step-1-main');
+    }
+
+    public function getStep2(Request $request){
 
         $validated = Validator::make($request->all(), [
             'title' => 'required|string|max:150',
@@ -144,41 +150,49 @@ class PublicationController extends Controller
             'description' => 'string|nullable',
             'pets' => 'in:1,0',
             'files' => 'required|max:2048',
-            'files.*' => 'required|max:2048|file'
+            'files.*' => 'required|max:2048|file',
         ], ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
         
-        if( $validated->fails() || !$request->file('files')){
+        if( $validated->fails() ){
             $request->flash();
-
-            return view('publications.create.form-step-2-main');
-        }
-        
-        $publicationTempId = $this->getMd5TemporalyKey();
-
-        Session::remove($publicationTempId);
-        Storage::disk('publication-pictures')->deleteDirectory("temp/$publicationTempId");
-
-        foreach ($request->file('files') as $file) {
-            $file->store("public/publication-pictures/temp/$publicationTempId/");
+            return redirect()
+            ->route('publications.create1')
+            ->withErrors($validated->errors())
+            ->withInput();
         }
 
-        Session::put($publicationTempId, $request->except(['files']));
 
-        return view('publications.create.form-step-2-main');
-    }
+        $publication = new Publication();
+        $publicationCreated = new Publication();
+        Db::transaction(function() use($request, $publication){
 
-    public function createStep1(){
-        return view('publications.create.form-step-1-main');
-    }
+            $publicationData = $request->except('files');
 
-    public function getPreviewFiles(Request $request){
-        $files = $request->all();
-        if( !Arr::isAssoc($files) && count($files) < 1){
-            Log::notice('Any files to render');
-            return '';
-        }
-        
-        return view('publications.create.form-preview-files', compact('files'))->render();
+            $publicationData['state'] = StateEnum::Draft->name;
+            $publicationData['user_id'] = Auth::user()->id;
+            $publicationCreated = $publication->create($publicationData);
+
+            
+
+            if(!$publicationCreated->exists()){
+                Log::emergency('Publication cannot be created');
+                throw new ModelNotFoundException("Error Processing Request");
+            }
+
+            foreach ($request->file('files') as $file) {
+                $file->store("public/publication-pictures/{$publicationCreated->id}/");
+
+                $publication->pictures()->save(
+                    new Picture([
+                        'name' => $file->getHashName(),
+                        'publication_id' => $publicationCreated->id,
+                        'type' => $file->getExtension(),
+                    ])
+                );
+            }
+        });
+       dd($publicationCreated->id);
+        return view('publications.create.form-step-2-main', ['publication_id' => $publicationCreated->id]);
     }
 
     /**
@@ -189,33 +203,28 @@ class PublicationController extends Controller
         $validator = Validator::make($request->all(), [
             'days' => 'required|array',
             'days.*.since' => 'required|date',
-            'days.*.to' => 'required|date'
+            'days.*.to' => 'required|date',
+            'publication_id' => 'required|integer',
         ], ['days' => 'Select even one date available']);
         
         if($validator->fails()){
             $request->flash();
 
-            return redirect(route('publications.create2'))
+            return redirect()
+            ->route('publications.create2')
             ->withErrors($validator->errors())
             ->withInput();
         }
 
-        $publicationTempId = $this->getMd5TemporalyKey();
-
-        $files = File::files(storage_path("app/public/publication-pictures/temp/$publicationTempId"));
-        // $files = Storage::disk('publication-pictures')->files("temp/$publicationTempId");
-        $data = Session::get($publicationTempId, null);
+        $publication = Publication::findOrFail($request->publication_id);
         $days = $request->input('days');
-        debugbar()->info(storage_path('app/public/publication-pictures/temp/'));
-        if(!($files && $data && $days)){
+
+        if( !($publication->exists() && $days) ){
+            Log::emergency("Neccessary data to store publication not found");
             return abort(500);
         }
 
-        Db::transaction(function() use($files, $data, $days){
-
-            $data['user_id'] = Auth::user()->id;
-
-            $publication = Publication::create($data);
+        Db::transaction(function() use($publication, $days){
 
             foreach ($days as $key => $availableDays) {
                 PublicationDayAvailable::create([
@@ -224,32 +233,21 @@ class PublicationController extends Controller
                     'to' => \DateTime::createFromFormat('d/m/Y', $availableDays['to'])->format('Y-m-d'),
                 ]);
             }
-
-
-            foreach ($files as $key => $file) {
-                $isStored = Storage::disk('publication-pictures')->move($file->getRealPath(), $publication->id);
-                
-                // ->put("$publication->id/", file_get_contents($file->getRealPath()));
-                debugbar()->warning($file->getPathname(), $file->getRealPath());
-                if(!$isStored){
-                    Log::alert("Error al almacenar los archivos de la publicacion");
-                    return report(throw new CannotWriteFileException("Error Processing Request file"));
-                }
-
-                $publication->pictures()->save(
-                    new Picture([
-                        'name' => $file->getFilename(),
-                        'publication_id' => $publication->id,
-                        'type' => $file->getExtension(),
-                    ])
-                );
-                
-            }
         });
         
         return redirect()
         ->route('publications.index')
         ->withSuccess(__('La publicacion ha sido creada exitosamente'));
+    }
+
+    public function getPreviewFiles(Request $request){
+        $files = $request->all();
+        if( !Arr::isAssoc($files) && count($files) < 1){
+            Log::notice('Any files to render');
+            return '';
+        }
+        
+        return view('publications.create.form-preview-files', compact('files'))->render();
     }
 
     /**
