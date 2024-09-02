@@ -47,8 +47,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function publication(){
-        return $this->belongsTo(Publication::class);
+    public function publications(){
+        return $this->hasMany(Publication::class);
     }
 
     public function owner(){
