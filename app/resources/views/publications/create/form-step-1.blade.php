@@ -10,13 +10,15 @@
 
 <div class="flex flex-col w-1/2 mx-auto">
     <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll">
-        <form id="publicationForm" name="publicationForm" action="{{ route('publications.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="publicationForm" name="publicationForm" action="{{ route('publications.create2') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
-
-            <x-alert.warning id="alertWarningMaxAllowedFiles" class="hidden">{{__("Solo se permiten hasta $maxAllowedFiles archivos")}}</x-alert.warning>
+            @if ($errors->has('files'))
+                @foreach ($errors->get('files') as $error)
+                    <x-alert.warning id="alertWarningMaxAllowedFiles">{{__($error)}}</x-alert.warning>
+                @endforeach
+            @endif
 
             @if($errors->first('pictures'))
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
@@ -28,12 +30,6 @@
 
             <div class="flex overflow-y-hidden overflow-x-auto mcss-hover-show-scroll mcss-hide-scroll space-x-2" id="previewFiles">
             
-            </div>
-
-            <x-input-label class="text-center mb-3">Disponibilidad</x-input-label>
-            <div class="justify-center flex">
-                <x-form.date-range-picker idDateFrom="available_since" idDateTo="available_to" id="dateRangePicker"></x-form.date-range-picker>
-                <x-primary-button type="button" class="ml-3" id="buttonAddDates">{{__('Añadir')}}</x-primary-button>
             </div>
 
             <div id="available_days" class="w-fit my-4 mx-auto grid grid-cols-2 xl:grid-cols-4 gap-x-2 gap-y-1"></div>
@@ -81,6 +77,6 @@
         </form>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button form="publicationForm" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
+        <button form="publicationForm" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Siguiente') }}</button>
     </div>
 </div>

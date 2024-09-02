@@ -27,7 +27,7 @@ class Publication extends Model
     ];
 
     public function user(){
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function daysAvailable() : HasMany {
@@ -50,7 +50,6 @@ class Publication extends Model
       }
       return $filename;
     }
-
     public function getFirstPicture(){
       $defaultPath = asset('publication-pictures/' . Picture::DEFAULT_PICTURE);
       
@@ -73,10 +72,12 @@ class Publication extends Model
       return $defaultPath;
     }
 
-    public function getFormattedUpdateAt(){
+    public function getFormattedCreatedAt(){
       Carbon::setLocale('es');
+      $date = Carbon::parse($this->created_at);
+      $dateString = $date->locale('es');
       if($this->exists()){
-        return Carbon::createFromTimestamp($this->created_at)->format('l jS \\of F Y h:i:s A');
+        return $dateString->translatedFormat('j \d\e F \d\e Y');
       }
       return '';
     }

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
+use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Models\Publication;
 use App\Models\Picture;
+use Hash;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
@@ -15,7 +20,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
-use App\Http\Controllers\Publication\PublicationStep;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
+use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 
 
 class PublicationController extends Controller
@@ -45,43 +55,41 @@ class PublicationController extends Controller
                         ->join(RentType::tableName() . ' as rt', 'rent_type_id', '=', 'rt.id')
                         ->leftjoin(PublicationDayAvailable::tableName() . " as pda", 'pda.publication_id', '=', 'p.id');
         
-        $searchValue = $request->input('search');
-        if(!empty($searchValue)){
+        $searchValue = $request->string('search');
+        if($searchValue->isNotEmpty()){
 
             $request->validate(['search' => 'string|min:1']);
 
             $queryBuilder
-            ->where('p.title', 'like', "%$searchValue%")
-            ->orWhere('p.description', 'like', "%$searchValue%")
-            ->orWhere('p.ubication', 'like', "%$searchValue%");
+            ->where(function(Builder $query) use ($searchValue) {
+                $query
+                    ->where('p.title', 'like', "%$searchValue%")
+                    ->orWhere('p.description', 'like', "%$searchValue%")
+                    ->orWhere('p.ubication', 'like', "%$searchValue%");
+            });
+            
         }
 
-        $stateValue = $request->input('state', '');
-        if(!is_null(StateEnum::fromName($stateValue))){
+        $stateValue = $request->enum('state', StateEnum::class);
+        if(isset($stateValue)){
             $queryBuilder
                 ->where('pda.state', $stateValue);
         }
 
-        $availableSince = $request->input('available_since', '');
-
-        if(!empty($availableSince)) {
-            $availableSinceCarbon = new Carbon($availableSince);
-            $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
+        $availableSince = $request->input('available_since');
+        if($availableSince != null) {
+            $availableSinceFormated = Carbon::createFromFormat('d/m/Y', $availableSince)->format('Y-m-d');
             if($availableSinceFormated){
                 $queryBuilder->where(DB::raw('DATE(pda.since)'), '>=', $availableSinceFormated);
             }
-
         }
 
-        $availableTo = $request->input('available_to', '');
-
-        if(!empty($availableTo)) {
-            $availableToCarbon = new Carbon($availableTo);
-            $availableToFormated = $availableToCarbon->format('Y-m-d');
+        $availableTo = $request->input('available_to');
+        if($availableTo != null) {
+            $availableToFormated = Carbon::createFromFormat('d/m/Y', $availableTo)->format('Y-m-d');
             if($availableToFormated && $availableToFormated > $availableSinceFormated){
                 $queryBuilder->where(DB::raw('DATE(pda.to)'), '<=', $availableToFormated);
             }
-
         }
 
         $rentType = $request->input('rentType');
@@ -98,20 +106,21 @@ class PublicationController extends Controller
         if (is_numeric($bathroomCount)) {
             $queryBuilder->where('p.bathroom_count', '=', $bathroomCount);
             }
+
         $withPets=$request->input('withPets');
-            if(is_numeric($withPets)){
-                $queryBuilder->where('p.pets', '=', $withPets);
-            }
-            $priceMin = $request->input('price_min');
-            if (is_numeric($priceMin)) {
-                $queryBuilder->where('p.price', '>=', $priceMin);
-            }
+        if(is_numeric($withPets)){
+            $queryBuilder->where('p.pets', '=', $withPets);
+        }
+
+        $priceMin = $request->input('price_min');
+        if (is_numeric($priceMin)) {
+            $queryBuilder->where('p.price', '>=', $priceMin);
+        }
         
-           
-            $priceMax = $request->input('price_max');
-            if (is_numeric($priceMax)) {
-                $queryBuilder->where('p.price', '<=', $priceMax);
-            }    
+        $priceMax = $request->input('price_max');
+        if (is_numeric($priceMax)) {
+            $queryBuilder->where('p.price', '<=', $priceMax);
+        }    
 
         $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
         $query = $queryBuilder->getQuery()->toRawSql();
@@ -120,30 +129,130 @@ class PublicationController extends Controller
         return $html;
     }
 
-    public function getStep(Request $request){
-        $method = PublicationStep::getStep($request->step)::method();
+    public function getStep1(){
+        return view('publications.create.form-step-1-main');
+    }
 
-        if(!method_exists($this, $method)){
-            return abort(500);
+    public function getStep2(Request $request){
+        // dd($request->all());
+
+        $rules = [
+            'title' => 'required|string|max:150',
+            'price' => 'required|numeric',
+            'rent_type_id' => 'required|integer',
+            'room_count' => 'integer',
+            'bathroom_count' => 'integer',
+            'number_people' => 'required|integer',
+            'ubication' => 'string|max:250',
+            'description' => 'string|nullable',
+            'pets' => 'in:1,0',
+            'files.*' => 'max:2048|file',
+        ];
+
+        $files = count($request->file('files')) - 1;
+        foreach(range(0, $files) as $index) {
+            $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
         }
 
-        call_user_func(PublicationStep::getStep($request->step)::method());
-    }
-
-    public function createFirstStep(){
-
-    }
-
-    public function createSecondStep(){
+        $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
         
+        if( $validated->fails() ){
+            $request->flash();
+            return redirect()
+            ->route('publications.create1')
+            ->withErrors($validated->errors())
+            ->withInput();
+        }
+
+
+        $publication = new Publication();
+        $publicationCreated = new Publication();
+
+        DB::beginTransaction();
+
+        $publicationData = $request->except('files');
+        $publicationData['state'] = StateEnum::Draft->name;
+        $publicationData['user_id'] = Auth::user()->id;
+
+        $publicationCreated = $publication->create($publicationData);
+
+        if(!$publicationCreated->exists()){
+            Log::emergency('Publication cannot be created');
+            DB::rollBack();
+            throw new ModelNotFoundException("Error Processing Request");
+        }
+        
+        foreach ($request->file('files') as $file) {
+            $fileStored = $file->store("public/publication-pictures/{$publicationCreated->id}/");
+
+            if(!$fileStored){
+                Log::emergency('File cannot be stored');
+                DB::rollBack();
+                throw new FileCouldNotBeWrittenException("Error Processing Request");
+            }
+
+            $picture = Picture::create([
+               'name' => $file->hashName(),
+               'publication_id' => $publicationCreated->id,
+               'type' => $file->extension(),
+            ]);
+            
+            if(!$picture->exists()){
+                Storage::disk('publication-pictures')->deleteDirectory($publicationCreated->id);
+                Log::emergency('Piciture cannot be created');
+                DB::rollBack();
+                throw new ModelNotFoundException("Error Processing Request");       
+            }
+        }
+
+        DB::commit();
+
+        return view('publications.create.form-step-2-main', ['publication_id' => $publicationCreated->id]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view("publications.create.main");
+     * Store a newly created resource in storage.
+     */ 
+    public function store(Request $request)
+    {   
+        $validator = Validator::make($request->all(), [
+            'days' => 'required|array',
+            'days.*.since' => 'required|date',
+            'days.*.to' => 'required|date',
+            'publication_id' => 'required|integer',
+        ], ['days' => 'Select even one date available']);
+        
+        if($validator->fails()){
+            $request->flash();
+
+            return redirect()
+            ->route('publications.create2')
+            ->withErrors($validator->errors())
+            ->withInput();
+        }
+
+        $publication = Publication::findOrFail($request->publication_id);
+        $days = $request->input('days');
+
+        if( !($publication->exists() && $days) ){
+            Log::emergency("Neccessary data to store publication not found");
+            return abort(500);
+        }
+
+        Db::transaction(function() use($publication, $days){
+
+            foreach ($days as $key => $availableDays) {
+                PublicationDayAvailable::create([
+                    'publication_id' => $publication->id,
+                    'since' => \DateTime::createFromFormat('d/m/Y', $availableDays['since'])->format('Y-m-d'),
+                    'to' => \DateTime::createFromFormat('d/m/Y', $availableDays['to'])->format('Y-m-d'),
+                ]);
+            }
+        });
+        
+        return redirect()
+        ->route('publications.index')
+        ->withSuccess(__('La publicacion ha sido creada exitosamente'));
     }
 
     public function getPreviewFiles(Request $request){
@@ -154,68 +263,6 @@ class PublicationController extends Controller
         }
         
         return view('publications.create.form-preview-files', compact('files'))->render();
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */ 
-    public function store(PublicationUpdateRequest $request)
-    {   
-        $request->check($request->all());
-
-        if($request->fails() || ($request->file('files') < 1) ){
-
-            $messageBag = new MessageBag();
-            $messageBag->merge($request->errors());
-
-            if(($request->file('files') < 1)){
-                $messageBag->add('pictures', __('Debe cargar al menos una imagen'));
-            }
-
-            $request->flash();
-
-            return redirect(route('publications.create'))
-            ->withErrors($messageBag)
-            ->withInput();
-        }
-
-        
-        Db::transaction(function() use($request){
-
-            $publication = Publication::create($request->all());
-
-            PublicationDayAvailable::create([
-                'publication_id' => $publication->id,
-                'since' => $request->available_since,
-                'to ' => $request->available_to,
-            ]);
-
-            foreach ($request->file('files') as $key => $file) {
-                
-                $isStored = $file->store(
-                    "{$publication->id}",
-                    'publication-pictures'
-                );
-                
-                if(!$isStored){
-                    Log::alert("Error al almacenar los archivos de la publicacion");
-                    report("Error Processing Request");
-                }
-
-                $publication->pictures()->save(
-                    new Picture([
-                        'name' => $file->hashName(),
-                        'publication_id' => $publication->id,
-                        'type' => $file->getMimeType(),
-                    ])
-                );
-                
-            }
-        });
-        
-        return redirect()
-        ->route('publications.index')
-        ->withSuccess(__('La publicacion ha sido creada exitosamente'));
     }
 
     /**
@@ -256,5 +303,9 @@ class PublicationController extends Controller
         $publication->delete();
         return redirect()->route('publications.index.main')
                 ->withSuccess(_('Publicacion eliminada exitosamente'));
+    }
+
+    private function getMd5TemporalyKey(){
+        return md5(Auth::user()->id . "-publicationtemp");   
     }
 }

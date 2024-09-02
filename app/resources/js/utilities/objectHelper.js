@@ -2,7 +2,7 @@ export default class ObjectHelper {
     
     static isEmpty(obj){
 
-        if(!obj) return false;
+        if(!obj || typeof obj != "object") return false;
 
         if (Object.keys(obj).length === 0) {
             return true;
@@ -30,4 +30,18 @@ export default class ObjectHelper {
         return true;
     }
 
+    
+    static searchPropertyByValue(obj, valorBuscado) {
+        for (const propiedad in obj) {
+          if (obj.hasOwnProperty(propiedad)) {
+            const valores = Object.values(obj[propiedad]);
+      
+            if (valores.includes(valorBuscado)) {
+              return propiedad;
+            }
+          }
+        }
+      
+        return null; // Devuelve null si no se encuentra el valor
+      }
 }

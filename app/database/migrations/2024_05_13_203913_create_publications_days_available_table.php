@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('publication_day_availables', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Publication::class)->constrained('publications')->onDelete('cascade');
-            $table->datetime('since');
-            $table->datetime('to');
+            $table->date('since');
+            $table->date('to');
             $table->enum('state', AvailableDayEnum::forMigration())->default(AvailableDayEnum::Available->name);
             $table->timestamps();
         });

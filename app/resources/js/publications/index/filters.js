@@ -1,5 +1,5 @@
 import PublicationList from './list.js';
-import ObjectHelper from '../../objectHelper.js';
+import ObjectHelper from '../../utilities/objectHelper.js';
 
 class PublicationFilter extends PublicationList {
 

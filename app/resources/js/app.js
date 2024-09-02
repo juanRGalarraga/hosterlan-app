@@ -7,7 +7,13 @@ window.Alpine = Alpine;
 Alpine.start();
 
 import 'flowbite';
+import Search from './components/search';
+import PublicationList from './publications/index/list';
 
-import NavigationSearch from './navigation-search';
-
-new NavigationSearch();
+let search = new Search('search');
+if(search.exists()){
+    let publicationList = new PublicationList;
+    search.loadListener((input) => {
+        publicationList.getList({search: input.value});
+    });
+}

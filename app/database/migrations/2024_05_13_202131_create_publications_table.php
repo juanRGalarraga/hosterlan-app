@@ -16,7 +16,6 @@ return new class extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->float('price');
             $table->string('ubication');
@@ -25,6 +24,7 @@ return new class extends Migration
             $table->integer('bathroom_count');
             $table->boolean('pets')->default(0);
             $table->integer('number_people');
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->enum('state', StateEnum::forMigration())->default(StateEnum::Published->name);
             $table->foreignIdFor(RentType::class);
             $table->timestamps();

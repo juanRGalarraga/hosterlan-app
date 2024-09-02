@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Enums\Publication\StateEnum;
+use Carbon\Carbon;
 class TestCommand extends Command
 {
     /**
@@ -24,7 +25,8 @@ class TestCommand extends Command
      * Execute the console command.
      */
     public function handle()
-    {
-        print_r(StateEnum::forMigration());
+    {   
+        $date = \DateTime::createFromFormat('d/m/Y', "24/06/2024");
+        print_r( \DateTime::createFromFormat('d/m/Y', "24/06/2024")->format("Y-m-d")); 
     }
 }

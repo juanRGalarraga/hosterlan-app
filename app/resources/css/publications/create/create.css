@@ -16,3 +16,8 @@
 .my-h-screen{
     height: calc(100vh - 70px);
 }
+
+.my-h-screen-form-step-2{
+    height: calc(90vh - 70px);
+}
+

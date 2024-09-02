@@ -9,7 +9,6 @@ export default class Alert {
     init(id){
         if(typeof id !== "string") return;
         this.alert = document.getElementById(id)
-        this.hidden(this.alert)
         return this
     }
 

@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+$commands = [
+    'cache:clear',
+    'view:clear',
+    'route:clear',
+    'event:clear',
+    'optimize',
+    'permission:cache-reset',
+    'optimize:clear',
+    'config:clear',
+    'debugbar:clear'
+];
+
+foreach ($commands as $command) {
+    echo "php artisan $command" . PHP_EOL;
+    exec("php artisan $command");
+}

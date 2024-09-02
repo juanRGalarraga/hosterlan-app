@@ -1,6 +1,11 @@
-import ContextMenu from "../../contextMenu";
-import SimpleHash from '../../simpleHash';
-import String from "../../utilities/string";
+import { 
+    ContextMenu, 
+    SimpleHash, 
+    Table, 
+    Div, 
+    DOM,
+    Input,
+    Label } from '../../components/main';
 
 export default class AvailableDay {
 
@@ -8,23 +13,29 @@ export default class AvailableDay {
     inputSince
     inputTo
     contextMenu
-    dates = {}
+    static dates = {}
+    search
+    tableDates = 'tableDates'
+    form
 
     constructor(){
         this.getInputDates({sinceId: 'available_since', toId: 'available_to'});
         this.loadButtonAddDates('buttonAddDates');
-        this.contextMenu = new ContextMenu();
+        this.contextMenu = new ContextMenu({
+            withModifier: false,
+            deleteAction: function(clickeableZone){
+                clickeableZone.remove();
+                delete AvailableDay.dates[clickeableZone.id];
+            }
+        });
+
         this.contextMenu.createContextMenu();
-    }
 
-    loadOptionsContextMenu() {
-        this.contextMenu.addDeleteAction(function () {
-            
-        });
-
-        this.contextMenu.addModifyAction(function () {
-            
-        });
+        this.form = DOM.captureElement('publicationStep2Form');
+        // this.search = new Search('table-search');
+        // this.search.loadListener((input) => {
+        //     ObjectHelper.searchPropertyByValue(input.value);
+        // });
     }
 
     getInputDates({sinceId, toId}){
@@ -36,6 +47,11 @@ export default class AvailableDay {
         this.inputTo = document.getElementById(toId);
         if( !(this.inputTo instanceof HTMLInputElement) ){
             return console.error("inputTo not found");
+        }
+
+        this.tableDates = document.getElementById(this.tableDates);
+        if( !(this.tableDates instanceof HTMLTableSectionElement) ){
+            return console.error("tableDates must be an HTMLTableSectionElement instace");
         }
     }
 
@@ -52,9 +68,18 @@ export default class AvailableDay {
         }
     }
 
-    addDates(){
-        let since = this.inputSince?.value;
-        let to = this.inputTo?.value;
+    loadButtonRemoveDates(buttonOrId){
+        let button = DOM.captureElement(buttonOrId);
+    
+        button.onclick = () => {
+            this.removeDates(DOM.$(button).attr('data-date'))
+        }
+    }
+
+    addDates(dateSince=null, dateTo=null){
+
+        let since = dateSince ?? this.inputSince?.value;
+        let to = dateTo ?? this.inputTo?.value;
     
         if((typeof since != "string" || typeof to != "string")
             || (since.length < 1 || to.length < 1)){
@@ -63,43 +88,56 @@ export default class AvailableDay {
 
         let dateMap = SimpleHash.generate(`${since}:${to}`);
         
-        if (this.dates.hasOwnProperty(dateMap)) {
+        if (AvailableDay.dates.hasOwnProperty(dateMap)) {
             return;
         }
 
-        let value = `${since} hasta ${since}`;
-        this.createInput('available_days', 'availableDays[]', dateMap, value);
+        this.createRow(dateMap, since, to);
 
-        this.dates[dateMap] = {since,to};
+        AvailableDay.dates[dateMap] = {since,to};
     }
-    
-    createInput(rootId, name, id, value){
 
-        let rootElement = document.getElementById(rootId);
-        if( !(rootElement instanceof HTMLDivElement) ){
-            return console.error("rootElement div not found");
+    createRow(id, dateSince, dateTo){
+        let hashId = SimpleHash.generate(`${dateSince}:${dateTo}`)
+        let inputClassName = 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600';
+        let trAttributes = {
+            class: 'bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600',
+            id: hashId
+        }
+        let tdAttributes = {
+            class: 'px-6 py-3',
+        }
+        let divAttributes = {
+            class : 'flex items-center'
         }
 
-        let input = document.createElement('input');
-        input.setAttribute('readonly', 'true');
-        input.setAttribute('type', 'text');
-        input.setAttribute('name', `${name}`);
-        input.setAttribute('value', value);
-        input.setAttribute('title', value);
-        input.setAttribute('id', SimpleHash.generate(value));
+        let row = 
+        Table.tr( (tr) => {
+            tr.td(
 
-        input.className = 
-        `availableDaysClickeable rounded-none rounded-r-lg 
-        bg-gray-50 border text-gray-900 
-        focus:ring-blue-500 focus:border-blue-500 
-        block flex-1  w-full text-sm border-gray-300 
-        p-2.5  dark:bg-gray-700 dark:border-gray-600 
-        dark:placeholder-gray-400 dark:text-white 
-        dark:focus:ring-blue-500 dark:focus:border-blue-500 
-        minimal-input ml-2`;
+                Div.create( (div) => {
+                    div.appendChild(Input.create(null, {id, type:'checkbox', class: inputClassName}))
+                    div.appendChild(Label.create('checkbox', {class:'sr-only', for: id}))
+                }, divAttributes ), tdAttributes)
 
-        rootElement.appendChild(input);
-        this.contextMenu.setClickeableZone(input);
+            tr.th(dateSince, tdAttributes);
+
+            tr.th(dateTo, tdAttributes);
+
+        }, trAttributes);
+
+        this.contextMenu.setClickeableZone(row)
+
         this.contextMenu.loadContextMenu();
+
+        let inputSince = Input.create('availableDays', {name: `days[${hashId}][since]`, type:'text', hidden:'true', class: 'hidden', value:dateSince});
+        let inputTo = Input.create('availableDays', {name: `days[${hashId}][to]`, type:'text', hidden:'true', class: 'hidden', value:dateTo});
+
+        this.form.insertAdjacentElement('beforeend', inputSince);
+        this.form.insertAdjacentElement('beforeend', inputTo);
+
+        this.tableDates.appendChild(row);
+
+        return row;
     }
 }

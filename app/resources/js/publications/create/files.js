@@ -1,5 +1,5 @@
 import SimpleHash from '../../simpleHash.js';
-import Alert from '../../utilities/alert.js';
+import Alert from '../../components/alert.js';
 
 export default class PublicationFile {
     input = null
@@ -61,6 +61,7 @@ export default class PublicationFile {
             
             const queryString = new URLSearchParams(dataTosend).toString();
             baseUrl += '?' + queryString;
+            console.log(baseUrl);
         }
 
         fetch(baseUrl, dataTosend)
@@ -132,8 +133,6 @@ export default class PublicationFile {
         document.getElementById('ubication').value = 'Gualeguaychú';
         document.getElementById('description').value = 'Cabaña con 2 habitaciones, amueblada. Gran oportunidad';
         document.getElementById('pets').checked = true;
-        document.getElementById('available_since').value = '06/03/2024';
-        document.getElementById('available_to').value = '06/04/2024';
     }
 
     fillExample(){
