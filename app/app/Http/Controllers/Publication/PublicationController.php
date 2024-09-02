@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 
 
@@ -138,8 +139,9 @@ class PublicationController extends Controller
     }
 
     public function getStep2(Request $request){
+        // dd($request->all());
 
-        $validated = Validator::make($request->all(), [
+        $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
             'rent_type_id' => 'required|integer',
@@ -149,9 +151,15 @@ class PublicationController extends Controller
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
             'pets' => 'in:1,0',
-            'files' => 'required|max:2048',
-            'files.*' => 'required|max:2048|file',
-        ], ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
+            'files.*' => 'max:2048|file',
+        ];
+
+        $files = count($request->file('files')) - 1;
+        foreach(range(0, $files) as $index) {
+            $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
+        }
+
+        $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
         
         if( $validated->fails() ){
             $request->flash();
@@ -164,34 +172,46 @@ class PublicationController extends Controller
 
         $publication = new Publication();
         $publicationCreated = new Publication();
-        Db::transaction(function() use($request, $publication){
 
-            $publicationData = $request->except('files');
+        DB::beginTransaction();
 
-            $publicationData['state'] = StateEnum::Draft->name;
-            $publicationData['user_id'] = Auth::user()->id;
-            $publicationCreated = $publication->create($publicationData);
+        $publicationData = $request->except('files');
+        $publicationData['state'] = StateEnum::Draft->name;
+        $publicationData['user_id'] = Auth::user()->id;
 
+        $publicationCreated = $publication->create($publicationData);
+
+        if(!$publicationCreated->exists()){
+            Log::emergency('Publication cannot be created');
+            DB::rollBack();
+            throw new ModelNotFoundException("Error Processing Request");
+        }
+        
+        foreach ($request->file('files') as $file) {
+            $fileStored = $file->store("public/publication-pictures/{$publicationCreated->id}/");
+
+            if(!$fileStored){
+                Log::emergency('File cannot be stored');
+                DB::rollBack();
+                throw new FileCouldNotBeWrittenException("Error Processing Request");
+            }
+
+            $picture = Picture::create([
+               'name' => $file->hashName(),
+               'publication_id' => $publicationCreated->id,
+               'type' => $file->extension(),
+            ]);
             
-
-            if(!$publicationCreated->exists()){
-                Log::emergency('Publication cannot be created');
-                throw new ModelNotFoundException("Error Processing Request");
+            if(!$picture->exists()){
+                Storage::disk('publication-pictures')->deleteDirectory($publicationCreated->id);
+                Log::emergency('Piciture cannot be created');
+                DB::rollBack();
+                throw new ModelNotFoundException("Error Processing Request");       
             }
+        }
 
-            foreach ($request->file('files') as $file) {
-                $file->store("public/publication-pictures/{$publicationCreated->id}/");
+        DB::commit();
 
-                $publication->pictures()->save(
-                    new Picture([
-                        'name' => $file->getHashName(),
-                        'publication_id' => $publicationCreated->id,
-                        'type' => $file->getExtension(),
-                    ])
-                );
-            }
-        });
-       dd($publicationCreated->id);
         return view('publications.create.form-step-2-main', ['publication_id' => $publicationCreated->id]);
     }
 

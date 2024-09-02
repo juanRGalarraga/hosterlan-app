@@ -16,12 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',225);
             $table->string('type',225);
-            $table
-                ->foreignIdFor(Publication::class)
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-                
+            $table->foreignIdFor(Publication::class);
             $table->timestamps();
         });
     }

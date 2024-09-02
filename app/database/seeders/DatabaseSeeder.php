@@ -36,11 +36,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')            
         ]);
 
-        Publication::factory()
-            ->count(10)
-            ->hasPictures(rand(1,5))
-            ->hasRentType(1)
-            ->hasDaysAvailable(rand(1, 5))
-            ->create();
+        // Publication::factory()
+        //     ->count(10)
+        //     ->hasPictures(rand(1,5))
+        //     ->hasRentType(1)
+        //     ->hasDaysAvailable(rand(1, 5))
+        //     ->create();
     }
 }
