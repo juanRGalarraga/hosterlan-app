@@ -14,7 +14,6 @@
             @csrf
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
-            {{dump($errors)}}
             @if ($errors->has('files'))
                 @foreach ($errors->get('files') as $error)
                     <x-alert.warning id="alertWarningMaxAllowedFiles">{{__($error)}}</x-alert.warning>

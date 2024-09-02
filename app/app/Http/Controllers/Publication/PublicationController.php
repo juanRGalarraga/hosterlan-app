@@ -76,22 +76,17 @@ class PublicationController extends Controller
                 ->where('pda.state', $stateValue);
         }
 
-        $availableSince = $request->input('available_since', '');
-
-        if(!empty($availableSince)) {
-            $availableSinceCarbon = new Carbon($availableSince);
-            $availableSinceFormated = $availableSinceCarbon->format('Y-m-d');
+        $availableSince = $request->input('available_since');
+        if($availableSince != null) {
+            $availableSinceFormated = Carbon::createFromFormat('d/m/Y', $availableSince)->format('Y-m-d');
             if($availableSinceFormated){
                 $queryBuilder->where(DB::raw('DATE(pda.since)'), '>=', $availableSinceFormated);
             }
-
         }
 
-        $availableTo = $request->date('available_to', '');
-
-        if(!empty($availableTo)) {
-            $availableToCarbon = new Carbon($availableTo);
-            $availableToFormated = $availableToCarbon->format('Y-m-d');
+        $availableTo = $request->input('available_to');
+        if($availableTo != null) {
+            $availableToFormated = Carbon::createFromFormat('d/m/Y', $availableTo)->format('Y-m-d');
             if($availableToFormated && $availableToFormated > $availableSinceFormated){
                 $queryBuilder->where(DB::raw('DATE(pda.to)'), '<=', $availableToFormated);
             }
