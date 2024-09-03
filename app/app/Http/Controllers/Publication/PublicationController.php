@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Intervention\Image\ImageManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
@@ -9,12 +10,10 @@ use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Models\Publication;
 use App\Models\Picture;
-use Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
-use Illuminate\Support\MessageBag;
 use App\Models\PublicationDayAvailable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
@@ -164,7 +163,6 @@ class PublicationController extends Controller
             ->withInput();
         }
 
-
         $publication = new Publication();
         $publicationCreated = new Publication();
 
@@ -183,13 +181,16 @@ class PublicationController extends Controller
         }
         
         foreach ($request->file('files') as $file) {
-            $fileStored = $file->store("public/publication-pictures/{$publicationCreated->id}/");
+            $imageManager = new ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+            $image = $imageManager->read($file);
+            $image->resizeDown(600);
+            $image->save(storage_path("public/publication-pictures/{$publicationCreated->id}/"));
 
-            if(!$fileStored){
-                Log::emergency('File cannot be stored');
-                DB::rollBack();
-                throw new FileCouldNotBeWrittenException("Error Processing Request");
-            }
+            // if(!$fileStored->){
+            //     Log::emergency('File cannot be stored');
+            //     DB::rollBack();
+            //     throw new FileCouldNotBeWrittenException("Error Processing Request");
+            // }
 
             $picture = Picture::create([
                'name' => $file->hashName(),
