@@ -21,7 +21,7 @@ class PublicationFactory extends Factory
     {
         return [
             'title' => fake()->sentence(3),
-            'price'=>fake()->randomFloat(2,0,8),
+            'price'=>fake()->randomFloat(2,0,10_000),
             'ubication'=> fake()->address(),
             'description'=>fake()->sentence(),
             'room_count'=>fake()->numberBetween(1,10),

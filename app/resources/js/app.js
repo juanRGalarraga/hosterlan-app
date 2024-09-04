@@ -11,9 +11,8 @@ import Search from './components/search';
 import PublicationList from './publications/index/list';
 
 let search = new Search('search');
-if(search.exists()){
-    let publicationList = new PublicationList;
-    search.loadListener((input) => {
-        publicationList.getList({search: input.value});
-    });
-}
+
+let publicationList = new PublicationList;
+search.loadListener((input) => {
+    publicationList.getList({search: input.value});
+});

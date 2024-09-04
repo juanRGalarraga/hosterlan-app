@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Exceptions\RuntimeException;
 use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 
@@ -181,16 +182,28 @@ class PublicationController extends Controller
         }
         
         foreach ($request->file('files') as $file) {
-            $imageManager = new ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
-            $image = $imageManager->read($file);
-            $image->resizeDown(600);
-            $image->save(storage_path("public/publication-pictures/{$publicationCreated->id}/"));
+    
+            // try {
+            //     $imageManager = new ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+            //     $image = $imageManager->read($file);
+            //     $image->resizeDown(600);
 
-            // if(!$fileStored->){
-            //     Log::emergency('File cannot be stored');
+            //     Storage::disk('publication-pictures')->put($publicationCreated->id, $image->toPng()->toString());
+            //     // Storage::disk('publication-pictures')->makeDirectory("{$publicationCreated->id}");
+            //     // $image->save(storage_path("app/public/publication-pictures/{$publicationCreated->id}/"));
+            //     // $image->save(storage_path("public/publication-pictures/{$publicationCreated->id}/"));
+            // } catch (RuntimeException $re) {
             //     DB::rollBack();
-            //     throw new FileCouldNotBeWrittenException("Error Processing Request");
+            //     debugbar()->emergency($re->getMessage());
+            //     Log::emergency($re->getMessage());
+            //     abort(500);
             // }
+
+            if(!$file->store("public/publication-pictures/$publicationCreated->id")){
+                Log::emergency('File cannot be stored');
+                DB::rollBack();
+                throw new FileCouldNotBeWrittenException("Error Processing Request");
+            }
 
             $picture = Picture::create([
                'name' => $file->hashName(),

@@ -64,14 +64,14 @@ class Publication extends Model
     if ($this->exists()) {
       $picture = $this->pictures->first() ?? '';
 
-      if (!$picture->exists()) {
+      if ( empty($picture) ) {
         return $defaultPath;
       }
 
-      $path = "publication-pictures/{$this->id}/{$picture->name}";
+      $path = "{$this->id}/{$picture->name}";
 
-      if (Storage::exists($path)) {
-        return asset($path);
+      if (Storage::disk('publication-pictures')->exists($path)) {
+        return asset("publication-pictures/$path");
       }
 
     }

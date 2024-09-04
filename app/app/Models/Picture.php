@@ -25,7 +25,7 @@ class Picture extends Model
     public function getUrl(){
       $filename = '';
       if($this->exists()){
-        $filename = asset("{$this->name}");
+        $filename = asset("publication-pictures/{$this->publication->id}/{$this->name}");
       }
       return $filename;
     }

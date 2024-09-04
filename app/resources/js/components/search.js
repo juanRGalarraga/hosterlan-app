@@ -2,8 +2,8 @@ export default class Search {
 
     inputEl
     publicationList
-    keyToSearch = 'Enter'
     inputExists = false
+    keyToSearch = 'Enter'
 
     constructor(inputId){
 
@@ -12,6 +12,7 @@ export default class Search {
         }
 
         this.inputEl = document.getElementById(inputId)
+        
         if( !(this.inputEl instanceof HTMLInputElement) || this.inputEl.type != 'text'){
             this.inputExists = false;
             return;
@@ -29,13 +30,17 @@ export default class Search {
 
     loadListener(callback){
 
+        let thisInstance = this;
         if(typeof callback != "function"){
             throw new Error("Callback must be a function");
         }
 
-        this.inputEl.onkeyup = function(event){
-            if(event.key == keyToSearch){
-                callback(inputEl)
+        this.inputEl.onkeyup = function (event) {
+            console.log(event.key);
+            console.log(thisInstance.keyToSearch);
+            
+            if(event.key == thisInstance.keyToSearch){
+                callback(thisInstance.inputEl)
             }
         }
     }
