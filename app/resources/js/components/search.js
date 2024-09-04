@@ -36,9 +36,6 @@ export default class Search {
         }
 
         this.inputEl.onkeyup = function (event) {
-            console.log(event.key);
-            console.log(thisInstance.keyToSearch);
-            
             if(event.key == thisInstance.keyToSearch){
                 callback(thisInstance.inputEl)
             }
