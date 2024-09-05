@@ -21,7 +21,6 @@ class PublicationDayAvailable extends Model
 
     public function isAvailable(){
         if(!$this->exists()) return false;
-        debugbar()->debug($this->state == AvailableDayEnum::Available->name);
         return $this->state == AvailableDayEnum::Available->name;
     }
 

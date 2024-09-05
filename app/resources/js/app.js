@@ -12,7 +12,9 @@ import PublicationList from './publications/index/list';
 
 let search = new Search('search');
 
-let publicationList = new PublicationList;
-search.loadListener((input) => {
-    publicationList.getList({search: input.value});
-});
+if(search){
+    let publicationList = new PublicationList;
+    search.loadListener((input) => {
+        publicationList.getList({search: input.value});
+    });
+}

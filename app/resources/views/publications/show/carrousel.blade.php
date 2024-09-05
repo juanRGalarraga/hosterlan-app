@@ -5,11 +5,15 @@
 <div id="default-carousel" class="relative w-[70%] h-screen ml-auto" data-carousel="static">
     <!-- Carousel wrapper -->
     <div class="relative h-full overflow-hidden rounded-lg">
-        @foreach ($images as $image)
+        @forelse ($images as $image)
             <div class="hidden duration-700 ease-in-out" data-carousel-item>
                 <img src="{{$image->getUrl()}}" class="w-full h-full" alt="...">
             </div>
-        @endforeach
+        @empty
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="{{asset('carousel-preview.svg')}}" class="w-full h-full" alt="...">
+            </div>
+        @endforelse
     </div>
 
     <!-- Silde Control -->
