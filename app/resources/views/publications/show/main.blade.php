@@ -7,7 +7,7 @@
   
   <x-slot:scripts>
         @vite([
-            'resources/js/publications/show/show.js',
+            'resources/js/publications/show/main.js',
             'resources/css/publications/show/show.css',
         ])
   </x-slot:scripts>
@@ -119,7 +119,7 @@
   @include('publications.show.carrousel')
 </div>
 
-
+@include('publications.show.reserve-day-modal')
 
 
 </x-app-layout>

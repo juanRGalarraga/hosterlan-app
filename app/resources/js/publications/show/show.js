@@ -27,8 +27,6 @@ export default class PublicationShow {
         document.startViewTransition(() => viewList());
     }
 
-}
+    
 
-document.addEventListener('DOMContentLoaded', (ev) => {
-    new PublicationShow;
-});
+}
