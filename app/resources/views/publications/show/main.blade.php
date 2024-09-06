@@ -76,8 +76,12 @@
       
     <div class="w-full text-center text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
         @foreach ($publication->daysAvailable as $dayAvailable)
-              <button type="button" 
+              <button type="button"
+                data-date="{{$dayAvailable->since . " hasta " . $dayAvailable->to}}"
+                data-modal-target="reserveDayModal"
+                data-modal-show="reserveDayModal"
                   @class([
+                      'buttons-reserve-day',
                       'cursor-not-allowed' => !$dayAvailable->isAvailable(),
                       'relative',
                       'inline-flex',
@@ -119,7 +123,9 @@
   @include('publications.show.carrousel')
 </div>
 
-@include('publications.show.reserve-day-modal')
+<div>
+    @include('publications.show.reserve-day-modal')
+</div>
 
 
 </x-app-layout>

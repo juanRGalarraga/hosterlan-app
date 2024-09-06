@@ -23,6 +23,19 @@ export default class DOM {
         return ele;
     }
 
+    static captureElements(element){
+        let ele = element;
+        if(typeof element == "string"){
+            element = element.startsWith('.') ? element : `.${element}`;
+            ele = document.querySelectorAll(element)
+        }
+
+        if(!(ele instanceof NodeList)){
+            throw new Error("Element not found");
+        }
+        return Array.from(ele);
+    }
+
     static createElement(element){
         if(typeof element != "string"){
             throw new Error("Element must be an string");
@@ -105,7 +118,9 @@ export default class DOM {
      */
     static attr(...attributes){
         let [nameAttr, valueAttr] = attributes;
-        if(nameAttr && valueAttr !== null){
+        console.log(nameAttr, valueAttr);
+        
+        if(nameAttr && valueAttr){
             DOM.element.setAttribute(nameAttr, valueAttr);
             return;
         }
