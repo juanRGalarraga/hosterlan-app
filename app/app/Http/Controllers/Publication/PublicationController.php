@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Publication;
 
 use Intervention\Image\ImageManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Publication\PublicationUpdateRequest;
-use App\Http\Requests\Publication\PublicationStoreRequest;
 use App\Models\Publication;
 use App\Models\Picture;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,11 +17,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Exceptions\RuntimeException;
 use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 
@@ -124,7 +120,7 @@ class PublicationController extends Controller
 
         $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
         $query = $queryBuilder->getQuery()->toRawSql();
-    //    dump($queryBuilder->getQuery()->ddRawSql());
+
         $html = view("publications.index.card-list", compact('publications', 'query'))->render();
         return $html;
     }
@@ -134,7 +130,6 @@ class PublicationController extends Controller
     }
 
     public function getStep2(Request $request){
-        // dd($request->all());
 
         $rules = [
             'title' => 'required|string|max:150',
@@ -317,9 +312,5 @@ class PublicationController extends Controller
         $publication->delete();
         return redirect()->route('publications.index.main')
                 ->withSuccess(_('Publicacion eliminada exitosamente'));
-    }
-
-    private function getMd5TemporalyKey(){
-        return md5(Auth::user()->id . "-publicationtemp");   
     }
 }

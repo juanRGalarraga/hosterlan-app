@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\CanGetTableNameStatically;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PublicationDayAvailable extends Model
 {
     use HasFactory, CanGetTableNameStatically;
     protected $fillable = [
-      'publication_id',
-      'since',
-      'to',
-      'state'
+        'guest_id',
+        'publication_id',
+        'since',
+        'to',
+        'state'
     ];
 
     public function isAvailable(){
@@ -24,20 +26,22 @@ class PublicationDayAvailable extends Model
         return $this->state == AvailableDayEnum::Available->name;
     }
 
-    public function publication()
+    public function guest(){
+        return $this->belongsTo(Guest::class);
+    }
+
+    public function publication() : BelongsTo
     {
         return $this->belongsTo(Publication::class);
     }
 
-    protected function since(){
+    protected function since() : Attribute {
         return Attribute::make(
-            set: fn(string $value) => \DateTime::createFromFormat('d/m/Y', $value)->format('Y-m-d'),
             get: fn(string $value) => \DateTime::createFromFormat('Y-m-d', $value)->format('d/m/Y'),
         );
     }
-    protected function to(){
+    protected function to() : Attribute {
         return Attribute::make(
-            set: fn(string $value) => \DateTime::createFromFormat('d/m/Y', $value)->format('Y-m-d'),
             get: fn(string $value) => \DateTime::createFromFormat('Y-m-d', $value)->format('d/m/Y')
         );
     }

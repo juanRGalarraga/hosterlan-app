@@ -23,10 +23,12 @@ class PublicationDayAvailableFactory extends Factory
     {
         $since = fake()->dateTimeThisYear();
         $to = (clone $since)->modify('+7 days');
+        $sinceFormatted = $since->format('Y-m-d');
+        $toFormatted = $to->format('Y-m-d');
         return [
             'publication_id' => Publication::factory(),
-            'since'=> $since,
-            'to'=> $to,
+            'since'=> $sinceFormatted,
+            'to'=> $toFormatted,
             'state'=> fake()->randomElement(AvailableDayEnum::forMigration())
         ];
     }
