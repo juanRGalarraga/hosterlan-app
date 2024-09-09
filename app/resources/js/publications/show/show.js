@@ -23,8 +23,6 @@ export default class PublicationShow {
         this.buttonsReserveDay.forEach(button => {
             button.onclick = () => {
                 let date = DOM.$(button).attr('data-date');
-                console.log(date);
-                
                 reserveDayText.innerText = date;
             }
         });

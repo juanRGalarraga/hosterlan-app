@@ -13,6 +13,7 @@
                 </button>
             </div>
             <form class="p-4 md:p-5" method="POST">
+                
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="text-center col-span-2">
                         <span class="text-md text-white" id="reserveDayText">[fecha]</span>

@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             ->hasOwner(1)
             ->create([
             'email' => 'test@example.com',
-            'password' => Hash::make('password')            
+            'password' => Hash::make('password')
         ]);
 
         Publication::factory()

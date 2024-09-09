@@ -128,10 +128,22 @@ class PublicationController extends Controller
         return $html;
     }
 
+
+    /**
+     * Get the step-1-form to create a publication.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function getStep1(){
         return view('publications.create.form-step-1-main');
     }
 
+    /**
+     * Get the step-1-form to create a publication.
+     * @param \Illuminate\Http\Request $request
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function getStep2(Request $request){
 
         $rules = [
@@ -267,6 +279,11 @@ class PublicationController extends Controller
         ->withSuccess(__('La publicacion ha sido creada exitosamente'));
     }
 
+    /**
+     * Allow the user to try to book a day.
+     * @param \Illuminate\Http\Request $request
+     * @return mixed
+     */
     public function reserveDay(Request $request){
         $validator = Validator::make($request->all(), [
             'publication_id' => 'required|integer',
@@ -284,7 +301,7 @@ class PublicationController extends Controller
         PublicationDayAvailable::findOrFail($request->publication_day_available_id);
         Guest::findOrFail($request->guest_id);
 
-        if( ReservationGuest::create($request->all()) ) {
+        if( !ReservationGuest::create($request->all()) ) {
             Log::emergency('Error during procesing update');
             return abort(500);
         }
@@ -293,7 +310,12 @@ class PublicationController extends Controller
         ->route('publications.index')
         ->withSuccess(__('La fecha ha sido solicitada correctamente'));
     }
-
+    
+    /**
+     * This method is used to fetch the preview files dynamically. 
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|string
+     */
     public function getPreviewFiles(Request $request){
         $files = $request->all();
         if( !Arr::isAssoc($files) && count($files) < 1){

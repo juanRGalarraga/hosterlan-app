@@ -6,6 +6,7 @@ use App\Models\RentType;
 use App\Models\Publication;
 use App\Models\PublicationDayAvailable;
 use App\Models\Guest;
+use App\Models\ReservationGuest;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,12 +33,18 @@ class RelashionshipTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $publicationDayAvailable = PublicationDayAvailable::factory()->create([
+        $dayAvailable = PublicationDayAvailable::factory()->create([
             'publication_id' => $publication->id,
+        ]);
+
+        $reservationGuest = ReservationGuest::factory()->create([
+            'publication_day_available_id' => $dayAvailable->id,
             'guest_id' => $guest->id,
         ]);
         
-        $this->assertInstanceOf(Publication::class, $publicationDayAvailable->publication);
-        $this->assertInstanceOf(Guest::class, $publicationDayAvailable->guest);
+        $this->assertInstanceOf(PublicationDayAvailable::class, $reservationGuest->publicationDayAvailable);
+        $this->assertInstanceOf(Publication::class, $reservationGuest->publicationDayAvailable->publication);
+        $this->assertInstanceOf(User::class, $reservationGuest->guest->user);
+        $this->assertInstanceOf(Guest::class, $reservationGuest->guest);
     }
 }
