@@ -285,26 +285,30 @@ class PublicationController extends Controller
      * @return mixed
      */
     public function reserveDay(Request $request){
+        debugbar()->debug(__LINE__);
         $validator = Validator::make($request->all(), [
             'publication_id' => 'required|integer',
             'publication_day_available_id' => 'required|integer',
             'guest_id' => 'required|integer'
         ]);
-
+        debugbar()->debug(__LINE__);
         if($validator->fails()){
             return redirect()
             ->route('publications.show')
             ->withErrors($validator->errors());
         }
-
+        debugbar()->debug(__LINE__);
         Publication::findOrFail($request->publication_id);
+        debugbar()->debug(__LINE__);
         PublicationDayAvailable::findOrFail($request->publication_day_available_id);
+        debugbar()->debug(__LINE__);
         Guest::findOrFail($request->guest_id);
-
+        debugbar()->debug(__LINE__);
         if( !ReservationGuest::create($request->all()) ) {
             Log::emergency('Error during procesing update');
             return abort(500);
         }
+        debugbar()->debug(__LINE__);
 
         return redirect()
         ->route('publications.index')

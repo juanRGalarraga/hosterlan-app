@@ -12,18 +12,24 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <form class="p-4 md:p-5" method="POST">
+            <form class="p-4 md:p-5" name="formReserveDay" id="formReserveDay" method="POST" action="{{route('publications.day.reserve')}}">
+                @csrf
+                <input type="hidden" name="publication_day_available_id" id="publication_day_available_id" value="{{$publication->id}}">
+                <input type="hidden" name="publication_id" value="{{$publication->id}}">
+                @if (Auth::user()->isGuest())
+                    <input type="hidden" name="guest_id" value="{{Auth::user()->guest->id}}">
+                @endif
                 
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="text-center col-span-2">
                         <span class="text-md text-white" id="reserveDayText">[fecha]</span>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2" hidden>
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{__('Adjuntar mensaje (opcional)')}}:</label>
                         <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>   
                     </div>
                 </div>
-                <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <button type="submit" form="formReserveDay" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     {{__('Enviar solicitud')}}
                 </button>

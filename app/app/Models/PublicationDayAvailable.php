@@ -20,6 +20,19 @@ class PublicationDayAvailable extends Model
         'state'
     ];
 
+    public function canReserve(){
+
+        $reservation = $this->reservations->find();
+        
+        return 
+        $this->isAvailable() 
+        && $this->state !== AvailableDayEnum::Pending->name;
+    }
+
+    public function reservations() : HasMany {
+        return $this->hasMany(ReservationGuest::class);
+    }
+
     public function isAvailable(){
         if(!$this->exists()) return false;
         return $this->state == AvailableDayEnum::Available->name;

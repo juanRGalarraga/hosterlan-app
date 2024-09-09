@@ -46,5 +46,6 @@ class RelashionshipTest extends TestCase
         $this->assertInstanceOf(Publication::class, $reservationGuest->publicationDayAvailable->publication);
         $this->assertInstanceOf(User::class, $reservationGuest->guest->user);
         $this->assertInstanceOf(Guest::class, $reservationGuest->guest);
+        $this->assertInstanceOf(ReservationGuest::class, $dayAvailable->reservations->first());
     }
 }

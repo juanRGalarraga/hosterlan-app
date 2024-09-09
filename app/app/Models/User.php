@@ -49,10 +49,12 @@ class User extends Authenticatable
     ];
 
     public function isOwner(){
+        debugbar()->debug("isGuest", is_a($this->owner, Owner::class) );
         return is_a($this->owner, Owner::class) ?: false;
     }
 
     public function isGuest(){
+        debugbar()->debug("isOwner", is_a($this->guest, Owner::class) );
         return is_a($this->guest, Guest::class) ?: false;
     }
 

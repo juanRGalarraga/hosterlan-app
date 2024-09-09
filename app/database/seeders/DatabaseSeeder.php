@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()
             ->count(1)
-            ->hasOwner(1)
+            ->hasGuest(1)
             ->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password')

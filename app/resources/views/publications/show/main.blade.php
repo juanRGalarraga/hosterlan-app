@@ -76,7 +76,12 @@
       
     <div class="w-full text-center text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
         @foreach ($publication->daysAvailable as $dayAvailable)
+              @php 
+                //$canReserve = $dayAvailable->
+              @endphp
+
               <button type="button"
+                data-day-available-id={{$dayAvailable->id}} 
                 data-date="{{$dayAvailable->since . " hasta " . $dayAvailable->to}}"
                 data-modal-target="reserveDayModal"
                 data-modal-show="reserveDayModal"

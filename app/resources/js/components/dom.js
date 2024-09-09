@@ -16,7 +16,7 @@ export default class DOM {
         if(typeof element == "string"){
             ele = document.getElementById(element)
         }
-
+        
         if(!(ele instanceof HTMLElement)){
             throw new Error("Element not found");
         }

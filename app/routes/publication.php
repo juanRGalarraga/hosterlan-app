@@ -17,3 +17,4 @@ Route::match(['put', 'patch'], 'publications/{publication}', [PublicationControl
 Route::get('publications/{publication}', [PublicationController::class, 'edit'])->name('publications.edit');
 Route::get('publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
 Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
+Route::post('publications/days/reserve', [PublicationController::class, 'reserveDay'])->name('publications.day.reserve');

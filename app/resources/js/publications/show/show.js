@@ -20,9 +20,14 @@ export default class PublicationShow {
     loadButtonReserveDay(element){
         let reserveDayText = DOM.captureElement('reserveDayText');
         this.buttonsReserveDay = DOM.captureElements(element);
+
         this.buttonsReserveDay.forEach(button => {
             button.onclick = () => {
                 let date = DOM.$(button).attr('data-date');
+
+                let dayAvailableId = DOM.$(button).attr('data-day-available-id');
+
+                DOM.$('publication_day_available_id').attr('value', dayAvailableId);
                 reserveDayText.innerText = date;
             }
         });

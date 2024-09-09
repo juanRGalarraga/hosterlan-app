@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Publication\AvailableDayEnum;
 use App\Models\Guest;
 use App\Models\PublicationDayAvailable;
 use App\Models\Publication;
