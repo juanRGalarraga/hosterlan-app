@@ -25,6 +25,9 @@
                     <x-nav-link :href="route('publications.create1')" :active="request()->routeIs('publications.create')">
                         {{ __('Crear Publicacion') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.index')">
+                        {{ __('Mis reservas') }}
+                    </x-nav-link>
                 </div>
             </div>
 
