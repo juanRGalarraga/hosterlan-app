@@ -14,7 +14,7 @@ use Illuminate\Auth\MustVerifyEmail;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +47,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function isOwner(){
+        return is_a($this->owner, Owner::class) ?: false;
+    }
+
+    public function isGuest(){
+        return is_a($this->guest, Guest::class) ?: false;
+    }
 
     public function publications(){
         return $this->hasMany(Publication::class);
