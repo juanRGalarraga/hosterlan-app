@@ -21,7 +21,7 @@ class PublicationDayAvailable extends Model
         'state'
     ];
 
-    public function isMyReservation(){
+    public function isPreReserved(){
         $reservationFound = null;
         if(Auth::user()->isGuest() && $this->exists()){
             $reservationFound = $this
@@ -33,13 +33,13 @@ class PublicationDayAvailable extends Model
         return isset($reservationFound);
     }
 
-    public function reservations() : HasMany {
-        return $this->hasMany(ReservationGuest::class);
-    }
-
     public function isAvailable(){
         if(!$this->exists()) return false;
         return $this->state == AvailableDayEnum::Available->name;
+    }
+
+    public function reservations() : HasMany {
+        return $this->hasMany(ReservationGuest::class);
     }
 
     public function publication() : BelongsTo
