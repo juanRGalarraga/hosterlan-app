@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Hamcrest\Number\IsCloseTo;
+use Illuminate\Support\Facades\Auth;
 use App\Enums\Publication\AvailableDayEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,13 +22,16 @@ class PublicationDayAvailable extends Model
         'state'
     ];
 
-    public function canReserve(){
-
-        $reservation = $this->reservations->find();
-        
-        return 
-        $this->isAvailable() 
-        && $this->state !== AvailableDayEnum::Pending->name;
+    public function isMyReservation(){
+        $reservationFound = null;
+        if(Auth::user()->isGuest() && $this->exists()){
+            $reservationFound = $this
+            ->reservations
+            ->where('guest_id', Auth::user()->guest->id)
+            ->where('state', AvailableDayEnum::Pending->name)
+            ->first();
+        }
+        return isset($reservationFound);
     }
 
     public function reservations() : HasMany {
