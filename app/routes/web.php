@@ -28,6 +28,10 @@ Route::get('/', function () {
     }
     return view('welcome');
 });
+Route::get('/home', [PublicationController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('home');
+
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
