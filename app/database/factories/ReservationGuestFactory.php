@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Publication\AvailableDayEnum;
+use App\Enums\Reservation\ReservationStateEnum;
 use App\Models\Guest;
 use App\Models\PublicationDayAvailable;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,7 +22,7 @@ class ReservationGuestFactory extends Factory
         return [
             'publication_day_available_id' => PublicationDayAvailable::factory(),
             'guest_id' => Guest::factory(),
-            'state'=> AvailableDayEnum::Pending->name,
+            'state'=> ReservationStateEnum::PreReserved->name,
         ];
     }
 }

@@ -66,7 +66,7 @@
                 $isAvailable = $dayAvailable->isAvailable();
                 $canReserve = !$isPreReserved && $isAvailable;
                 $label = 
-                (!$isAvailable ? __('Reservado') : '') ?: 
+                (!$isAvailable ? __('Ocupado') : '') ?: 
                 ($isPreReserved ? __('Pre-Reservado') : '');
             @endphp
 
