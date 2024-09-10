@@ -8,6 +8,7 @@ use App\Models\ReservationGuest;
 use App\Models\PublicationDayAvailable;
 use App\Models\Publication;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,7 +19,7 @@ class ReservationController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return mixed
      */
-    public function reserve(Request $request){
+    public function preReserve(Request $request){
         $validator = Validator::make($request->all(), [
             'publication_id' => 'required|integer',
             'publication_day_available_id' => 'required|integer',
@@ -53,16 +54,16 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = ReservationGuest::latest()->paginate(25);
-        $html = view("reservations.index", compact('reservations'));
+        $html = view("reservations.index.main", compact('reservations'));
         return $html;
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(ReservationGuest $reservation)
     {
-        //
+        return view( 'reservations.create.main', [ 'reservation' => $reservation ] );
     }
 
     /**

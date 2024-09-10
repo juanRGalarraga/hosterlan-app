@@ -9,7 +9,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <form class="p-4 md:p-5" name="formReserveDay" id="formReserveDay" method="POST" action="{{route('reservations.reserve')}}">
+            <form class="p-4 md:p-5" name="formReserveDay" id="formReserveDay" method="POST" action="{{route('reservations.pre-reserve')}}">
                 @csrf
                 <input type="hidden" name="publication_day_available_id" id="publication_day_available_id" value="{{$publication->id}}">
                 <input type="hidden" name="publication_id" value="{{$publication->id}}">
