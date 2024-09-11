@@ -62,10 +62,12 @@
     <div class="w-full text-center text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
         @foreach ($publication->daysAvailable as $dayAvailable)
             @php
-                $isMyReservation = $dayAvailable->isMyReservation();
+                $isPreReserved = $dayAvailable->isPreReserved();
                 $isAvailable = $dayAvailable->isAvailable();
-                $canReserve = !$isMyReservation && $isAvailable;
-                $label = !$isAvailable ? __('Reservado') : '';
+                $canReserve = !$isPreReserved && $isAvailable;
+                $label = 
+                (!$isAvailable ? __('Ocupado') : '') ?: 
+                ($isPreReserved ? __('Pre-Reservado') : '');
             @endphp
 
             <button type="button"
@@ -110,7 +112,7 @@
                 </span>
 
                 @if ($label)
-                    <x-utils.badge class="ml-2">{{$label}}</x-utils.badge>
+                    <x-utils.badge class="ml-2 text-xs">{{$label}}</x-utils.badge>
                 @endif
 
             </button>

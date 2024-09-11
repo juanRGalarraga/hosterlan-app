@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\Auth;
+use App\Enums\Reservation\ReservationStateEnum;
 use App\Enums\Publication\AvailableDayEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,25 +22,24 @@ class PublicationDayAvailable extends Model
         'state'
     ];
 
-    public function isMyReservation(){
+    public function isPreReserved(){
         $reservationFound = null;
-        if(Auth::user()->isGuest() && $this->exists()){
+        if($this->exists()){
             $reservationFound = $this
             ->reservations
-            ->where('guest_id', Auth::user()->guest->id)
-            ->where('state', AvailableDayEnum::Pending->name)
+            ->where('state', ReservationStateEnum::PreReserved->name)
             ->first();
         }
         return isset($reservationFound);
     }
 
-    public function reservations() : HasMany {
-        return $this->hasMany(ReservationGuest::class);
-    }
-
     public function isAvailable(){
         if(!$this->exists()) return false;
         return $this->state == AvailableDayEnum::Available->name;
+    }
+
+    public function reservations() : HasMany {
+        return $this->hasMany(ReservationGuest::class);
     }
 
     public function publication() : BelongsTo
