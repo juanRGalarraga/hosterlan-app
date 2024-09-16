@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reservation;
 
+use Illuminate\Support\Facades\Auth;
 use App\Enums\Reservation\ReservationStateEnum;
 use Illuminate\Support\Facades\Log;
 use App\Models\Guest;
@@ -9,13 +10,12 @@ use App\Models\ReservationGuest;
 use App\Models\PublicationDayAvailable;
 use App\Models\Publication;
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {   
+
     /**
      * Allow the user to try to book a day.
      * @param \Illuminate\Http\Request $request
@@ -40,14 +40,12 @@ class ReservationController extends Controller
         
         Guest::findOrFail($request->guest_id);
 
-        if( !$reservation = ReservationGuest::create($request->all()) ) {
+        if( !( $reservation = ReservationGuest::create($request->all()) ) ) {
             Log::emergency('Error during procesing update');
             return abort(500);
         }
 
-        return redirect()
-        ->route('reservations.create', ['reservation' => $reservation])
-        ->withSuccess(__('La fecha ha sido solicitada correctamente'));
+        return view('reservations.create.main', ['reservation' => $reservation]);
     }
     /**
      * Display a listing of the resource.
@@ -64,6 +62,10 @@ class ReservationController extends Controller
      */
     public function create(ReservationGuest $reservation)
     {
+        if($reservation->guest_id != Auth::user()->guest->id){
+            //I c
+            return redirect()->back();
+        }
         return view( 'reservations.create.main', [ 'reservation' => $reservation ] );
     }
 

@@ -29,7 +29,7 @@ class PublicationDayAvailableFactory extends Factory
             'publication_id' => Publication::factory(),
             'since'=> $sinceFormatted,
             'to'=> $toFormatted,
-            'state'=> fake()->randomElement(AvailableDayEnum::forMigration())
+            'state'=> AvailableDayEnum::Available->name
         ];
     }
 }
