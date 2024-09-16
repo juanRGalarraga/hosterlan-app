@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use App\Enums\Reservation\ReservationStateEnum;
 use App\Enums\Publication\AvailableDayEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -21,6 +22,24 @@ class PublicationDayAvailable extends Model
         'to',
         'state'
     ];
+
+    public function finalPrice(): float {
+        if($this->exists()){
+            return $this->publication->price * $this->dayCount();
+        }
+        return 0.0;
+    }
+
+    public function dayCount(): int {
+        $count = 0;
+        if($this->exists()){
+            $date = Carbon::createFromFormat('d/m/Y', $this->since);
+            $now = Carbon::createFromFormat('d/m/Y', $this->to);
+            $diff = $date->diffInDays($now);
+            $count = $diff;
+        }
+        return $count;
+    }
 
     public function isPreReserved(){
         $reservationFound = null;

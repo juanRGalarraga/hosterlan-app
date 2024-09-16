@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reservation;
 
+use App\Enums\Reservation\ReservationStateEnum;
 use Illuminate\Support\Facades\Log;
 use App\Models\Guest;
 use App\Models\ReservationGuest;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {   
@@ -37,15 +39,14 @@ class ReservationController extends Controller
         PublicationDayAvailable::findOrFail($request->publication_day_available_id);
         
         Guest::findOrFail($request->guest_id);
-        
-        if( !ReservationGuest::create($request->all()) ) {
+
+        if( !$reservation = ReservationGuest::create($request->all()) ) {
             Log::emergency('Error during procesing update');
             return abort(500);
         }
-        
 
         return redirect()
-        ->route('publications.index')
+        ->route('reservations.create', ['reservation' => $reservation])
         ->withSuccess(__('La fecha ha sido solicitada correctamente'));
     }
     /**
@@ -71,7 +72,34 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'reservation_id' => 'required|integer',
+            'name' => 'required|string|max:80|alpha',
+            'email' => 'required|email',
+            'phoneNumber' => 'required',
+            'since' => 'date',
+            'to' => 'after_or_equal:since',
+            'message' => 'string|max:200'
+        ]);
+
+        if($validator->fails()){
+            return redirect()
+            ->route('reservations.create', $request->reservation_id)
+            ->withErrors($validator->errors());
+        }
+
+        $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
+        
+        $reservation = ReservationGuest::create($record);
+
+        if(!$reservation->exist()){
+            Log::emergency('Error during procesing update');
+            return abort(500);
+        }
+
+        return redirect()
+        ->route('publications.index')
+        ->withSuccess(__('La reserva ha sido realizada correctamente'));
     }
 
     /**
