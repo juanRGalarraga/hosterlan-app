@@ -1,11 +1,12 @@
 @php
     $publication = $reservation->publicationDayAvailable->publication;
+    dump($errors->all());
 @endphp
 <x-app-layout>
     <div class="form-container p-52 grid grid-cols-4 px-auto">
         <div class="col-span-2 col-start-1">
             <h2 class="text-2xl font-bold form-title mb-6 dark:text-white">{{__('Confirmación de Reserva')}}</h2>
-            <form id="confirmReservationForm" name="confirmReservationForm" action="{{route('reservations.store', $reservation->id)}}" method="POST">
+            <form id="confirmReservationForm" name="confirmReservationForm" action="{{route('reservations.store', ['reservation_id' => $reservation->id])}}" method="POST">
                 @csrf
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-300">{{__('Nombre Completo')}}</label>
