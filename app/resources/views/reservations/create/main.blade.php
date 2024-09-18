@@ -52,15 +52,15 @@
         <div class="col-span-2 md:col-span-2 ml-3 col-start-3">
 
             <x-publication.mini-card
-                :srcImage="$publication->getFirstPicture()"
-                :title="$publication->title"
-                :subtitle="$publication->rentType->name"
+                srcImage="{{$publication->getFirstPicture()}}"
+                title="{{$publication->title}}"
+                subtitle="{{$publication->rentType->name}}"
             ></x-publication.mini-card>
 
             <h2 class="text-2xl font-bold form-title mb-6 dark:text-white">{{__('Detalles del precio')}}</h2>
             <div class="flex justify-between">
-                <span class="dark:text-white">@convert($publication->price) por {{$reservation->publicationDayAvailable->dayCount()}} noches</span>
-                <span class="dark:text-white">@convert($reservation->publicationDayAvailable->finalPrice())</span>
+                <span class="dark:text-white">{{convert($publication->price)}} por {{$reservation->publicationDayAvailable->dayCount()}} noches</span>
+                <span class="dark:text-white">{{convert($reservation->publicationDayAvailable->finalPrice())}}</span>
             </div>
         </div>
     </div>

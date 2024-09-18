@@ -28,7 +28,13 @@ class AppServiceProvider extends ServiceProvider
 
     private function defineCustomBladeDirective(){
         Blade::directive('convert', function ($money) {
-            return "<?php echo ".env('CURRENCY_FORMAT', '$').". number_format($money, 2); ?>";
+            if(!is_numeric($money)){
+                return $money;
+            }
+            
+            $currency = env("CURRENCY_FORMAT", '$');
+            $formatedNumber = number_format($money, 2);
+            return "<?php echo '$' . $formatedNumber; ?>";
         });
     }
 }

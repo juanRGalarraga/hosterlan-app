@@ -45,6 +45,7 @@ class ReservationController extends Controller
             return abort(500);
         }
 
+        return redirect()->action([$this::class, 'create'], ['reservation' => $reservation]);
         return view('reservations.create.main', ['reservation' => $reservation]);
     }
     /**

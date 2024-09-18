@@ -1,7 +1,7 @@
 @props([
     'srcImage',
     'title',
-    'subtitle'    
+    'subtitle'
 ])
 
 <div class=" bg-gray-800 text-white rounded-lg shadow-md overflow-hidden mb-3 w-full mx-auto">
