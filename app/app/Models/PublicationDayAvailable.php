@@ -72,7 +72,13 @@ class PublicationDayAvailable extends Model
 
     protected function since() : Attribute {
         return Attribute::make(
-            get: fn(string $value) => \DateTime::createFromFormat('Y-m-d', $value)->format('d/m/Y'),
+            get: function (string $value) {
+                $carbonDate = \DateTime::createFromFormat('Y-m-d', $value);
+                if($carbonDate){
+                    return $carbonDate->format('d/m/Y');
+                }
+                return $value;
+            }
         );
     }
     protected function to() : Attribute {
