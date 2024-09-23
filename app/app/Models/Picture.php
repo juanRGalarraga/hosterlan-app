@@ -17,7 +17,7 @@ class Picture extends Model
       'publication_id'
     ];
 
-    const DEFAULT_PICTURE = 'carousel-preview.svg';
+    const DEFAULT_PICTURE = 'publication-pictures/carousel-preview.svg';
     
     public function publication(){
       return $this->belongsTo(Publication::class);

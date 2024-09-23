@@ -48,7 +48,7 @@ class Publication extends Model
     return $this->belongsTo(RentType::class);
   }
 
-  public function getUrlPicture(int $id)
+  public function getUrlPicture(int $id): string
   {
     $filename = '';
     if ($this->exists()) {
@@ -58,7 +58,7 @@ class Publication extends Model
     return $filename;
   }
 
-  public function getFirstPicture()
+  public function getFirstPicture(): string
   {
     $defaultPath = asset(Picture::DEFAULT_PICTURE);
 
