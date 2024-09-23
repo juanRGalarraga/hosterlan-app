@@ -31,7 +31,7 @@
       <h1 class="text-2xl font-bold mb-4 text-center dark:text-white">{{$publication->title}}</h1>
       
       <!-- Precio -->
-      <div class="text-xl text-green-400 font-semibold mb-4 text-center">@convert($publication->price)</div>
+      <div class="text-xl text-green-400 font-semibold mb-4 text-center">{{convert($publication->price)}}</div>
 
       <!-- Grupo de botones -->
       <div class="justify-center flex">
