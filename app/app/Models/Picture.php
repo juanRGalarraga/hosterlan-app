@@ -24,7 +24,7 @@ class Picture extends Model
     }
 
     public function getUrl(){
-      $filename =  asset("publication-pictures/" . self::DEFAULT_PICTURE);
+      $filename =  asset(self::DEFAULT_PICTURE);
       if($this->exists()){
         $realFile = asset("publication-pictures/{$this->publication->id}/{$this->name}");
         if( file_exists(storage_path("app/public/publication-pictures/{$this->publication->id}/{$this->name}")) ){
