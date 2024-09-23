@@ -11,7 +11,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Owner;
 use App\Models\Publication;
 use App\Models\Picture;
-use App\Models\PublicationDayAvailable;
+use App\Models\AvailableDay;
 use Database\Factories\RentTypeFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         User::factory()
             ->count(1)
             ->hasGuest(1)
+            ->hasPhones(1)
             ->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password')
@@ -40,7 +41,7 @@ class DatabaseSeeder extends Seeder
             ->count(10)
             ->hasPictures(rand(1,5))
             ->hasRentType(1)
-            ->hasDaysAvailable(rand(1, 5))
+            ->hasAvailableDays(rand(1, 5))
             ->create();
     }
 }

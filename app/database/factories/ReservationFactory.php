@@ -4,13 +4,13 @@ namespace Database\Factories;
 
 use App\Enums\Reservation\ReservationStateEnum;
 use App\Models\Guest;
-use App\Models\PublicationDayAvailable;
+use App\Models\AvailableDay;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReservationGuest>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Reservation>
  */
-class ReservationGuestFactory extends Factory
+class ReservationFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,7 +20,7 @@ class ReservationGuestFactory extends Factory
     public function definition(): array
     {
         return [
-            'publication_day_available_id' => PublicationDayAvailable::factory(),
+            'available_day_id' => AvailableDay::factory(),
             'guest_id' => Guest::factory(),
             'state'=> ReservationStateEnum::PreReserved->name,
         ];

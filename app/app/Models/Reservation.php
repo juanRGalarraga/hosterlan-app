@@ -2,24 +2,22 @@
 
 namespace App\Models;
 
-use App\Enums\Publication\AvailableDayEnum;
 use App\Models\Guest;
-use App\Models\PublicationDayAvailable;
-use App\Models\Publication;
+use App\Models\AvailableDay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReservationGuest extends Model
+class Reservation extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'publication_day_available_id',
+        'available_day_id',
         'guest_id',
     ];
 
-    public function publicationDayAvailable(){
-        return $this->belongsTo(PublicationDayAvailable::class);
+    public function availableDay(){
+        return $this->belongsTo(AvailableDay::class);
     }
 
     public function guest(){

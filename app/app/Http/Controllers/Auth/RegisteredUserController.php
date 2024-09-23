@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Phone;
 use App\Models\Owner;
 use App\Models\Guest;
 use App\Models\User;
@@ -42,6 +43,8 @@ class RegisteredUserController extends Controller
             'type' => [Rule::enum(UserType::class)],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'area_code' => ['required', 'alpha_num', 'max:10'],
+            'phone' => ['required', 'alpha_num', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'password_confirmation' => ['required', Rules\Password::defaults()],
         ]);
@@ -50,6 +53,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'name' => $request->name,
             'password' => Hash::make($request->password)
+        ]);
+
+        Phone::create([
+            'user_id' => $user->id,
+            'area_code' => $request->area_code,
+            'number' => $request->phone,
+            'is_default' => 1
         ]);
 
         // Crear el tipo de usuario

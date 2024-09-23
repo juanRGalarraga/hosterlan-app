@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
-use App\Models\PublicationDayAvailable;
+use App\Models\AvailableDay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -49,7 +49,7 @@ class PublicationController extends Controller
                         ->select('p.*')
                         ->from(Publication::tableName() . ' as p')
                         ->join(RentType::tableName() . ' as rt', 'rent_type_id', '=', 'rt.id')
-                        ->leftjoin(PublicationDayAvailable::tableName() . " as pda", 'pda.publication_id', '=', 'p.id');
+                        ->leftjoin(AvailableDay::tableName() . " as pda", 'pda.publication_id', '=', 'p.id');
         
         $searchValue = $request->string('search');
         if($searchValue->isNotEmpty()){
@@ -263,7 +263,7 @@ class PublicationController extends Controller
         Db::transaction(function() use($publication, $days){
 
             foreach ($days as $key => $availableDays) {
-                PublicationDayAvailable::create([
+                AvailableDay::create([
                     'publication_id' => $publication->id,
                     'since' => \DateTime::createFromFormat('d/m/Y', $availableDays['since'])->format('Y-m-d'),
                     'to' => \DateTime::createFromFormat('d/m/Y', $availableDays['to'])->format('Y-m-d'),

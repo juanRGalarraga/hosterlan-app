@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\PublicationDayAvailable;
+use App\Models\AvailableDay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Models\ReservationGuest;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Guest extends Model
@@ -17,7 +17,7 @@ class Guest extends Model
     ];
 
     public function daysAvailables() : HasMany {
-      return $this->hasMany(PublicationDayAvailable::class);
+      return $this->hasMany(AvailableDay::class);
     }
 
     public function user(){
@@ -25,6 +25,6 @@ class Guest extends Model
     }
 
     public function reservations() : HasMany {
-      return $this->hasMany(ReservationGuest::class);
+      return $this->hasMany(Reservation::class);
     }
 }

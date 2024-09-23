@@ -4,14 +4,14 @@ namespace Tests\Unit\Publication;
 
 use App\Models\RentType;
 use App\Models\Publication;
-use App\Models\PublicationDayAvailable;
+use App\Models\AvailableDay;
 use App\Models\Guest;
-use App\Models\ReservationGuest;
+use App\Models\Reservation;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RelashionshipTest extends TestCase
+class PublicationRelashionTest extends TestCase
 {
     use RefreshDatabase;
     /**
@@ -33,19 +33,19 @@ class RelashionshipTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $dayAvailable = PublicationDayAvailable::factory()->create([
+        $dayAvailable = AvailableDay::factory()->create([
             'publication_id' => $publication->id,
         ]);
 
-        $reservationGuest = ReservationGuest::factory()->create([
-            'publication_day_available_id' => $dayAvailable->id,
+        $reservationGuest = Reservation::factory()->create([
+            'available_day_id' => $dayAvailable->id,
             'guest_id' => $guest->id,
         ]);
         
-        $this->assertInstanceOf(PublicationDayAvailable::class, $reservationGuest->publicationDayAvailable);
-        $this->assertInstanceOf(Publication::class, $reservationGuest->publicationDayAvailable->publication);
+        $this->assertInstanceOf(AvailableDay::class, $reservationGuest->availableDay);
+        $this->assertInstanceOf(Publication::class, $reservationGuest->availableDay->publication);
         $this->assertInstanceOf(User::class, $reservationGuest->guest->user);
         $this->assertInstanceOf(Guest::class, $reservationGuest->guest);
-        $this->assertInstanceOf(ReservationGuest::class, $dayAvailable->reservations->first());
+        $this->assertInstanceOf(Reservation::class, $dayAvailable->reservations->first());
     }
 }

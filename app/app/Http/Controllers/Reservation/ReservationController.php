@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Enums\Reservation\ReservationStateEnum;
 use Illuminate\Support\Facades\Log;
 use App\Models\Guest;
-use App\Models\ReservationGuest;
-use App\Models\PublicationDayAvailable;
+use App\Models\Reservation;
+use App\Models\AvailableDay;
 use App\Models\Publication;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -36,16 +36,14 @@ class ReservationController extends Controller
         
         Publication::findOrFail($request->publication_id);
         
-        PublicationDayAvailable::findOrFail($request->publication_day_available_id);
+        AvailableDay::findOrFail($request->publication_day_available_id);
         
         Guest::findOrFail($request->guest_id);
 
-        if( !( $reservation = ReservationGuest::create($request->all()) ) ) {
+        if( !( $reservation = Reservation::create($request->all()) ) ) {
             Log::emergency('Error during procesing update');
             return abort(500);
         }
-
-        return redirect()->action([$this::class, 'create'], ['reservation' => $reservation]);
         return view('reservations.create.main', ['reservation' => $reservation]);
     }
     /**
@@ -53,7 +51,7 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = ReservationGuest::latest()->paginate(25);
+        $reservations = Reservation::latest()->paginate(25);
         $html = view("reservations.index.main", compact('reservations'));
         return $html;
     }
@@ -61,7 +59,7 @@ class ReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(ReservationGuest $reservation)
+    public function create(Reservation $reservation)
     {
         if($reservation->guest_id != Auth::user()->guest->id){
             //I c
@@ -93,7 +91,7 @@ class ReservationController extends Controller
 
         $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
         
-        $reservation = ReservationGuest::create($record);
+        $reservation = Reservation::create($record);
 
         if(!$reservation->exist()){
             Log::emergency('Error during procesing update');

@@ -13,7 +13,7 @@ use App\Traits\CanGetTableNameStatically;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PublicationDayAvailable extends Model
+class AvailableDay extends Model
 {
     use HasFactory, CanGetTableNameStatically;
     protected $fillable = [
@@ -58,7 +58,7 @@ class PublicationDayAvailable extends Model
     }
 
     public function reservations() : HasMany {
-        return $this->hasMany(ReservationGuest::class);
+        return $this->hasMany(Reservation::class);
     }
 
     public function publication() : BelongsTo
@@ -83,7 +83,13 @@ class PublicationDayAvailable extends Model
     }
     protected function to() : Attribute {
         return Attribute::make(
-            get: fn(string $value) => \DateTime::createFromFormat('Y-m-d', $value)->format('d/m/Y')
+            get: function (string $value) {
+                $carbonDate = \DateTime::createFromFormat('Y-m-d', $value);
+                if($carbonDate){
+                    return $carbonDate->format('d/m/Y');
+                }
+                return $value;
+            }
         );
     }
 }
