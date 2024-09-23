@@ -73,27 +73,30 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
+        Log::channel('debug')->debug(json_encode($request->all()));
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
-            'name' => 'required|string|max:80|alpha',
+            'name' => 'required|string|max:80',
             'email' => 'required|email',
             'phoneNumber' => 'required',
-            'since' => 'date',
+            'since' => 'date_format:d/m/Y',
             'to' => 'after_or_equal:since',
-            'message' => 'string|max:200|trim'
         ]);
 
         if($validator->fails()){
+            $request->flash();
             return redirect()
             ->route('reservations.create', $request->reservation_id)
+            ->withInput()
             ->withErrors($validator->errors());
         }
 
-        $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
         
-        $reservation = Reservation::create($record);
+        $reservation = Reservation::findOrFail($request->reservation_id);
+        $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
+        $updated = $reservation->update($record);
 
-        if(!$reservation->exist()){
+        if(!$updated){
             Log::emergency('Error during procesing update');
             return abort(500);
         }

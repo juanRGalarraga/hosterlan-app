@@ -56,24 +56,23 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'emergency'],
-            'path' => storage_path('logs/debug.log'),
+            'channels' => ['emergency'],
+            'path' => storage_path('logs/laravel.log'),
             'ignore_exceptions' => false,
             'level' => 'debug',
         ],
 
-        'debugger' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/debugger.log'),
-            'level' => 'info'
-        ],
-
-        'single' => [
+        'debug' => [
             'driver' => 'single',
             'tap' => [CustomizeFormatter::class],
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'path' => storage_path('logs/debugger.log'),
+            'level' => 'debug',
             'replace_placeholders' => true,
+        ],
+
+        'emergency' => [
+            'path' => storage_path('logs/emergency.log'),
+            'level' => 'emergency',
         ],
 
         'daily' => [
@@ -132,10 +131,6 @@ return [
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
-        ],
-
-        'emergency' => [
-            'path' => storage_path('logs/emergency.log'),
         ],
     ],
 

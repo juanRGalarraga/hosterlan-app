@@ -13,6 +13,8 @@ class Reservation extends Model
 
     protected $fillable = [
         'available_day_id',
+        'message',
+        'email',
         'guest_id',
     ];
 
