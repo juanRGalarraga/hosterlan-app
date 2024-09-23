@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(AvailableDay::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Guest::class)->constrained()->cascadeOnDelete();
             $table->enum('state', ReservationStateEnum::forMigration())->default(ReservationStateEnum::PreReserved->name);
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }

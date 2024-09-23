@@ -80,7 +80,7 @@ class ReservationController extends Controller
             'phoneNumber' => 'required',
             'since' => 'date',
             'to' => 'after_or_equal:since',
-            'message' => 'string|max:200'
+            'message' => 'string|max:200|trim'
         ]);
 
         if($validator->fails()){
