@@ -49,6 +49,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
+    public function getDefaultPhone(): string{
+        $phone = $this->phones->where('is_default', 1)->first();
+        debugbar()->debug($phone->number );
+        if($phone->exists()){
+            return $phone->number;
+        }
+        return '';
+    }
+
     public function isOwner(){
         return is_a($this->owner, Owner::class) ?: false;
     }

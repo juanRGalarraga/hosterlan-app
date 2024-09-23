@@ -11,7 +11,7 @@
             </div>
             <form class="p-4 md:p-5" name="formReserveDay" id="formReserveDay" method="POST" action="{{route('reservations.pre-reserve')}}">
                 @csrf
-                <input type="hidden" name="publication_day_available_id" id="publication_day_available_id" value="{{$publication->id}}">
+                <input type="hidden" name="available_day_id" id="available_day_id" value="{{$publication->id}}">
                 <input type="hidden" name="publication_id" value="{{$publication->id}}">
                 @if (Auth::user()->isGuest())
                     <input type="hidden" name="guest_id" value="{{Auth::user()->guest->id}}">
