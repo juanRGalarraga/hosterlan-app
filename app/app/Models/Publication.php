@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PublicationDayAvailable;
+use App\Models\AvailableDay;
 use App\Models\Picture;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,9 +33,9 @@ class Publication extends Model
     return $this->belongsTo(User::class);
   }
 
-  public function daysAvailable(): HasMany
+  public function availableDays(): HasMany
   {
-    return $this->hasMany(PublicationDayAvailable::class);
+    return $this->hasMany(AvailableDay::class);
   }
 
   public function pictures()
@@ -47,7 +48,7 @@ class Publication extends Model
     return $this->belongsTo(RentType::class);
   }
 
-  public function getUrlPicture(int $id)
+  public function getUrlPicture(int $id): string
   {
     $filename = '';
     if ($this->exists()) {
@@ -57,7 +58,7 @@ class Publication extends Model
     return $filename;
   }
 
-  public function getFirstPicture()
+  public function getFirstPicture(): string
   {
     $defaultPath = asset(Picture::DEFAULT_PICTURE);
 
@@ -88,4 +89,5 @@ class Publication extends Model
     }
     return '';
   }
+  
 }

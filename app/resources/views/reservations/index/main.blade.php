@@ -1,7 +1,6 @@
 <x-app-layout>
 
 
-    @section('content')
         <div class="container mx-auto py-8">
             <h1 class="text-2xl font-bold mb-4">Reservas y Pre-reservas del Huésped</h1>
     
@@ -54,7 +53,6 @@
                 </div>
             @endif
         </div>
-    @endsection
-    
+
     
 </x-app-layout>

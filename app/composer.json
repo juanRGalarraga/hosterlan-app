@@ -30,7 +30,8 @@
     "autoload": {
         "files": [
              "helpers/Array.php",
-             "helpers/String.php"
+             "helpers/String.php",
+             "helpers/Number.php"
         ],
         "psr-4": {
             "App\\": "app/",

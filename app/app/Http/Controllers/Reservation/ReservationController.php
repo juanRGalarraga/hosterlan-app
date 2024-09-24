@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Enums\Reservation\ReservationStateEnum;
 use Illuminate\Support\Facades\Log;
 use App\Models\Guest;
-use App\Models\ReservationGuest;
-use App\Models\PublicationDayAvailable;
+use App\Models\Reservation;
+use App\Models\AvailableDay;
 use App\Models\Publication;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -24,27 +24,26 @@ class ReservationController extends Controller
     public function preReserve(Request $request){
         $validator = Validator::make($request->all(), [
             'publication_id' => 'required|integer',
-            'publication_day_available_id' => 'required|integer',
+            'available_day_id' => 'required|integer',
             'guest_id' => 'required|integer'
         ]);
         
         if($validator->fails()){
             return redirect()
-            ->route('publications.show')
+            ->back()
             ->withErrors($validator->errors());
         }
         
         Publication::findOrFail($request->publication_id);
         
-        PublicationDayAvailable::findOrFail($request->publication_day_available_id);
+        AvailableDay::findOrFail($request->available_day_id);
         
         Guest::findOrFail($request->guest_id);
 
-        if( !( $reservation = ReservationGuest::create($request->all()) ) ) {
+        if( !( $reservation = Reservation::create($request->all()) ) ) {
             Log::emergency('Error during procesing update');
             return abort(500);
         }
-
         return view('reservations.create.main', ['reservation' => $reservation]);
     }
     /**
@@ -60,7 +59,7 @@ class ReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(ReservationGuest $reservation)
+    public function create(Reservation $reservation)
     {
         if($reservation->guest_id != Auth::user()->guest->id){
             //I c
@@ -74,27 +73,30 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
+        Log::channel('debug')->debug(json_encode($request->all()));
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
-            'name' => 'required|string|max:80|alpha',
+            'name' => 'required|string|max:80',
             'email' => 'required|email',
             'phoneNumber' => 'required',
-            'since' => 'date',
+            'since' => 'date_format:d/m/Y',
             'to' => 'after_or_equal:since',
-            'message' => 'string|max:200'
         ]);
 
         if($validator->fails()){
+            $request->flash();
             return redirect()
             ->route('reservations.create', $request->reservation_id)
+            ->withInput()
             ->withErrors($validator->errors());
         }
 
-        $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
         
-        $reservation = ReservationGuest::create($record);
+        $reservation = Reservation::findOrFail($request->reservation_id);
+        $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
+        $updated = $reservation->update($record);
 
-        if(!$reservation->exist()){
+        if(!$updated){
             Log::emergency('Error during procesing update');
             return abort(500);
         }

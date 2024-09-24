@@ -5,13 +5,11 @@ namespace Database\Factories;
 use App\Enums\Publication\AvailableDayEnum;
 use App\Models\Publication;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\PublicationDayAvailable;
-use \DateInterval;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PublicationDayAvailable>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AvailableDay>
  */
-class PublicationDayAvailableFactory extends Factory
+class AvailableDayFactory extends Factory
 {
     
     /**

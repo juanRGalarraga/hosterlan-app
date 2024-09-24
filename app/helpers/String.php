@@ -32,3 +32,9 @@ if( !function_exists('elipsis') ){
         return $result;
     }
 }
+
+if(!function_exists('convert')){
+    function convert(int|float $number, string $symbol = '$', int $decimals = 2){
+        return $symbol . number_format($number, $decimals);
+    }
+}

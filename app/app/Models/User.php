@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Phone;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,6 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'password_confirmation',
+        'document',
+        'document_type'
     ];
 
     /**
@@ -47,6 +51,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
+    public function getDefaultPhone(): string{
+        $phone = $this->phones->where('is_default', 1)->first();
+        debugbar()->debug($phone->number );
+        if($phone->exists()){
+            return $phone->number;
+        }
+        return '';
+    }
+
     public function isOwner(){
         return is_a($this->owner, Owner::class) ?: false;
     }
@@ -65,5 +78,9 @@ class User extends Authenticatable implements MustVerifyEmail
     
     public function guest(){
         return $this->hasOne(Guest::class);
+    }
+
+    public function phones() : HasMany {
+        return $this->hasMany(Phone::class);
     }
 }

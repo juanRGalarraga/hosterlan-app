@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('publication_day_availables', function (Blueprint $table) {
+        Schema::create('available_days', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Publication::class)->constrained('publications')->onDelete('cascade');
             $table->date('since');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('publication_day_availables');
+        Schema::dropIfExists('available_days');
     }
 };

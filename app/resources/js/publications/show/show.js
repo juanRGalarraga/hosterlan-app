@@ -27,7 +27,7 @@ export default class PublicationShow {
 
                 let dayAvailableId = DOM.$(button).attr('data-day-available-id');
 
-                DOM.$('publication_day_available_id').attr('value', dayAvailableId);
+                DOM.$('available_day_id').attr('value', dayAvailableId);
                 reserveDayText.innerText = date;
             }
         });

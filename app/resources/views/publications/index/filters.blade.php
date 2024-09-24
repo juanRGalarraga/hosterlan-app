@@ -1,7 +1,6 @@
 
 @php
     use App\Enums\Publication\AvailableDayEnum;
-    use App\Enums\Publication\RentTypeEnum;
     use App\Models\RentType;
 @endphp
 

@@ -2,20 +2,14 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
+use App\Models\Phone;
 use App\Enums\Publication\RentTypeEnum;
 use App\Models\RentType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\Owner;
 use App\Models\Publication;
-use App\Models\Picture;
-use App\Models\PublicationDayAvailable;
-use Database\Factories\RentTypeFactory;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
-use League\CommonMark\Util\ArrayCollection;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,7 +22,7 @@ class DatabaseSeeder extends Seeder
             ->count(count(RentTypeEnum::cases()))
             ->create();
 
-        User::factory()
+        $user = User::factory()
             ->count(1)
             ->hasGuest(1)
             ->create([
@@ -36,11 +30,18 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
 
+        Phone::factory()
+            ->count(1)
+            ->create([
+                'user_id' => $user->first()->id,
+                'is_default' => 1
+            ]);
+
         Publication::factory()
             ->count(10)
             ->hasPictures(rand(1,5))
             ->hasRentType(1)
-            ->hasDaysAvailable(rand(1, 5))
+            ->hasAvailableDays(rand(1, 5))
             ->create();
     }
 }
