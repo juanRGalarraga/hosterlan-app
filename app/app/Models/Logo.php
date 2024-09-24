@@ -10,6 +10,7 @@ class Logo
     public static function get(){
         $file = env('APP_LOGO', 'default-logo.png');
         $content = asset($file);
+        debugbar()->debug($content);
         if(!$content){
             Log::warning('Logo not found');
             return '';
