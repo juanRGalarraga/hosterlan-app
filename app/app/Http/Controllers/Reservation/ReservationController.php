@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reservation;
 
+use App\Enums\Publication\AvailableDayEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\Reservation\ReservationStateEnum;
 use Illuminate\Support\Facades\Log;
@@ -76,12 +77,11 @@ class ReservationController extends Controller
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
-            'email' => 'required|email',
             'phoneNumber' => 'required',
             'since' => 'date_format:d/m/Y',
             'to' => 'after_or_equal:since',
         ]);
-
+        
         if($validator->fails()){
             $request->flash();
             return redirect()
@@ -89,12 +89,16 @@ class ReservationController extends Controller
             ->withInput()
             ->withErrors($validator->errors());
         }
-        
-        $reservation = Reservation::findOrFail($request->reservation_id);
-        $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);
-        $updated = $reservation->update($record);
 
-        if(!$updated){
+        $updated = Reservation::where('id', $request->reservation_id)
+        ->update(['state' => ReservationStateEnum::Reserved->name]);
+
+        $reservation = Reservation::findOrFail($request->reservation_id);
+
+        $updatedAvailableDay = AvailableDay::where('id', $reservation->availableDay->publication->id)
+            ->update(['state' => AvailableDayEnum::Unavailable->name]);
+
+        if(!$updated || !$updatedAvailableDay){
             Log::emergency('Error during procesing update');
             return abort(500);
         }
