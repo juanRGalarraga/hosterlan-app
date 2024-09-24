@@ -51,7 +51,7 @@ class ReservationController extends Controller
      */
     public function index($guest_id)
     {
-        $reservations = Reservation::latest()->where("guest_id",$guest_id)->paginate(25);
+        $reservations = Reservation::orderBy('created_at', 'desc')->where("guest_id",$guest_id)->paginate(25);
         $html = view("reservations.index.main", compact('reservations'));
         return $html;
     }
