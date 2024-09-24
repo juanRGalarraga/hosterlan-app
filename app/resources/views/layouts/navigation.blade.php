@@ -22,12 +22,12 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Inicio') }}
                     </x-nav-link>
-                    @if(Auth::user()->isOwner())
+                    @if(Auth::user()?->isOwner())
                     <x-nav-link :href="route('publications.create1')" :active="request()->routeIs('publications.create')">
                         {{ __('Crear Publicacion') }}
                     </x-nav-link>
                     @endif
-                    @if(Auth::user()->isGuest())
+                    @if(Auth::user()?->isGuest())
                     <x-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.index')">
                         {{ __('Mis reservas') }}
                     </x-nav-link>
