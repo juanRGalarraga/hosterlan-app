@@ -50,9 +50,9 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($guest_id)
     {
-        $reservations = ReservationGuest::latest()->paginate(25);
+        $reservations = ReservationGuest::latest()->where("guest_id",$guest_id)->paginate(25);
         $html = view("reservations.index.main", compact('reservations'));
         return $html;
     }
