@@ -62,7 +62,6 @@ class ReservationController extends Controller
     public function create(Reservation $reservation)
     {
         if($reservation->guest_id != Auth::user()->guest->id){
-            //I c
             return redirect()->back();
         }
         return view( 'reservations.create.main', [ 'reservation' => $reservation ] );
@@ -90,7 +89,6 @@ class ReservationController extends Controller
             ->withInput()
             ->withErrors($validator->errors());
         }
-
         
         $reservation = Reservation::findOrFail($request->reservation_id);
         $record = array_merge($request->all(), ['state' => ReservationStateEnum::Reserved->name]);

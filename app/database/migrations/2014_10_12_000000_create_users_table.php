@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('document_type', DocumentTypeEnum::forMigration())
                 ->default(DocumentTypeEnum::DNI->name);
-            $table->string('document', 12);
+            $table->string('document', 12)->nullable();
             $table->json('options')->nullable();
             $table->float('rating')->nullable();
             $table->rememberToken();

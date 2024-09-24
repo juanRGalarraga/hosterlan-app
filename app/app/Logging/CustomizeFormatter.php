@@ -12,7 +12,7 @@ class CustomizeFormatter {
 
             $handler->setFormatter(new LineFormatter(
                 '[%datetime%] %channel%.%level_name%: %message% %context% %extra%' . PHP_EOL,
-                'Y-m-d',
+                'Y-m-d H:i:s',
                 true,
                 true,
                 true

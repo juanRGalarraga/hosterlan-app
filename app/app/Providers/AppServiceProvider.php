@@ -15,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('Debugbar', \Barryvdh\Debugbar\Facades\Debugbar::class);
+
+        $this->app->singleton('logo', function ($app) {
+            return new \App\Models\Logo;
+        });
     }
 
     /**
@@ -23,18 +27,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
-        $this->defineCustomBladeDirective();
-    }
-
-    private function defineCustomBladeDirective(){
-        Blade::directive('convert', function ($money) {
-            if(!is_numeric($money)){
-                return $money;
-            }
-            
-            $currency = env("CURRENCY_FORMAT", '$');
-            $formatedNumber = number_format($money, 2);
-            return "<?php echo '$' . $formatedNumber; ?>";
-        });
     }
 }
