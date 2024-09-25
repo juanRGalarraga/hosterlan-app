@@ -26,11 +26,17 @@ class Picture extends Model
     public function getUrl(){
       $filename =  asset(self::DEFAULT_PICTURE);
       if($this->exists()){
-        $realFile = asset("publication-pictures/{$this->publication->id}/{$this->name}");
-        if( file_exists(storage_path("app/public/publication-pictures/{$this->publication->id}/{$this->name}")) ){
-          $filename = $realFile;
+
+        $path = "{$this->publication->id}/{$this->name}";
+        if(env('APP_DEBUG', true)){  
+          $path = "{$this->name}";
+        }
+        
+        if( Storage::disk('publication-pictures')->exists($path) ){
+          $filename = $path;
         }
       }
-      return $filename;
+      debugbar()->debug($filename);
+      return asset("publication-pictures/$filename");
     }
 }

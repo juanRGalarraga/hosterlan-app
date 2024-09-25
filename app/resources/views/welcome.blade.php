@@ -31,9 +31,17 @@
                 </div>
             @endif
 
-            <div class="max-w-7xl mx-auto p-6 lg:p-8">
+            <div class="w-screen mx-auto p-6 lg:p-8">
                 <div class="flex justify-center">
-                    <img src="{{app('logo')->get()}}" alt="" width="200" height="80">
+                    <img src="{{app('logo')->get()}}" alt="" width="10%">
+                </div>
+                
+                <div class="flex justify-center">
+                    <img src="{{app('logo')->name()}}" class="w-screen" width="30%" alt="">
+                </div>
+
+                <div>
+                    <img src="{{app('logo')->banner()}}" class="w-screen" width="100%" alt="">
                 </div>
 
                 <div class="mt-16">

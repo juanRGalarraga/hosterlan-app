@@ -53,7 +53,12 @@ class Publication extends Model
     $filename = '';
     if ($this->exists()) {
       $picture = $this->pictures->find($id);
+
       $filename = asset("publication-pictures/{$this->id}/{$picture->name}");
+      if(env('APP_DEBUG', true)){
+          $filename = asset("publication-pictures/{$picture->name}");
+      }
+      debugbar()->debug($filename);
     }
     return $filename;
   }
@@ -76,7 +81,6 @@ class Publication extends Model
         $path = "{$picture->name}";
       }
 
-      debugbar()->debug($path);
       if (Storage::disk('publication-pictures')->exists($path)) {
         return asset("publication-pictures/$path");
       }

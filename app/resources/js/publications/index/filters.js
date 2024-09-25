@@ -1,5 +1,6 @@
 import PublicationList from './list.js';
 import ObjectHelper from '../../utilities/objectHelper.js';
+import { Datepicker } from 'flowbite-datepicker';
 
 class PublicationFilter extends PublicationList {
 
@@ -99,6 +100,35 @@ class PublicationFilter extends PublicationList {
         /**
          * TODO append to localstorage for persistence.
          */
+    }
+
+    loadDatePicker(){
+        // set the target element of the input field
+        const $datepickerEl = document.getElementById('dateRangePicker');
+
+       // optional options with default values and callback functions
+        const options = {
+            defaultDatepickerId: null,
+            autohide: false,
+            format: 'dd/mm/yyyy',
+            maxDate: null,
+            minDate: null,
+            orientation: 'bottom',
+            buttons: false,
+            autoSelectToday: false,
+            title: null,
+            rangePicker: false,
+        };
+
+        const instanceOptions = {
+            id: 'dateRangePicker',
+            override: true
+        };
+        const datepicker = new Datepicker($datepickerEl, options, instanceOptions);
+    }
+
+    sum(a, b) {
+        
     }
 }
 
