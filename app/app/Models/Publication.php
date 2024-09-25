@@ -71,6 +71,12 @@ class Publication extends Model
 
       $path = "{$this->id}/{$picture->name}";
 
+      //This try to found the example pictures in publication-pictures/factory/
+      if(env('APP_DEBUG', true)){
+        $path = "{$picture->name}";
+      }
+
+      debugbar()->debug($path);
       if (Storage::disk('publication-pictures')->exists($path)) {
         return asset("publication-pictures/$path");
       }

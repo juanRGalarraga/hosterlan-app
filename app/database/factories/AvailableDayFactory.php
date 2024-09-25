@@ -19,14 +19,13 @@ class AvailableDayFactory extends Factory
      */
     public function definition(): array
     {
-        $since = fake()->dateTimeThisYear();
-        $to = (clone $since)->modify('+7 days');
-        $sinceFormatted = $since->format('Y-m-d');
-        $toFormatted = $to->format('Y-m-d');
+        $since = (new \DateTime())->format('Y-m-d');
+        $days = fake()->numberBetween(5, 20);
+        $to = (new \DateTime($since))->modify("+$days days")->format('Y-m-d');
         return [
             'publication_id' => Publication::factory(),
-            'since'=> $sinceFormatted,
-            'to'=> $toFormatted,
+            'since'=> $since,
+            'to'=> $to,
             'state'=> AvailableDayEnum::Available->name
         ];
     }

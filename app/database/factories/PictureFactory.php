@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Picture>
@@ -17,8 +18,16 @@ class PictureFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'carousel-preview.svg',
-            'type' => 'svg',
+            'name' => fake()->randomElement($this->pictures()),
+            'type' => 'jpeg',
+        ];
+    }
+
+    public function pictures(): array{
+        return [
+            'factory/picture00.jpeg',
+            'factory/picture01.jpeg',
+            'factory/picture02.jpeg',
         ];
     }
 }

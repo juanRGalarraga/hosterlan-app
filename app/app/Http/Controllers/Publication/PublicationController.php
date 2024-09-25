@@ -66,11 +66,11 @@ class PublicationController extends Controller
             
         }
 
-        $stateValue = $request->enum('state', StateEnum::class);
-        if(isset($stateValue)){
-            $queryBuilder
-                ->where('pda.state', $stateValue);
-        }
+        // $stateValue = $request->enum('state', StateEnum::class);
+        // if(isset($stateValue)){
+        //     $queryBuilder
+        //         ->where('pda.state', $stateValue);
+        // }
 
         $availableSince = $request->input('available_since');
         if($availableSince != null) {
