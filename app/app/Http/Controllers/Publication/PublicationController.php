@@ -290,6 +290,10 @@ class PublicationController extends Controller
      */
     public function getPreviewFiles(Request $request){
         $files = $request->all();
+        if($request->input('publication_id')){
+            $files = Storage::disk('publication-pictures')->allFiles($request->publication_id);
+        }
+        
         if( !Arr::isAssoc($files) && count($files) < 1){
             Log::notice('Any files to render');
             return '';

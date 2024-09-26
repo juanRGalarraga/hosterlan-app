@@ -68,6 +68,12 @@ export default class PublicationFile {
         this.fetchFiles(baseUrl, dataTosend, thisInstance);
     }
 
+    
+    loadFiles() {
+        let publicationId = this.inputForm.querySelector('#publicationId').value;
+        this.fetchFiles({publicationId});
+    }
+
     async fetchFiles(baseUrl, dataTosend, thisInstance) {
         try {
             const absoluteUrl = new URL(baseUrl, window.location.origin).href;
@@ -124,7 +130,6 @@ export default class PublicationFile {
     thisExceedMaxAllowedFiles(){
         return Object.keys(this.files).length > this.maxFilesUpload
     }
-
 
     /**
      * Method for only debug purposes
