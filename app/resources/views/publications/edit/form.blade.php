@@ -12,7 +12,7 @@
     <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll">
         <form id="publicationForm" name="publicationForm" action="{{ route('publications.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
+            <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{$publication->title}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
             @if ($errors->has('files'))
                 @foreach ($errors->get('files') as $error)
@@ -36,7 +36,9 @@
         
             <x-form.select-input name="rent_type_id" id="rent_type_id" value="{{old('rent_type_id')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3 w-full">
                 @foreach(RentTypeEnum::cases() as $key => $rentType)
-                    <x-form.select-input-option value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
+                    <x-form.select-input-option 
+                        @selected($key == $publication->rentType->id)
+                        value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
                 @endforeach
             </x-form.select-input>
         
