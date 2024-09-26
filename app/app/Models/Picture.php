@@ -28,10 +28,7 @@ class Picture extends Model
       if($this->exists()){
 
         $path = "{$this->publication->id}/{$this->name}";
-        if(env('APP_DEBUG', true)){  
-          $path = "{$this->name}";
-        }
-        
+    
         if( Storage::disk('publication-pictures')->exists($path) ){
           $filename = $path;
         }

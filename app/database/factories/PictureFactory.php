@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Picture;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Picture>
@@ -17,17 +18,24 @@ class PictureFactory extends Factory
      */
     public function definition(): array
     {
+        $picture = fake()->randomElement($this->pictures());
         return [
-            'name' => fake()->randomElement($this->pictures()),
+            'name' => $picture,
             'type' => 'jpeg',
         ];
     }
 
+    public function configure(): static{
+        return $this->afterCreating(function (Picture $picture) {
+            Storage::disk('publication-pictures')->copy("factory/$picture->name", "{$picture->publication->id}/$picture->name");
+        });
+    }
+
     public function pictures(): array{
         return [
-            'factory/picture00.jpeg',
-            'factory/picture01.jpeg',
-            'factory/picture02.jpeg',
+            'picture00.jpeg',
+            'picture01.jpeg',
+            'picture02.jpeg',
         ];
     }
 }

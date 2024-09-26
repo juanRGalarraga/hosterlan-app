@@ -161,7 +161,14 @@ class PublicationController extends Controller
             $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
         }
 
-        $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
+        $validated = Validator::make(
+            $request->all(),
+            $rules,
+            [
+                'files.*.min' => 'Upload even one photo',
+                'files.*.required' => 'Upload even one photo'
+            ]
+        );
         
         if( $validated->fails() ){
             $request->flash();

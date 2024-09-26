@@ -55,9 +55,6 @@ class Publication extends Model
       $picture = $this->pictures->find($id);
 
       $filename = asset("publication-pictures/{$this->id}/{$picture->name}");
-      if(env('APP_DEBUG', true)){
-          $filename = asset("publication-pictures/{$picture->name}");
-      }
       debugbar()->debug($filename);
     }
     return $filename;
@@ -75,11 +72,8 @@ class Publication extends Model
       }
 
       $path = "{$this->id}/{$picture->name}";
-
-      //This try to found the example pictures in publication-pictures/factory/
-      if(env('APP_DEBUG', true)){
-        $path = "{$picture->name}";
-      }
+      debugbar()->debug($path);
+      debugbar()->debug(Storage::disk('publication-pictures')->exists($path));
 
       if (Storage::disk('publication-pictures')->exists($path)) {
         return asset("publication-pictures/$path");
