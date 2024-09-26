@@ -32,6 +32,7 @@ export default class PublicationFile {
     }
 
     loadOnchange() {
+        
         let thisInstance = this
         this.input.onchange = function(event) {
             Array.from(event.target.files).forEach(file => {
@@ -52,26 +53,32 @@ export default class PublicationFile {
     }
 
     getFiles(dataTosend = null) {
+  
         let thisInstance = this;
 
-        let baseUrl = 'getPreviewFiles'
+        let baseUrl = 'publications/getPreviewFiles'
         
-        // dataTosend = this.fillExample()
         if(dataTosend != null){
             
             const queryString = new URLSearchParams(dataTosend).toString();
             baseUrl += '?' + queryString;
-            console.log(baseUrl);
         }
+        
+        
+        this.fetchFiles(baseUrl, dataTosend, thisInstance);
+    }
 
-        fetch(baseUrl, dataTosend)
-        .then((respuesta) => respuesta.blob())
-        .then(blob => {
-            blob.text().then(text => {
-                thisInstance.rootPreviewFiles.innerHTML = text;
-                thisInstance.loadButtonDeletePreviewFileAction();
-            });
-        });
+    async fetchFiles(baseUrl, dataTosend, thisInstance) {
+        try {
+            const absoluteUrl = new URL(baseUrl, window.location.origin).href;
+            const response = await fetch(absoluteUrl, dataTosend);
+            const blob = await response.blob();
+            const text = await blob.text();
+            thisInstance.rootPreviewFiles.innerHTML = text;
+            thisInstance.loadButtonDeletePreviewFileAction();
+        } catch (error) {
+            console.error('Error fetching files:', error);
+        }
     }
 
     createInputFile(theFile, id){
