@@ -1,5 +1,6 @@
 import SimpleHash from "../../simpleHash.js";
 import Alert from "../../components/alert.js";
+import {formatUrl} from "../../utilities/url.js";
 
 export default class PublicationFile {
     input = null;
@@ -48,43 +49,72 @@ export default class PublicationFile {
         };
     }
 
+    mergeWithUploadedFiles() {
+        let thisInstance = this;
+        let filesUploaded = document.querySelectorAll(".files");
+        
+        Array.from(filesUploaded).forEach(input => {
+            console.log(input.value);
+            
+            if (input.value) {
+                thisInstance.files[SimpleHash.generate(input.value)] = input.value;
+            }
+        })
+        
+    }
+
+    getUploadedFiles(publicationId) {
+        let baseUrl = "publications/getUploadedFiles";
+
+        formatUrl(baseUrl, {publicationId}).then((fullUrl) => {
+            this.fetchFiles(fullUrl, {publicationId}).then((text) => {
+                this.rootPreviewFiles.innerHTML = text;
+                this.loadButtonDeletePreviewFileAction();
+            });
+        })
+    }
+    
+
     loadFiles(dataTosend = null) {
+
         let baseUrl = "publications/getUploadedFiles";
 
         if (dataTosend?.files) {
+
             this.processFiles(dataTosend.files);
+            //Because i neet the blob not the file
+            this.mergeWithUploadedFiles();
 
-            //Because i neet the blob but not the file
             dataTosend.files = this.files;
+            console.log(dataTosend.files);
+            
         }
-        
-        baseUrl = this.formatUrl(baseUrl, dataTosend);
 
-        this.fetchFiles(baseUrl, dataTosend).then((text) => {
-            this.rootPreviewFiles.innerHTML = text;
-            this.loadButtonDeletePreviewFileAction();
-        });
+        dataTosend = dataTosend.files
+        formatUrl(baseUrl, dataTosend).then((fullUrl) => {
+            this.fetchFiles(fullUrl, dataTosend).then((text) => {
+                this.rootPreviewFiles.innerHTML = text;
+                this.loadButtonDeletePreviewFileAction();
+            });
+        })
     }
 
     processFiles(files) {
         let thisInstance = this;
         Array.from(files).forEach((file) => {
             if (!thisInstance.thisExceedMaxAllowedFiles()) {
-                thisInstance.createFile(file);
+                const value = URL.createObjectURL(file);
+                let id = SimpleHash.generate(file.name);
+                this.files[id] = value;
             }
         });
-    }
-
-    createFile(file) {
-        const blobURL = URL.createObjectURL(file);
-        let hashId = SimpleHash.generate(file.name);
-        this.files[hashId] = blobURL;
-        this.createInputFile(file, hashId);
     }
 
     formatUrl(baseUrl, dataTosend) {
         if (dataTosend != null) {
             const queryString = new URLSearchParams(dataTosend).toString();
+            console.log(queryString);
+            
             baseUrl += "?" + queryString;
         }
         return baseUrl;
@@ -147,6 +177,7 @@ export default class PublicationFile {
     }
 
     thisExceedMaxAllowedFiles() {
+        return false;
         return Object.keys(this.files).length > this.maxFilesUpload;
     }
 
