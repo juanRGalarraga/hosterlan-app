@@ -370,32 +370,23 @@ class PublicationController extends Controller
             throw new ModelNotFoundException("Error Processing Request");
         }
 
-        foreach ($request->input('files') as $id => $file) {
+        foreach ($request->file('files') as $id => $file) {
 
-            if (Picture::find(id: $id) || !preg_match(Pattern::BLOB, $file)) {
-                continue;
-            }
-
-            // Convert the blob URL to a file
-            $fileContent = file_get_contents($file);
-            $fileName = uniqid() . '.jpg'; // Assuming the file is a jpg, adjust as necessary
-            $filePath = "{$publication->id}/{$fileName}";
-
-            if (!Storage::disk('publication-pictures')->put($filePath, $fileContent)) {
+            if (!$file->store("public/publication-pictures/$publication->id")) {
                 Log::emergency('File cannot be stored');
                 DB::rollBack();
                 throw new FileCouldNotBeWrittenException("Error Processing Request");
             }
 
             $picture = Picture::create([
-                'name' => $fileName,
+                'name' => $file->hashName(),
                 'publication_id' => $publication->id,
-                'type' => 'jpg', // Adjust as necessary
+                'type' => $file->extension(),
             ]);
 
             if (!$picture->exists()) {
-                Storage::deleteDirectory("public/publication-pictures/{$publication->id}");
-                Log::emergency('Picture cannot be created');
+                Storage::disk('publication-pictures')->deleteDirectory($publication->id);
+                Log::emergency('Piciture cannot be created');
                 DB::rollBack();
                 throw new ModelNotFoundException("Error Processing Request");
             }

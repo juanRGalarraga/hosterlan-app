@@ -86,8 +86,6 @@ export default class PublicationFile {
             this.mergeWithUploadedFiles();
 
             dataTosend.files = this.files;
-            console.log(dataTosend.files);
-            
         }
 
         dataTosend = dataTosend.files
@@ -104,15 +102,17 @@ export default class PublicationFile {
         Array.from(files).forEach((file) => {
             if (!thisInstance.thisExceedMaxAllowedFiles()) {
                 const value = URL.createObjectURL(file);
-                let id = SimpleHash.generate(file.name);
-                this.files[id] = value;
+                // Generate a hash that is a single alphabetic character
+                let hash = SimpleHash.generate(file.name);
+                this.files[hash] = value;
+                this.createInputFile(file, hash);
             }
         });
     }
 
     formatUrl(baseUrl, dataTosend) {
         if (dataTosend != null) {
-            const queryString = new URLSearchParams(dataTosend).toString();
+            const queryString = new URLSearchParams(dataTosend);
             console.log(queryString);
             
             baseUrl += "?" + queryString;

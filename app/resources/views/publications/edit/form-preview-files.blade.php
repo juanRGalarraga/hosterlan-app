@@ -1,6 +1,6 @@
 @if(is_array($files) && count($files) >= 1 )
     @foreach ($files as $id => $data)
-        <input type="hidden" id="{{$id}}" name="files[{{$id}}]" class="files" value="{{$data}}">
+        <input type="hidden" id="{{$id}}" class="files" value="{{$data}}">
         <x-form.file-preview 
             :filename="$id"
             :previewSrc="$data"
