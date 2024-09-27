@@ -1,5 +1,6 @@
-@if(Arr::isAssoc($files) && count($files) >= 1 )
+@if(is_array($files) && count($files) >= 1 )
     @foreach ($files as $filename => $data)
+        <input type="hidden" name="currentFiles[]" value="{{$data}}">
         <x-form.file-preview 
             :filename="$filename"
             :previewSrc="$data"

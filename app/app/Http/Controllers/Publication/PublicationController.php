@@ -66,12 +66,6 @@ class PublicationController extends Controller
             
         }
 
-        // $stateValue = $request->enum('state', StateEnum::class);
-        // if(isset($stateValue)){
-        //     $queryBuilder
-        //         ->where('pda.state', $stateValue);
-        // }
-
         $availableSince = $request->input('available_since');
         if($availableSince != null) {
             $availableSinceFormated = Carbon::createFromFormat('d/m/Y', $availableSince)->format('Y-m-d');
@@ -288,18 +282,29 @@ class PublicationController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return mixed|string
      */
-    public function getPreviewFiles(Request $request){
+    public function getPictures(Request $request){
+        $publication = Publication::findOrFail($request->input('publicationId'));
+        $files = [];
+        $files[] = $publication->pictures->each(function($picture){
+            return asset("publication-pictures/{$picture->publication_id}/{$picture->name}");
+        });
+        return response()->json($files);
+    }
+
+
+    /**
+     * Recovery the uploaded files from the storage.
+     * @param int $publicationId
+     * @return mixed|string
+     */
+    public function getUploadedFiles(Request $request)
+    {
         $files = $request->all();
-        if($request->input('publication_id')){
-            $files = Storage::disk('publication-pictures')->allFiles($request->publication_id);
+        if($request->input('publicationId')){
+            $files = Storage::disk('publication-pictures')->allFiles($request->input('publicationId'));
         }
-        
-        if( !Arr::isAssoc($files) && count($files) < 1){
-            Log::notice('Any files to render');
-            return '';
-        }
-        
-        return view('publications.create.form-preview-files', compact('files'))->render();
+        array_walk($files, function (&$file) { $file = asset("publication-pictures/$file"); });
+        return view('publications.edit.form-preview-files', compact('files'))->render();
     }
 
     /**

@@ -1,4 +1,6 @@
-import PublicationFile from "../create/files"
+import PublicationFile from "../create/files";
 
-let publicationFile = new PublicationFile('dropzone-file');
+let publicationFile = new PublicationFile({ inputId: "dropzone-file" });
 
+let publicationId = document.getElementById("id").value;
+publicationFile.loadFiles({publicationId});
