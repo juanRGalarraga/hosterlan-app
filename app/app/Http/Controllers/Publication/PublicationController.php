@@ -290,11 +290,12 @@ class PublicationController extends Controller
         $files = $request->all();
         // dd($files);
         if ($request->input('publicationId')) {
-            $files = Storage::disk('publication-pictures')->allFiles($request->input('publicationId'));
-            array_walk($files, function (&$file) {
-                $file = asset("publication-pictures/$file");
+            $pictures = Picture::where('publication_id', $request->input('publicationId'))->get();
+            $files = $pictures->map(function ($picture) {
+                return $picture->getUrl();
             });
-        }
+            $files = $files->all();
+        }   
 
 
         return view('publications.edit.form-preview-files', compact('files'))->render();
@@ -323,7 +324,7 @@ class PublicationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PublicationUpdateRequest $request, Publication $publication)
+    public function update(Request $request, Publication $publication)
     {
         $rules = [
             'title' => 'required|string|max:150',
@@ -337,15 +338,7 @@ class PublicationController extends Controller
             'pets' => 'in:1,0',
             'files' => 'required|array|min:1',
         ];
-
-        $files = $request->file('files');
-        $filesRange = count($files) - 1;
-        foreach (range(0, $filesRange) as $index => $file) {
-            if(!preg_match(Pattern::BLOB, $file)){
-                unset($files[$index]);
-            }
-        }
-
+       
         $validated = Validator::make(
             $request->all(),
             $rules,
@@ -363,40 +356,46 @@ class PublicationController extends Controller
                 ->withInput();
         }
 
-        $publication = new Publication();
-        $publicationCreated = new Publication();
-
         DB::beginTransaction();
 
         $publicationData = $request->except('files');
-        $publicationData['state'] = StateEnum::Draft->name;
+        $publicationData['state'] = StateEnum::Published->name;
         $publicationData['user_id'] = Auth::user()->id;
 
-        $publicationCreated = $publication->create($publicationData);
+        $updated = $publication->update($publicationData);
 
-        if (!$publicationCreated->exists()) {
-            Log::emergency('Publication cannot be created');
+        if (!$updated) {
+            Log::emergency('Publication cannot be updated');
             DB::rollBack();
             throw new ModelNotFoundException("Error Processing Request");
         }
 
-        foreach ($request->file('files') as $file) {
+        foreach ($request->input('files') as $id => $file) {
 
-            if (!$file->store("public/publication-pictures/$publicationCreated->id")) {
+            if (Picture::find(id: $id) || !preg_match(Pattern::BLOB, $file)) {
+                continue;
+            }
+
+            // Convert the blob URL to a file
+            $fileContent = file_get_contents($file);
+            $fileName = uniqid() . '.jpg'; // Assuming the file is a jpg, adjust as necessary
+            $filePath = "{$publication->id}/{$fileName}";
+
+            if (!Storage::disk('publication-pictures')->put($filePath, $fileContent)) {
                 Log::emergency('File cannot be stored');
                 DB::rollBack();
                 throw new FileCouldNotBeWrittenException("Error Processing Request");
             }
 
             $picture = Picture::create([
-                'name' => $file->hashName(),
-                'publication_id' => $publicationCreated->id,
-                'type' => $file->extension(),
+                'name' => $fileName,
+                'publication_id' => $publication->id,
+                'type' => 'jpg', // Adjust as necessary
             ]);
 
             if (!$picture->exists()) {
-                Storage::disk('publication-pictures')->deleteDirectory($publicationCreated->id);
-                Log::emergency('Piciture cannot be created');
+                Storage::deleteDirectory("public/publication-pictures/{$publication->id}");
+                Log::emergency('Picture cannot be created');
                 DB::rollBack();
                 throw new ModelNotFoundException("Error Processing Request");
             }
@@ -404,7 +403,7 @@ class PublicationController extends Controller
 
         DB::commit();
 
-        return view('publications.create.form-step-2-main', ['publication_id' => $publicationCreated->id]);
+        return view('publications.edit.form', ['publication' => $publication]);
     }
 
     /**

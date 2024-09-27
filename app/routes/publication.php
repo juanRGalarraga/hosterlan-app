@@ -15,6 +15,6 @@ Route::post('publications/create/2', [PublicationController::class, 'getStep2'])
 Route::get('publications/getUploadedFiles', [PublicationController::class, 'getUploadedFiles']);
 Route::match(['put', 'patch'], 'publications/{publication}', [PublicationController::class, 'update'])->name('publications.update');
 Route::get('publications/edit/{publication}', [PublicationController::class, 'edit'])->name('publications.edit');
-Route::put('publications/update', [PublicationController::class, 'update'])->name('publications.update');
+Route::put('publications/update/{publication}', [PublicationController::class, 'update'])->name('publications.update');
 Route::get('publications/{publication?}', [PublicationController::class, 'show'])->name('publications.show');
 Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');

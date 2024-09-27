@@ -57,7 +57,7 @@ export default class PublicationFile {
             console.log(input.value);
             
             if (input.value) {
-                thisInstance.files[SimpleHash.generate(input.value)] = input.value;
+                thisInstance.files[input.id] = input.value;
             }
         })
         

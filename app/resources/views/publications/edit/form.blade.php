@@ -6,12 +6,14 @@
     $optNumberPeople = 10;
     $maxAllowedFiles = env('MAX_ALLOWED_FILES', 5);
     //Storage::disk('local')->put('example.txt', 'Contents');
+    dump($errors->all());
 @endphp
 
 <div class="flex flex-col w-1/2 mx-auto">
     <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll">
-        <form id="publicationForm" name="publicationForm" action="{{ route('publications.update') }}" method="POST" enctype="multipart/form-data">
+        <form id="publicationForm" name="publicationForm" action="{{ route('publications.update', ['publication' => $publication]) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <input type="hidden" id="id" value="{{$publication->id}}">
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{$publication->title}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
