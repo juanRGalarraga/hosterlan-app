@@ -288,15 +288,14 @@ class PublicationController extends Controller
     public function getUploadedFiles(Request $request)
     {
         $files = $request->all();
-        // dd($files);
         if ($request->input('publicationId')) {
             $pictures = Picture::where('publication_id', $request->input('publicationId'))->get();
             $files = $pictures->map(function ($picture) {
+                // dump(vars: $picture->getUrl());
                 return $picture->getUrl();
             });
             $files = $files->all();
-        }   
-
+        }
 
         return view('publications.edit.form-preview-files', compact('files'))->render();
     }
@@ -348,6 +347,13 @@ class PublicationController extends Controller
             ]
         );
 
+        $files = count($request->file('files')) - 1;
+        foreach(range(0, $files) as $index) {
+            $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
+        }
+
+        $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
+
         if ($validated->fails()) {
             $request->flash();
             return redirect()
@@ -393,8 +399,8 @@ class PublicationController extends Controller
         }
 
         DB::commit();
-
-        return view('publications.edit.form', ['publication' => $publication]);
+        return redirect()->route('publications.edit', ['publication' => $publication])
+            ->withSuccess(_('Publicacion actualizada exitosamente'));
     }
 
     /**

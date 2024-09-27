@@ -55,7 +55,6 @@ class Publication extends Model
       $picture = $this->pictures->find($id);
 
       $filename = asset("publication-pictures/{$this->id}/{$picture->name}");
-      debugbar()->debug($filename);
     }
     return $filename;
   }
@@ -72,8 +71,6 @@ class Publication extends Model
       }
 
       $path = "{$this->id}/{$picture->name}";
-      debugbar()->debug($path);
-      debugbar()->debug(Storage::disk('publication-pictures')->exists($path));
 
       if (Storage::disk('publication-pictures')->exists($path)) {
         return asset("publication-pictures/$path");

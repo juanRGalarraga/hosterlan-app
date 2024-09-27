@@ -5,8 +5,6 @@
     $optBathroomCount = 4;
     $optNumberPeople = 10;
     $maxAllowedFiles = env('MAX_ALLOWED_FILES', 5);
-    //Storage::disk('local')->put('example.txt', 'Contents');
-    dump($errors->all());
 @endphp
 
 <div class="flex flex-col w-1/2 mx-auto">
