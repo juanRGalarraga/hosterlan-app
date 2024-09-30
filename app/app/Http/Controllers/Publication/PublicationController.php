@@ -426,4 +426,15 @@ class PublicationController extends Controller
         return redirect()->route('publications.index.main')
             ->withSuccess(_('Publicacion eliminada exitosamente'));
     }
+    
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroyPicture(Picture $picture)
+    {
+        $publicationId = $picture->publication_id;
+        $picture->delete();
+        return redirect()->route('publications.edit', ['publication' => $publicationId])
+            ->withSuccess(_('Publicacion eliminada exitosamente'));
+    }
 }

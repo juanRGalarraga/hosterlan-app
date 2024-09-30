@@ -1,7 +1,7 @@
 import SimpleHash from "../../simpleHash.js";
 import Alert from "../../components/alert.js";
-import {formatUrl} from "../../utilities/url.js";
-
+import { formatUrl } from "../../utilities/url.js";
+import DOM from "../../components/dom.js";
 export default class PublicationFile {
     input = null;
     rootPreviewFiles = "previewFiles";
@@ -49,15 +49,25 @@ export default class PublicationFile {
         };
     }
 
+    getInputUploadFiles() {
+        let filesUploaded = document.querySelectorAll(".files");
+        if (filesUploaded && filesUploaded.length > 0) {
+            return Array.from(filesUploaded);
+        }
+        return null;
+    }
+
     mergeWithUploadedFiles() {
         let thisInstance = this;
-        let filesUploaded = document.querySelectorAll(".files");
-        
-        Array.from(filesUploaded).forEach(input => {
-            if (input.value) {
-                thisInstance.files[input.id] = input.value;
-            }
-        })
+        let filesUploaded = this.getInputUploadFiles();
+
+        if (filesUploaded) {
+            filesUploaded.forEach(input => {
+                if (input.value) {
+                    thisInstance.files[input.id] = input.value;
+                }
+            })
+        }
         
     }
 
@@ -68,6 +78,7 @@ export default class PublicationFile {
             this.fetchFiles(fullUrl, {publicationId}).then((text) => {
                 this.rootPreviewFiles.innerHTML = text;
                 this.loadButtonDeletePreviewFileAction();
+                this.files = this.getInputUploadFiles();
             });
         })
     }
@@ -91,6 +102,7 @@ export default class PublicationFile {
             this.fetchFiles(fullUrl, dataTosend).then((text) => {
                 this.rootPreviewFiles.innerHTML = text;
                 this.loadButtonDeletePreviewFileAction();
+                this.files = this.getInputUploadFiles();
             });
         })
     }
@@ -165,17 +177,28 @@ export default class PublicationFile {
     deleteFile(id) {
         let indexOfFilename = this.files[id] ?? null;
         if (indexOfFilename == null) return console.error(id + " not exist");
-        delete this.files[id];
 
         let input = document.getElementById(id);
         if (!input) return console.error(id + " input not exist");
 
+        this.persistDeletePicture(id)
         input.remove();
+        delete this.files[id];
         this.loadFiles(this.files);
     }
 
+    persistDeletePicture(id) { 
+        let baseUrl = `publications/deletePicture/${id}`;
+        let form = document.querySelector(`#form-delete-picture-${id}`);
+        const absoluteUrl = new URL(baseUrl, window.location.origin).href;
+
+        formatUrl(absoluteUrl).then((fullUrl) => {
+            form.submit();
+            this.loadFiles();
+        })
+    }
+
     thisExceedMaxAllowedFiles() {
-        return false;
         return Object.keys(this.files).length > this.maxFilesUpload;
     }
 

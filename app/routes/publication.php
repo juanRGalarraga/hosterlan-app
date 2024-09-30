@@ -38,6 +38,9 @@ Route::put('publications/update/{publication}', [PublicationController::class, '
 
 Route::get('publications/{publication?}', [PublicationController::class, 'show'])
     ->name('publications.show');
+
+Route::delete('publications/deletePicture/{picture}', [PublicationController::class, 'destroyPicture'])
+    ->name('publications.destroyPicture');
     
 Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
     ->name('publications.destroy');
