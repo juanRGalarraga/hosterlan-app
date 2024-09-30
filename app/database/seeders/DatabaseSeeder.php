@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             ->hasGuest(1)
             ->create([
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'is_dev' => true
         ]);
 
         Phone::factory()

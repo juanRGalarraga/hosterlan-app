@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('document', 12)->nullable();
             $table->json('options')->nullable();
             $table->float('rating')->nullable();
+            $table->boolean('is_dev')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

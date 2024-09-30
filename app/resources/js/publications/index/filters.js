@@ -1,6 +1,7 @@
 import PublicationList from './list.js';
 import ObjectHelper from '../../utilities/objectHelper.js';
 import { Datepicker } from 'flowbite-datepicker';
+import Search from './components/search';
 
 class PublicationFilter extends PublicationList {
 
@@ -130,6 +131,15 @@ class PublicationFilter extends PublicationList {
     sum(a, b) {
         
     }
+}
+
+let search = new Search('search');
+
+if(search){
+    let publicationList = new PublicationList;
+    search.loadListener((input) => {
+        publicationList.getList({search: input.value});
+    });
 }
 
 document.addEventListener('DOMContentLoaded', e => {

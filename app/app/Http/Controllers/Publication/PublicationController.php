@@ -42,6 +42,35 @@ class PublicationController extends Controller
         return $html;
     }
 
+    /**
+     * Display a listing of the publciation to edit.
+     */
+    public function editIndex()
+    {
+        $html = view("publications.edit.main");
+        return $html;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Publication $publication)
+    {
+        return view('publications.edit.form-main', [
+            'publication' => $publication
+        ]);
+    }
+
+    //Fetch the data for the edit list
+    public function editFetch(){
+        
+        $publications = Publication::where('user_id', Auth::user()->id)
+        ->latest('created_at')
+        ->paginate(25);
+
+        return view('publications.edit.main-list', compact('publications'))->render();
+    }
+
     public function getList(Request $request)
     {
 
@@ -306,16 +335,6 @@ class PublicationController extends Controller
     public function show(Publication $publication)
     {
         return view('publications.show.main', [
-            'publication' => $publication
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Publication $publication)
-    {
-        return view('publications.edit.main', [
             'publication' => $publication
         ]);
     }

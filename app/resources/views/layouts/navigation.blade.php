@@ -27,6 +27,11 @@
                         {{ __('Crear Publicacion') }}
                     </x-nav-link>
                     @endif
+                    @if(Auth::user()?->isOwner())
+                    <x-nav-link :href="route('publications.edit.list')" :active="request()->routeIs('publications.edit.list')">
+                        {{ __('Mis propiedades') }}
+                    </x-nav-link>
+                    @endif
                     @if(Auth::user()?->isGuest())
                     <x-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.index')">
                         {{ __('Mis reservas') }}

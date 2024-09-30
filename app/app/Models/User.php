@@ -60,11 +60,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return '';
     }
 
-    public function isOwner(){
+    public function isOwner(): bool{
+
+        if($this->is_dev){
+            return true;
+        }
+
         return is_a($this->owner, Owner::class) ?: false;
     }
 
-    public function isGuest(){
+    public function isGuest(): bool{
+
+        if($this->is_dev){
+            return true;
+        }
+
         return is_a($this->guest, Guest::class) ?: false;
     }
 

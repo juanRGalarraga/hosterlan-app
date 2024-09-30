@@ -1,6 +1,5 @@
-import PublicationFile from "../create/files";
+import PublicationEditList from "./main-list";
 
-let publicationFile = new PublicationFile({ inputId: "dropzone-file" });
+let publicationEditList = new PublicationEditList();
 
-let publicationId = document.getElementById("id").value;
-publicationFile.getUploadedFiles(publicationId);
+publicationEditList.fetchList();

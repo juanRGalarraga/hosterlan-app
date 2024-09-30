@@ -54,8 +54,6 @@ export default class PublicationFile {
         let filesUploaded = document.querySelectorAll(".files");
         
         Array.from(filesUploaded).forEach(input => {
-            console.log(input.value);
-            
             if (input.value) {
                 thisInstance.files[input.id] = input.value;
             }
