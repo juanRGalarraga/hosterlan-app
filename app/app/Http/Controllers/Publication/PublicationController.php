@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Publication;
 
-// use Intervention\Image\ImageManager;
-// use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
-use App\Utils\Regex\Pattern;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Publication\PublicationUpdateRequest;
 use App\Models\Publication;
 use App\Models\Picture;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +12,6 @@ use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
 use App\Models\AvailableDay;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
 use Illuminate\Support\Facades\Storage;
