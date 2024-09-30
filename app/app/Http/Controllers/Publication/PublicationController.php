@@ -311,16 +311,13 @@ class PublicationController extends Controller
      */
     public function getUploadedFiles(Request $request)
     {
-        $files = $request->all();
+        $files = $request->only('files');
         if ($request->input('publicationId')) {
             $pictures = Picture::where('publication_id', $request->input('publicationId'))->get();
-            $files = $pictures->map(function ($picture) {
-                // dump(vars: $picture->getUrl());
-                return $picture->getUrl();
-            });
-            $files = $files->all();
+            foreach ($pictures as $key => $picture) {
+                $files[$picture->id] = $picture->getUrl();
+            }
         }
-
         return view('publications.edit.form-preview-files', compact('files'))->render();
     }
 
@@ -433,6 +430,12 @@ class PublicationController extends Controller
     public function destroyPicture(Picture $picture)
     {
         $publicationId = $picture->publication_id;
+        $deleted = Storage::disk('pubication-pictures')->delete("$publicationId/$picture->id");
+
+        if(!$deleted){
+            throw new Exception("Error Processing Request",);
+        }
+        
         $picture->delete();
         return redirect()->route('publications.edit', ['publication' => $publicationId])
             ->withSuccess(_('Publicacion eliminada exitosamente'));

@@ -51,8 +51,12 @@ export default class PublicationFile {
 
     getInputUploadFiles() {
         let filesUploaded = document.querySelectorAll(".files");
+        let inputs = []
         if (filesUploaded && filesUploaded.length > 0) {
-            return Array.from(filesUploaded);
+            Array.from(filesUploaded).forEach((input) => {
+                inputs[input.id] = input;
+            })
+            return inputs
         }
         return null;
     }
@@ -146,6 +150,7 @@ export default class PublicationFile {
         let input = document.createElement("input");
         input.setAttribute("type", "file");
         input.setAttribute("name", "files[]");
+        input.classList.add("files");
         input.setAttribute("hidden", "true");
         input.id = id;
 
@@ -175,12 +180,13 @@ export default class PublicationFile {
     }
 
     deleteFile(id) {
+        
         let indexOfFilename = this.files[id] ?? null;
         if (indexOfFilename == null) return console.error(id + " not exist");
 
         let input = document.getElementById(id);
         if (!input) return console.error(id + " input not exist");
-
+        
         this.persistDeletePicture(id)
         input.remove();
         delete this.files[id];
@@ -193,8 +199,21 @@ export default class PublicationFile {
         const absoluteUrl = new URL(baseUrl, window.location.origin).href;
 
         formatUrl(absoluteUrl).then((fullUrl) => {
-            form.submit();
-            this.loadFiles();
+            let init = {
+                method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('[name="_token"]').value
+                    },
+                }
+    debugger
+            this.fetchFiles(fullUrl, init).then((text) => {
+                this.rootPreviewFiles.innerHTML = text;
+                this.loadButtonDeletePreviewFileAction();
+                this.files = this.getInputUploadFiles();
+                this.loadFiles();
+            });
+
         })
     }
 
