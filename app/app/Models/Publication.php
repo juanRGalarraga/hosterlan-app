@@ -80,7 +80,18 @@ class Publication extends Model
     return $defaultPath;
   }
 
-  public function getFormattedCreatedAt()
+  public function getLongTextFormat()
+  {
+    Carbon::setLocale('es');
+    $date = Carbon::parse($this->created_at);
+    $dateString = $date->locale('es');
+    if ($this->exists()) {
+      return $dateString->translatedFormat('j \d\e F \d\e Y');
+    }
+    return '';
+  }
+
+  public function getShortTextFormat()
   {
     Carbon::setLocale('es');
     $date = Carbon::parse($this->created_at);

@@ -1,7 +1,7 @@
 import PublicationList from './list.js';
 import ObjectHelper from '../../utilities/objectHelper.js';
 import { Datepicker } from 'flowbite-datepicker';
-import Search from './components/search';
+import Search from '../../components/search.js';
 
 class PublicationFilter extends PublicationList {
 

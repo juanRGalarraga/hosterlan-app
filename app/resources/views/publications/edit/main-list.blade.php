@@ -1,8 +1,8 @@
 @foreach ($publications as $publication)
     <tr>
         <td class="py-2 px-4 border-b border-gray-700">{{$publication->id}}</td>
-        <td class="py-2 px-4 border-b border-gray-700">{{$publication->title}}</td>
-        <td class="py-2 px-4 border-b border-gray-700">{{$publication->description}}</td>
+        <td class="py-2 px-4 border-b border-gray-700">{{elipsis($publication->title)}}</td>
+        <td class="py-2 px-4 border-b border-gray-700">{{elipsis($publication->description)}}</td>
         <td class="py-2 px-4 border-b border-gray-700">{{convert($publication->price)}}</td>
         <td class="py-2 px-4 border-b border-gray-700">{{$publication->created_at}}</td>
         <td class="py-2 px-4 border-b border-gray-700">
