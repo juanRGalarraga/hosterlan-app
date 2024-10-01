@@ -51,10 +51,15 @@ class ReservationController extends Controller
      */
     public function index($guest_id)
     {
-        $reservations = Reservation::latest()->where("guest_id",$guest_id)->paginate(25);
-        $html = view("reservations.index.main", compact('reservations'));
-        return $html;
+        $reservations = Reservation::where('guest_id', $guest_id)->orderBy('created_at', 'asc');
+        if ($reservations->count() === 1) {
+            return redirect()->route('reservations.show', $reservations->first());
+        }
+        $reservations = $reservations->paginate(25);
+        return view('reservations.index.main', compact('reservations'));
     }
+    
+
 
     /**
      * Show the form for creating a new resource.
@@ -109,9 +114,9 @@ class ReservationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Reservation $reservation)
     {
-        //
+        return view('reservations.show.main', ['reservation' => $reservation]);
     }
 
     /**
