@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('phones', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->string('area_code', 10);
+            $table->string('area_code', 10)->default('+54');
             $table->string('number', 20);
             $table->boolean('is_default')->default(0);
             $table->timestamps();

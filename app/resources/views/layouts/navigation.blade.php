@@ -13,7 +13,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        <img src="{{app('logo')->get()}}" alt="" width="40">
                     </a>
                 </div>
 
@@ -22,11 +22,18 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Inicio') }}
                     </x-nav-link>
+                    @if(Auth::user()?->isOwner())
                     <x-nav-link :href="route('publications.create1')" :active="request()->routeIs('publications.create')">
                         {{ __('Crear Publicacion') }}
                     </x-nav-link>
-                    @if(Auth::user()->isGuest())
-                    <x-nav-link :href="route('reservations.index',Auth::user()->guest->id)" :active="request()->routeIs('reservations.index')">
+                    @endif
+                    @if(Auth::user()?->isOwner())
+                    <x-nav-link :href="route('publications.edit.list')" :active="request()->routeIs('publications.edit.list')">
+                        {{ __('Mis propiedades') }}
+                    </x-nav-link>
+                    @endif
+                    @if(Auth::user()?->isGuest())
+                    <x-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.index')">
                         {{ __('Mis reservas') }}
                     </x-nav-link>
                     @endif

@@ -15,7 +15,7 @@ class DateRangePicker extends Component
         public string $id,
         public string $idDateFrom,
         public string $idDateTo,
-        public string $format = 'd-m-Y'
+        public string $format = 'dd-mm-yyyy'
     )
     {
 

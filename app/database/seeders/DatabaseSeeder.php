@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             ->hasGuest(1)
             ->create([
             'email' => 'test@example.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'is_dev' => true
         ]);
 
         Phone::factory()
@@ -38,8 +39,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
         Publication::factory()
-            ->count(10)
-            ->hasPictures(rand(1,5))
+            ->count(100)
+            ->hasPictures(3)
             ->hasRentType(1)
             ->hasAvailableDays(rand(1, 5))
             ->create();

@@ -53,6 +53,7 @@ class Publication extends Model
     $filename = '';
     if ($this->exists()) {
       $picture = $this->pictures->find($id);
+
       $filename = asset("publication-pictures/{$this->id}/{$picture->name}");
     }
     return $filename;
@@ -79,15 +80,33 @@ class Publication extends Model
     return $defaultPath;
   }
 
-  public function getFormattedCreatedAt()
+  public function getDateLongFormat(DateColumns $column = DateColumns::Created_at): string
   {
+    $columnToGet = $column->value;
     Carbon::setLocale('es');
-    $date = Carbon::parse($this->created_at);
+    $date = Carbon::parse($this->$columnToGet);
     $dateString = $date->locale('es');
     if ($this->exists()) {
-      return $dateString->translatedFormat('j \d\e F \d\e Y');
+      return $dateString->translatedFormat('d/m/Y');
+    }
+    return '';
+  }
+
+  public function getDateShortFormat(DateColumns $column = DateColumns::Created_at): string
+  {
+    $columnToGet = $column->value;
+    Carbon::setLocale('es');
+    $date = Carbon::parse($this->$columnToGet);
+    $dateString = $date->locale('es');
+    if ($this->exists()) {
+      return $dateString->translatedFormat('d/m/Y');
     }
     return '';
   }
   
+}
+
+enum DateColumns : string {
+  case Created_at = 'created_at';
+  case updated_at = 'updated_at';
 }

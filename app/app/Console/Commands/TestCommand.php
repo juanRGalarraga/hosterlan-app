@@ -26,7 +26,9 @@ class TestCommand extends Command
      */
     public function handle()
     {   
-        $date = \DateTime::createFromFormat('d/m/Y', "24/06/2024");
-        print_r( \DateTime::createFromFormat('d/m/Y', "24/06/2024")->format("Y-m-d")); 
+        $since = (new \DateTime())->format('Y-m-d');
+        $to = (new \DateTime($since))->modify('+7 days')->format('Y-m-d');
+        print_r($since . PHP_EOL);
+        print_r($to);
     }
 }

@@ -41,6 +41,8 @@ require __DIR__ . '/publication.php';
 
 require __DIR__ . '/reservation.php';
 
+require __DIR__ . '/pictures.php';
+
 require __DIR__.'/auth.php';
 
 Route::get('registro',function(){

@@ -1,2 +1,4 @@
 *
 !.gitignore
+!publication-pictures/factory/
+!publication-pictures/factory/**
