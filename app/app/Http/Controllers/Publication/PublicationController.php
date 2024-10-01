@@ -303,24 +303,6 @@ class PublicationController extends Controller
         return response()->json($files);
     }
 
-
-    /**
-     * Recovery the uploaded files from the storage.
-     * @param int $publicationId
-     * @return mixed|string
-     */
-    public function getUploadedFiles(Request $request)
-    {
-        $files = $request->only('files');
-        if ($request->input('publicationId')) {
-            $pictures = Picture::where('publication_id', $request->input('publicationId'))->get();
-            foreach ($pictures as $key => $picture) {
-                $files[$picture->id] = $picture->getUrl();
-            }
-        }
-        return view('publications.edit.form-preview-files', compact('files'))->render();
-    }
-
     /**
      * Display the specified resource.
      */
@@ -421,23 +403,6 @@ class PublicationController extends Controller
     {
         $publication->delete();
         return redirect()->route('publications.index.main')
-            ->withSuccess(_('Publicacion eliminada exitosamente'));
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroyPicture(Picture $picture)
-    {
-        $publicationId = $picture->publication_id;
-        $deleted = Storage::disk('pubication-pictures')->delete("$publicationId/$picture->id");
-
-        if(!$deleted){
-            throw new Exception("Error Processing Request",);
-        }
-        
-        $picture->delete();
-        return redirect()->route('publications.edit', ['publication' => $publicationId])
             ->withSuccess(_('Publicacion eliminada exitosamente'));
     }
 }

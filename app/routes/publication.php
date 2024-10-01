@@ -28,9 +28,7 @@ Route::get('publications/create/1', [PublicationController::class, 'getStep1'])
 Route::post('publications/create/2', [PublicationController::class, 'getStep2'])
     ->name('publications.create2');
 
-Route::get('publications/getUploadedFiles', [PublicationController::class, 'getUploadedFiles']);
-
-Route::get('publications/edit/{publication}', [PublicationController::class, 'edit'])
+Route::match(['get', 'delete'], 'publications/edit/{publication}', [PublicationController::class, 'edit'])
     ->name('publications.edit');
 
 Route::put('publications/update/{publication}', [PublicationController::class, 'update'])
@@ -38,9 +36,6 @@ Route::put('publications/update/{publication}', [PublicationController::class, '
 
 Route::get('publications/{publication?}', [PublicationController::class, 'show'])
     ->name('publications.show');
-
-Route::delete('publications/deletePicture/{picture}', [PublicationController::class, 'destroyPicture'])
-    ->name('publications.destroyPicture');
     
 Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
     ->name('publications.destroy');

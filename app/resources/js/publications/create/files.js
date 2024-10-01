@@ -51,35 +51,21 @@ export default class PublicationFile {
 
     getInputUploadFiles() {
         let filesUploaded = document.querySelectorAll(".files");
-        let inputs = []
+        let inputs = {}
         if (filesUploaded && filesUploaded.length > 0) {
             Array.from(filesUploaded).forEach((input) => {
-                inputs[input.id] = input;
+                inputs[input.id] = input.value;
             })
             return inputs
         }
-        return null;
-    }
-
-    mergeWithUploadedFiles() {
-        let thisInstance = this;
-        let filesUploaded = this.getInputUploadFiles();
-
-        if (filesUploaded) {
-            filesUploaded.forEach(input => {
-                if (input.value) {
-                    thisInstance.files[input.id] = input.value;
-                }
-            })
-        }
-        
+        return {};
     }
 
     getUploadedFiles(publicationId) {
-        let baseUrl = "publications/getUploadedFiles";
+        let baseUrl = "pictures/getHTMLUploadFiles";
 
         formatUrl(baseUrl, {publicationId}).then((fullUrl) => {
-            this.fetchFiles(fullUrl, {publicationId}).then((text) => {
+            this.fetchFiles(fullUrl, { publicationId }).then((text) => {
                 this.rootPreviewFiles.innerHTML = text;
                 this.loadButtonDeletePreviewFileAction();
                 this.files = this.getInputUploadFiles();
@@ -89,19 +75,16 @@ export default class PublicationFile {
     
 
     loadFiles(dataTosend = null) {
-
-        let baseUrl = "publications/getUploadedFiles";
+        
+        let baseUrl = "pictures/getHTMLUploadFiles";
 
         if (dataTosend?.files) {
 
             this.processFiles(dataTosend.files);
-            //Because i neet the blob not the file
-            this.mergeWithUploadedFiles();
-
-            dataTosend.files = this.files;
+            
+            dataTosend = this.files;
         }
 
-        dataTosend = dataTosend.files
         formatUrl(baseUrl, dataTosend).then((fullUrl) => {
             this.fetchFiles(fullUrl, dataTosend).then((text) => {
                 this.rootPreviewFiles.innerHTML = text;
@@ -115,10 +98,13 @@ export default class PublicationFile {
         let thisInstance = this;
         Array.from(files).forEach((file) => {
             if (!thisInstance.thisExceedMaxAllowedFiles()) {
+                
                 const value = URL.createObjectURL(file);
+                
                 // Generate a hash that is a single alphabetic character
                 let hash = SimpleHash.generate(file.name);
                 this.files[hash] = value;
+                
                 this.createInputFile(file, hash);
             }
         });
@@ -127,8 +113,6 @@ export default class PublicationFile {
     formatUrl(baseUrl, dataTosend) {
         if (dataTosend != null) {
             const queryString = new URLSearchParams(dataTosend);
-            console.log(queryString);
-            
             baseUrl += "?" + queryString;
         }
         return baseUrl;
@@ -141,6 +125,17 @@ export default class PublicationFile {
             const blob = await response.blob();
             const text = await blob.text();
             return text;
+        } catch (error) {
+            console.error("Error fetching files:", error);
+        }
+    }
+
+    async fetch(baseUrl, dataTosend) {
+        try {
+            const absoluteUrl = new URL(baseUrl, window.location.origin).href;
+            const response = await fetch(absoluteUrl, dataTosend);
+            const json = await response.json()
+            return json;
         } catch (error) {
             console.error("Error fetching files:", error);
         }
@@ -190,12 +185,11 @@ export default class PublicationFile {
         this.persistDeletePicture(id)
         input.remove();
         delete this.files[id];
-        this.loadFiles(this.files);
     }
 
     persistDeletePicture(id) { 
-        let baseUrl = `publications/deletePicture/${id}`;
-        let form = document.querySelector(`#form-delete-picture-${id}`);
+        let thisInstance = this
+        let baseUrl = `pictures/${id}`;
         const absoluteUrl = new URL(baseUrl, window.location.origin).href;
 
         formatUrl(absoluteUrl).then((fullUrl) => {
@@ -206,19 +200,22 @@ export default class PublicationFile {
                         'X-CSRF-TOKEN': document.querySelector('[name="_token"]').value
                     },
                 }
-    debugger
-            this.fetchFiles(fullUrl, init).then((text) => {
-                this.rootPreviewFiles.innerHTML = text;
-                this.loadButtonDeletePreviewFileAction();
-                this.files = this.getInputUploadFiles();
-                this.loadFiles();
+    
+            this.fetch(fullUrl, init).then((response) => {
+                if (response.status == "ok") { 
+                    let publicationId = document.getElementById("id").value;
+                    thisInstance.getUploadedFiles(publicationId);
+                }
             });
 
         })
     }
 
     thisExceedMaxAllowedFiles() {
-        return Object.keys(this.files).length > this.maxFilesUpload;
+        if (this?.files?.length && this?.files?.length > 0) {
+            return Object.keys(this.files).length > this.maxFilesUpload
+        }
+        return false
     }
 
     /**
