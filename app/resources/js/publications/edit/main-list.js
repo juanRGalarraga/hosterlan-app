@@ -16,6 +16,9 @@ export default class PublicationEditList {
 
         let url = new URL(baseUrl, window.location.origin).href;
 
+        console.log(url);
+        
+
         if( !ObjectHelper.isEmpty(dataToSend) ){
             const queryString = new URLSearchParams(dataToSend).toString();
             url = `${url}?${queryString}`;
@@ -34,6 +37,13 @@ export default class PublicationEditList {
         let blob = await response.blob();
         let text = await blob.text();
         publicationMainlist.innerHTML = text;
+        this.refreshPagination();
+    }
+
+    refreshPagination() {
+        this.collectLinkPagination();
+        this.getButtonNextPage();
+        this.getButtonPrevPage();
     }
 
     callToFilterAction() {
@@ -91,6 +101,52 @@ export default class PublicationEditList {
         });
 
         return totalCleaned
+    }
+
+    collectLinkPagination() { 
+        let paginationLinks = document.querySelectorAll('.pagination-link');
+        
+        if(paginationLinks.length < 1) {
+            return;
+        }
+
+        paginationLinks.forEach((link) => {
+            let page = link.getAttribute('data-page');
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.fetchList({ page: page });
+            });
+        });
+    }
+
+    getButtonNextPage() { 
+        let buttonNext = document.getElementById('nextPageUrlButton');
+
+        if (!(buttonNext instanceof HTMLButtonElement)) {
+            return
+        }
+
+        buttonNext.onclick = () => { 
+            let nextPage = buttonNext.getAttribute('data-href');
+            this.fetchList({ page: nextPage });
+        }
+
+        return buttonNext
+    }
+
+    getButtonPrevPage() {
+        let buttonPrev = document.getElementById('previusPageUrlButton');
+
+        if (!(buttonPrev instanceof HTMLButtonElement)) {
+            return
+        }
+        
+        buttonPrev.onclick = () => {
+            let prevPage = buttonPrev.getAttribute('data-href');
+            this.fetchList({ page: prevPage });
+        }
+
+        return buttonPrev;
     }
 
 }

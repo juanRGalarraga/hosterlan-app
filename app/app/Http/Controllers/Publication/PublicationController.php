@@ -93,10 +93,11 @@ class PublicationController extends Controller
             }
         }
 
+
         $publications = $queryBuilder->where('user_id', Auth::user()->id)
             ->latest('created_at')
-            ->paginate(25);
-
+            ->paginate(25, '*', 'page', $request->integer('page', 1));
+        dump($queryBuilder->getQuery()->toRawSql());
         return view('publications.edit.main-list', compact('publications'))->render();
     }
 

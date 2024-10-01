@@ -40,6 +40,6 @@
     @endforeach                        
     </tbody>
 </table>
-<div class="mt-4">
-    {{ $publications->links() }}
+<div class="mt-4" id="paginator">
+    {{ $publications->links('vendor.pagination.fetch-tailwind') }}
 </div>
