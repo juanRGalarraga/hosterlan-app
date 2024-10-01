@@ -50,9 +50,11 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($guest_id)
+    public function index(Guest $guest)
     {
-        $reservations = Reservation::where('guest_id', $guest_id)->orderBy('created_at', 'asc');
+        $reservations = Reservation::where('guest_id', $guest->id)
+        ->orderBy('created_at', 'asc');
+        
         if ($reservations->count() === 1) {
             return redirect()->route('reservations.show', $reservations->first());
         }

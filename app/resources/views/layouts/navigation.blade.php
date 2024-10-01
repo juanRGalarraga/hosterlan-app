@@ -33,7 +33,7 @@
                     </x-nav-link>
                     @endif
                     @if(Auth::user()?->isGuest())
-                    <x-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.index')">
+                    <x-nav-link :href="route('reservations.index', Auth::user()->guest)" :active="request()->routeIs('reservations.index')">
                         {{ __('Mis reservas') }}
                     </x-nav-link>
                     @endif
