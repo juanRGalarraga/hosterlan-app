@@ -10,7 +10,7 @@
     <x-slot:header>
         {{__('Mis propiedades')}}
     </x-slot:header>
-    <div class="bg-gray-900 flex justify-center p-10" id="mainView">
+    <div class="bg-gray-900 flex justify-center p-10 h-screen" id="mainView">
         <form method="GET" action="{{ route('publications.edit.fetch') }}" id="frm-filter-properties" form="frm-filter-properties" class="w-full">
             @csrf
             <div class="mb-4 grid grid-cols-4 gap-2">
