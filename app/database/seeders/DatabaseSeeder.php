@@ -4,11 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\Phone;
 use App\Enums\Publication\RentTypeEnum;
+use App\Models\AvailableDay;
 use App\Models\RentType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\Owner;
 use App\Models\Publication;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -43,6 +45,11 @@ class DatabaseSeeder extends Seeder
             ->hasPictures(3)
             ->hasRentType(1)
             ->hasAvailableDays(rand(1, 5))
+            ->create();
+
+
+        Reservation::factory()
+            ->count(rand(2, 10))
             ->create();
     }
 }

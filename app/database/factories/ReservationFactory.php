@@ -20,8 +20,8 @@ class ReservationFactory extends Factory
     public function definition(): array
     {
         return [
-            'available_day_id' => AvailableDay::factory(),
-            'guest_id' => Guest::factory(),
+            'available_day_id' => AvailableDay::inRandomOrder()->first()->id,
+            'guest_id' => Guest::inRandomOrder()->first()->id,
             'state'=> ReservationStateEnum::PreReserved->name,
         ];
     }
