@@ -10,24 +10,34 @@
     <x-slot:header>
         {{__('Mis propiedades')}}
     </x-slot:header>
-
     <div class="flex flex-row mcss-max-h-screen mcss-h-screen justify-center">
         <div class="bg-gray-900 flex justify-center py-10">
-            <table class="min-w-full bg-gray-800 text-white  p-4">
-                <thead>
-                    <tr>
-                        <th class="py-2 px-4 border-b border-gray-700">Numero</th>
-                        <th class="py-2 px-4 border-b border-gray-700">Titulo</th>
-                        <th class="py-2 px-4 border-b border-gray-700">Descripcion</th>
-                        <th class="py-2 px-4 border-b border-gray-700">Precio</th>
-                        <th class="py-2 px-4 border-b border-gray-700">Fecha de alta</th>
-                        <th class="py-2 px-4 border-b border-gray-700">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="mainList">
-                    
-                </tbody>
-            </table>
+            <form method="GET" action="{{ route('publications.edit.fetch') }}" id="frm-filter-properties" form="frm-filter-properties" class="w-full">
+                @csrf
+                <div class="mb-4 grid grid-cols-4 gap-2">
+                    <div class="col-span-1">
+                        <x-form.minimal-input inputClass="filter-input" class="mr-2 w-1/2" id="search" name="search" type="text" placeholder="{{__('Buscar')}}"></x-form.minimal-input>
+                    </div>
+                    <div class="flex flex-row mb-3 col-span-1">
+                        <x-form.minimal-input inputClass="filter-input" class="mr-2" id="price_min" name="price_min" type="text" placeholder="{{__('Precio min.')}}"></x-form.minimal-input>
+                        <x-form.minimal-input inputClass="filter-input" id="price_max" name="price_max" type="text" placeholder="{{__('Precio máx.')}}"></x-form.minimal-input>
+                    </div>
+                    <div class="flex flex-row mb-3 col-span-1">
+                        <x-form.date-range-picker class="filter-input" id="dateRangePicker" idDateFrom="created_at_since" idDateTo="created_at_to"></x-form.flowbite-daterangepicker>
+                    </div>
+                    <div class="col-span-1">
+                        <button type="button" form="frm-filter-properties" id="filterButton" class="bg-green-400 text-white font-semibold py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                            {{ __('Filtrar') }}
+                        </button>
+                        <button type="button" form="frm-filter-properties" id="clearFilterButton" class="bg-red-400 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                            {{ __('Borrar') }}
+                        </button>
+                    </div>
+                </div>
+                <div id="mainList">
+
+                </div>
+            </form>
         </div>
     </div>
 

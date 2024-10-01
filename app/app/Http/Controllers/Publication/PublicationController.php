@@ -57,11 +57,45 @@ class PublicationController extends Controller
     }
 
     //Fetch the data for the edit list
-    public function editFetch(){
-        
-        $publications = Publication::where('user_id', Auth::user()->id)
-        ->latest('created_at')
-        ->paginate(25);
+    public function editFetch(Request $request)
+    {
+        $queryBuilder = Publication::query();
+        $search = $request->string('search');
+        if(!$search->isEmpty()){
+            $queryBuilder->where('title', 'like', "%$search%")
+                ->orWhere('description', 'like', "%$search%")
+                ->orWhere('ubication', 'like', "%$search%");
+        }
+
+        $priceMin = $request->input('price_min');
+        if (is_numeric($priceMin)) {
+            $queryBuilder->where('price', '>=', $priceMin);
+        }
+
+        $priceMax = $request->input('price_max');
+        if (is_numeric($priceMax)) {
+            $queryBuilder->where('price', '<=', $priceMax);
+        }
+
+        $createdAtMin = $request->input('created_at_min');
+        if ($createdAtMin != null) {
+            $createdAtMinFormated = Carbon::createFromFormat('d/m/Y', $createdAtMin)->format('Y-m-d');
+            if ($createdAtMinFormated) {
+                $queryBuilder->where(DB::raw('DATE(created_at)'), '>=', $createdAtMinFormated);
+            }
+        }
+
+        $createdAtMax = $request->input('created_at_max');
+        if ($createdAtMax != null) {
+            $createdAtMaxFormated = Carbon::createFromFormat('d/m/Y', $createdAtMax)->format('Y-m-d');
+            if ($createdAtMaxFormated && $createdAtMaxFormated > $createdAtMinFormated) {
+                $queryBuilder->where(DB::raw('DATE(created_at)'), '<=', $createdAtMaxFormated);
+            }
+        }
+
+        $publications = $queryBuilder->where('user_id', Auth::user()->id)
+            ->latest('created_at')
+            ->paginate(25);
 
         return view('publications.edit.main-list', compact('publications'))->render();
     }

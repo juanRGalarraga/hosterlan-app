@@ -14,7 +14,7 @@ Route::get('publications/edit/list', [PublicationController::class, 'editIndex']
     ->name('publications.edit.list');
 
 //This route is used to fetch the data for the edit list
-Route::get('publications/edit/list/fetch', [PublicationController::class, 'editFetch']);
+Route::get('publications/edit/list/fetch', [PublicationController::class, 'editFetch'])->name('publications.edit.fetch');
 
 Route::get('publications/list', [PublicationController::class, 'getList'])
     ->name('publications.list');
