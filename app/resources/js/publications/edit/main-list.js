@@ -1,14 +1,21 @@
 import ObjectHelper from "../../utilities/objectHelper";
 import { isEmptyString } from "../../utilities/string";
+import Spinner from "../../components/spinner";
 
 export default class PublicationEditList {
+
+    spinner
 
     constructor() { 
         this.callToFilterAction();
         this.callToClearFilterAction();
+        this.spinner = new Spinner();
+
     }
 
     fetchList(dataToSend = {}) {
+
+        // this.spinner.show('mainView');
 
         let publicationMainlist = document.getElementById('mainList');
         let baseUrl = 'publications/edit/list/fetch';
