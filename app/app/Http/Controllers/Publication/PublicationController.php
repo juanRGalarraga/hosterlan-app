@@ -27,7 +27,7 @@ class PublicationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('destroy');
+        $this->middleware('auth');
     }
 
     /**
@@ -458,7 +458,7 @@ class PublicationController extends Controller
             Log::error($le->getMessage());
         }
 
-        return response()->json(['status' => 500]);
+        return response()->json(Config::get('responses.error.delete'));
 
     }
 }

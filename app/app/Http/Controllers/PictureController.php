@@ -43,7 +43,7 @@ class PictureController extends Controller
                 $files[$picture->id] = $picture->getUrl();
             }
         }
-
+        
         return view('publications.common.form-preview-files', compact('files'))->render();
     }
 }

@@ -19,18 +19,16 @@ use App\Mail\Email;
 |
 */
 
-Route::get('/home', [PublicationController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
-
 Route::get('/', function () {
 
     if(Auth::check()){
-        return redirect('home');
+        return redirect()->route('publications.index');
     }
     return view('welcome');
-});
-Route::get('/home', [PublicationController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('home');
+})->name('home');
+// Route::get('/home', [PublicationController::class, 'index'])
+//     ->middleware(['auth', 'verified'])
+//     ->name('home');
 
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -81,20 +81,19 @@ export default class PublicationFile {
         let baseUrl = "pictures/getHTMLUploadFiles";
 
         if (dataTosend?.files) {
-
+            console.log(this.files);
             this.processFiles(dataTosend.files);
+            console.log(this.files);
             
             dataTosend = this.files;
         }
 
-        formatUrl(baseUrl, dataTosend).then((fullUrl) => {
-
-            this.fetch.render(fullUrl, dataTosend).then((text) => {
-                this.rootPreviewFiles.innerHTML = text;
-                this.loadButtonDeletePreviewFileAction();
-                this.files = this.getInputUploadFiles();
-            });
-        })
+        this.fetch.render(baseUrl, dataTosend).then((text) => {
+            
+            this.rootPreviewFiles.innerHTML = text;
+            this.loadButtonDeletePreviewFileAction();
+            this.files = this.getInputUploadFiles();
+        });
     }
 
     processFiles(files) {

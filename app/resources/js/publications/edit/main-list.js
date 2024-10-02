@@ -114,7 +114,7 @@ export default class PublicationEditList {
                 this.fetchList();
                 return;
             }
-            console.error(response)
+            Alert.error(response.message)
         });
     }
 
