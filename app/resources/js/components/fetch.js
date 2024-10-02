@@ -1,22 +1,30 @@
+import { format as formatUrl } from "../utilities/url";
+
 export default class Fetch {
 
     options = {
         type: 'json'
     }
 
-    mergeOptions(userOptions = {}) { 
-        this.options = Object.assign({}, userOptions)
+    constructor() {
+        this.options['baseUrl'] = window.location.origin;
     }
 
-    async json(baseUrl, dataTosend, options = {} ) {
+    mergeOptions(userOptions = {}) {
+        this.options = Object.assign({}, this.options, userOptions)
+    }
+
+    async json(endpoint, dataToSend, options = {} ) {
         try {
 
             this.mergeOptions(options)
+            
+            const finalUrl = formatUrl(endpoint, this.options.baseUrl, dataToSend)
 
-            const absoluteUrl = new URL(baseUrl, window.location.origin).href;
-            const response = await fetch(absoluteUrl, dataTosend);
+            const response = await fetch(finalUrl, dataToSend);
             const text = await response.json();
             return text;
+
         } catch (error) {
             console.error("Error fetching json:", error);
         }
@@ -25,17 +33,18 @@ export default class Fetch {
     /**
      * This is helpful to fetch a file content from the server
      * @param {string} baseUrl endpoint to fetch
-     * @param {object} dataTosend data to send to the server
+     * @param {object} dataToSend data to send to the server
      * @param {object} options 
      * @returns 
      */
-    async render(baseUrl, dataTosend, options = {} ) {
+    async render(endpoint, dataToSend, options = {} ) {
         try {
-
+            
             this.mergeOptions(options)
-
-            const absoluteUrl = new URL(baseUrl, window.location.origin).href;
-            const response = await fetch(absoluteUrl, dataTosend);
+            
+            const finalUrl = formatUrl(endpoint, this.options.baseUrl, dataToSend)
+            
+            const response = await fetch(finalUrl, dataToSend)
             const blob = await response.blob();
             const text = await blob.text();
             return text;

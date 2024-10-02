@@ -1,18 +1,19 @@
-import ObjectHelper from "../../utilities/objectHelper";
-import { isEmptyString } from "../../utilities/string";
 import Spinner from "../../components/spinner";
 import Pagination from "../../components/fetchPagination";
+import Fetch from "../../components/fetch";
 
 export default class PublicationEditList {
 
     spinner
     pagination
+    fetch
 
     constructor() { 
         this.pagination = new Pagination();
         this.callToFilterAction();
         this.callToClearFilterAction();
         this.spinner = new Spinner();
+        this.fetch = new Fetch();
 
     }
 
@@ -21,33 +22,12 @@ export default class PublicationEditList {
         // this.spinner.show('mainView');
 
         let publicationMainlist = document.getElementById('mainList');
-        let baseUrl = 'publications/edit/list/fetch';
-
-
-        let url = new URL(baseUrl, window.location.origin).href;
-
-        console.log(url);
+        let url = 'publications/edit/list/fetch';
         
-
-        if( !ObjectHelper.isEmpty(dataToSend) ){
-            const queryString = new URLSearchParams(dataToSend).toString();
-            url = `${url}?${queryString}`;
-        }
-
-        const absoluteUrl = url
-        
-        this.#executeFetch(absoluteUrl, dataToSend, publicationMainlist);
-    }
-
-    async #executeFetch(url, dataToSend, publicationMainlist) {
-        if (isEmptyString(url)) return console.error('Without URL');
-        if( !(publicationMainlist instanceof HTMLElement) ) return console.error('Without element!');
-
-        let response = await fetch(url, dataToSend);
-        let blob = await response.blob();
-        let text = await blob.text();
-        publicationMainlist.innerHTML = text;
-        this.refreshPagination();
+        this.fetch.render(url, dataToSend).then((text) => { 
+            publicationMainlist.innerHTML = text;
+            this.refreshPagination();
+        })
     }
 
     refreshPagination() {

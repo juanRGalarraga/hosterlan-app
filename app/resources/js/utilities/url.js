@@ -1,9 +1,25 @@
+import ObjectHelper from "./objectHelper";
+
 export async function formatUrl(baseUrl, dataTosend) {
     if (dataTosend != null) {
         const queryString = await convertBlobsToQueryString(dataTosend);
         baseUrl += "?" + queryString;
     }
     return baseUrl;
+}
+
+/**
+ * Simple method to format url
+ */
+export function format(endPoint, baseUrl, dataToSend = {}) {
+    console.log(endPoint, baseUrl, dataToSend);
+    let finalUrl = new URL(endPoint, baseUrl).href;
+    if( !ObjectHelper.isEmpty(dataToSend) ){
+        const queryString = new URLSearchParams(dataToSend).toString();
+        finalUrl = `${finalUrl}?${queryString}`;
+        return finalUrl;
+    }
+    return finalUrl;
 }
 
 async function convertBlobsToQueryString(data) {
