@@ -1,4 +1,4 @@
-import PublicationFile from "../create/files";
+import PublicationFile from "../files";
 
 let publicationFile = new PublicationFile({ inputId: "dropzone-file" });
 
