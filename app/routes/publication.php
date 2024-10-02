@@ -14,7 +14,7 @@ Route::get('publications/fetchList', [PublicationController::class, 'getList'])
 Route::get('publications/{publication?}', [PublicationController::class, 'show'])
  ->name('publications.show');
 
-Route::group(['middleware' => ['is.guest']], function () {
+Route::group(['middleware' => ['is.owner']], function () {
     
     Route::put('publications/create', [PublicationController::class, 'store'])
         ->name('publications.store');
@@ -36,9 +36,6 @@ Route::group(['middleware' => ['is.guest']], function () {
 
     Route::put('publications/update/{publication}', [PublicationController::class, 'update'])
         ->name('publications.update');
-});
-
-Route::group(['middleware' => ['is.owner']], function () {
-    Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
-        ->name('publications.destroy');
+        Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
+            ->name('publications.destroy');
 });

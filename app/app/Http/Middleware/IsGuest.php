@@ -16,7 +16,7 @@ class IsGuest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ( Auth::user()->guest?->exist() ) {
+        if ( isset(Auth::user()->guest) ) {
             return $next($request);
         }
         
