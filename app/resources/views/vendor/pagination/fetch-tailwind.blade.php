@@ -1,3 +1,8 @@
+/**
+* This is a custom pagination view for Laravel 8.x that uses with a fetch request to get the next/prev page of the paginated data.
+* @author Juan Galarraga
+*/
+
 @if ($paginator->hasPages())
     <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center justify-between">
         <div class="flex justify-between flex-1 sm:hidden">

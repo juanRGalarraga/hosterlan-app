@@ -1,27 +1,35 @@
-import SimpleHash from "../../simpleHash.js";
-import Alert from "../../components/alert.js";
-import { formatUrl } from "../../utilities/url.js";
-import DOM from "../../components/dom.js";
+/**
+ * This is a common plugin to publication´s scenarios
+ */
+
+import SimpleHash from "../simpleHash.js";
+import { formatUrl } from "../utilities/url.js";
+import Fetch from "../components/fetch.js";
+
 export default class PublicationFile {
     input = null;
     rootPreviewFiles = "previewFiles";
     form = "publicationForm";
     files = {};
     maxFilesUpload = 5;
-    alertWarningMaxAllowedFiles;
+    fetch
 
     constructor({
         inputId,
         form = "publicationForm",
         rootPreviewFiles = "previewFiles",
     }) {
+        this.#initElements(inputId, form, rootPreviewFiles);
+        this.loadOnchange();
+        this.fetch = new Fetch();
+    }
+
+    #initElements(inputId, form, rootPreviewFiles) {
         this.input = document.getElementById(inputId);
-        if (
-            !(
-                this.input instanceof HTMLInputElement &&
-                this.input.type == "file"
-            )
-        ) {
+        if (!(
+            this.input instanceof HTMLInputElement &&
+            this.input.type == "file"
+        )) {
             throw new Error("Input type file not found");
         }
 
@@ -34,12 +42,6 @@ export default class PublicationFile {
         if (!this.rootPreviewFiles) {
             throw new Error("rootPreviewFiles not found");
         }
-
-        this.alertWarningMaxAllowedFiles = new Alert().init(
-            "alertWarningMaxAllowedFiles"
-        );
-
-        this.loadOnchange();
     }
 
     loadOnchange() {
@@ -65,7 +67,7 @@ export default class PublicationFile {
         let baseUrl = "pictures/getHTMLUploadFiles";
 
         formatUrl(baseUrl, {publicationId}).then((fullUrl) => {
-            this.fetchFiles(fullUrl, { publicationId }).then((text) => {
+            this.fetch.render(fullUrl, { publicationId }).then((text) => {
                 this.rootPreviewFiles.innerHTML = text;
                 this.loadButtonDeletePreviewFileAction();
                 this.files = this.getInputUploadFiles();
@@ -79,19 +81,19 @@ export default class PublicationFile {
         let baseUrl = "pictures/getHTMLUploadFiles";
 
         if (dataTosend?.files) {
-
+            console.log(this.files);
             this.processFiles(dataTosend.files);
+            console.log(this.files);
             
             dataTosend = this.files;
         }
 
-        formatUrl(baseUrl, dataTosend).then((fullUrl) => {
-            this.fetchFiles(fullUrl, dataTosend).then((text) => {
-                this.rootPreviewFiles.innerHTML = text;
-                this.loadButtonDeletePreviewFileAction();
-                this.files = this.getInputUploadFiles();
-            });
-        })
+        this.fetch.render(baseUrl, dataTosend).then((text) => {
+            
+            this.rootPreviewFiles.innerHTML = text;
+            this.loadButtonDeletePreviewFileAction();
+            this.files = this.getInputUploadFiles();
+        });
     }
 
     processFiles(files) {
@@ -116,29 +118,6 @@ export default class PublicationFile {
             baseUrl += "?" + queryString;
         }
         return baseUrl;
-    }
-
-    async fetchFiles(baseUrl, dataTosend) {
-        try {
-            const absoluteUrl = new URL(baseUrl, window.location.origin).href;
-            const response = await fetch(absoluteUrl, dataTosend);
-            const blob = await response.blob();
-            const text = await blob.text();
-            return text;
-        } catch (error) {
-            console.error("Error fetching files:", error);
-        }
-    }
-
-    async fetch(baseUrl, dataTosend) {
-        try {
-            const absoluteUrl = new URL(baseUrl, window.location.origin).href;
-            const response = await fetch(absoluteUrl, dataTosend);
-            const json = await response.json()
-            return json;
-        } catch (error) {
-            console.error("Error fetching files:", error);
-        }
     }
 
     createInputFile(theFile, id) {
@@ -193,6 +172,7 @@ export default class PublicationFile {
         const absoluteUrl = new URL(baseUrl, window.location.origin).href;
 
         formatUrl(absoluteUrl).then((fullUrl) => {
+
             let init = {
                 method: 'DELETE',
                     headers: {
@@ -201,8 +181,8 @@ export default class PublicationFile {
                     },
                 }
     
-            this.fetch(fullUrl, init).then((response) => {
-                if (response.status == "ok") { 
+            this.fetch.json(fullUrl, init).then((response) => {
+                if (response.status == 200) { 
                     let publicationId = document.getElementById("id").value;
                     thisInstance.getUploadedFiles(publicationId);
                 }
