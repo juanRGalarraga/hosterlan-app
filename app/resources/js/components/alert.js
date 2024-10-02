@@ -10,9 +10,10 @@ export default class Alert {
         });
     }
 
-    static debug({title, text}) {
+    static debug({title='', text=''}) {
         Swal.fire({
             icon: 'info',
+            className:'bg-gray-800',
             title,
             text,
         });
@@ -59,7 +60,7 @@ export default class Alert {
         });
     }
 
-    static confirmUpdate({title, text, confirmAction}) {
+    static confirmUpdate({title, text, confirmAction}) {    
         this.confirm({
             title,
             text,
@@ -80,3 +81,19 @@ export default class Alert {
     }
     
 }
+
+function setStyle() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .swal2-modal {
+            --tw-bg-opacity: 1;
+            background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+        }
+        .swal2-title, .swal2-html-container {
+            color:white;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+setStyle();

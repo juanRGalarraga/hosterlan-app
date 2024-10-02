@@ -16,7 +16,7 @@ class IsGuest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ( isset(Auth::user()->guest) ) {
+        if ( isset(Auth::user()->guest) || Auth::user()->is_dev) {
             return $next($request);
         }
         

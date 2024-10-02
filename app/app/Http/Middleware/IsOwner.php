@@ -16,7 +16,7 @@ class IsOwner
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ( isset(Auth::user()->owner) ) {
+        if ( isset(Auth::user()->owner)  || Auth::user()->is_dev) {
             return $next($request);
         }
         
