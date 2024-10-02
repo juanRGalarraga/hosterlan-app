@@ -25,6 +25,7 @@ class Picture extends Model
 
     public function getUrl(){
       $filename = self::DEFAULT_PICTURE;
+      
       if($this->exists()){
         $path = "{$this->publication->id}/{$this->name}";
         if( Storage::disk('publication-pictures')->exists($path) ){
