@@ -50,10 +50,15 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Guest $guest)
+    public function index(Request $request,Guest $guest)
+    
     {
+
         $reservations = Reservation::where('guest_id', $guest->id)
+        ->orderBy('state', 'asc')
         ->orderBy('created_at', 'asc');
+
+
         
         if ($reservations->count() === 1) {
             return redirect()->route('reservations.show', $reservations->first());
@@ -85,10 +90,10 @@ class ReservationController extends Controller
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
             'phoneNumber' => 'required',
-            'since' => 'date_format:d/m/Y',
+            'since' => 'date',
             'to' => 'after_or_equal:since',
         ]);
-        
+        Log::channel('debug')->debug($validator->errors());
         if($validator->fails()){
             $request->flash();
             return redirect()

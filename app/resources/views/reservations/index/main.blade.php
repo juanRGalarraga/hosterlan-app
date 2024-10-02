@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="form-container p-40 grid-cols-200 px-auto">
-        <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas y Pre-reservas del Huésped</h1>
+    <div class="form-container p-40 grid-cols-200 px-auto h-screen">
+        <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas y Pre-reservas </h1>
 
         @if($reservations->isEmpty())
             <p class="text-gray-600">No hay reservas o pre-reservas registradas.</p>
@@ -32,7 +32,7 @@
                                     </a>
                                 </td>
                                 <td class="py-3 px-4">
-                                    <a href="{{ route('reservations.show', ['reservation' => $reservation]) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    <a href="{{ route('reservations.create', ['reservation' => $reservation]) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
                                         Ver Reserva
                                     </a>
                                 </td>
