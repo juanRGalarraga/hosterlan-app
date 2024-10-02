@@ -9,7 +9,6 @@ export default class PublicationEditList {
     fetch
 
     constructor() { 
-        Alert.debug({title:'Prueba', text:'Texto'})
         this.pagination = new Pagination();
         this.callToFilterAction();
         this.callToClearFilterAction();

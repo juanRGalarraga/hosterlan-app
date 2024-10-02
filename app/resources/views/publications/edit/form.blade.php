@@ -13,6 +13,16 @@
             @csrf
             @method('PUT')
             <input type="hidden" id="id" value="{{$publication->id}}">
+
+            <x-form.select-input id="state" value="{{old('state')}}" name="state" label="{{__('Estado')}}" class="mb-3 w-full">
+                @foreach (App\Enums\Publication\StateEnum::cases() as $case)
+                    <option value="{{$case->name}}" @selected($case->name == $publication->state)>
+                        {{$case->value}}
+                    </option>
+                @endforeach
+            </x-form.select-input>
+
+            <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">{{__('Título')}}</label>
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{$publication->title}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />
             @if ($errors->has('files'))
