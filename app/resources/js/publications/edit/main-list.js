@@ -1,12 +1,15 @@
 import ObjectHelper from "../../utilities/objectHelper";
 import { isEmptyString } from "../../utilities/string";
 import Spinner from "../../components/spinner";
+import Pagination from "../../components/fetchPagination";
 
 export default class PublicationEditList {
 
     spinner
+    pagination
 
     constructor() { 
+        this.pagination = new Pagination();
         this.callToFilterAction();
         this.callToClearFilterAction();
         this.spinner = new Spinner();
@@ -48,9 +51,9 @@ export default class PublicationEditList {
     }
 
     refreshPagination() {
-        this.collectLinkPagination();
-        this.getButtonNextPage();
-        this.getButtonPrevPage();
+        this.pagination.collectLinkPagination();
+        this.pagination.getButtonNextPage();
+        this.pagination.getButtonPrevPage();
     }
 
     callToFilterAction() {
@@ -108,52 +111,6 @@ export default class PublicationEditList {
         });
 
         return totalCleaned
-    }
-
-    collectLinkPagination() { 
-        let paginationLinks = document.querySelectorAll('.pagination-link');
-        
-        if(paginationLinks.length < 1) {
-            return;
-        }
-
-        paginationLinks.forEach((link) => {
-            let page = link.getAttribute('data-page');
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                this.fetchList({ page: page });
-            });
-        });
-    }
-
-    getButtonNextPage() { 
-        let buttonNext = document.getElementById('nextPageUrlButton');
-
-        if (!(buttonNext instanceof HTMLButtonElement)) {
-            return
-        }
-
-        buttonNext.onclick = () => { 
-            let nextPage = buttonNext.getAttribute('data-href');
-            this.fetchList({ page: nextPage });
-        }
-
-        return buttonNext
-    }
-
-    getButtonPrevPage() {
-        let buttonPrev = document.getElementById('previusPageUrlButton');
-
-        if (!(buttonPrev instanceof HTMLButtonElement)) {
-            return
-        }
-        
-        buttonPrev.onclick = () => {
-            let prevPage = buttonPrev.getAttribute('data-href');
-            this.fetchList({ page: prevPage });
-        }
-
-        return buttonPrev;
     }
 
 }
