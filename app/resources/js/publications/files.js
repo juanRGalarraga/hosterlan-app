@@ -3,7 +3,6 @@
  */
 
 import SimpleHash from "../simpleHash.js";
-import Alert from "../components/alert.js";
 import { formatUrl } from "../utilities/url.js";
 import Fetch from "../components/fetch.js";
 
@@ -13,7 +12,6 @@ export default class PublicationFile {
     form = "publicationForm";
     files = {};
     maxFilesUpload = 5;
-    alertWarningMaxAllowedFiles;
     fetch
 
     constructor({
@@ -44,9 +42,6 @@ export default class PublicationFile {
         if (!this.rootPreviewFiles) {
             throw new Error("rootPreviewFiles not found");
         }
-        this.alertWarningMaxAllowedFiles = new Alert().init(
-            "alertWarningMaxAllowedFiles"
-        );
     }
 
     loadOnchange() {
@@ -188,7 +183,7 @@ export default class PublicationFile {
                 }
     
             this.fetch.json(fullUrl, init).then((response) => {
-                if (response.status == "ok") { 
+                if (response.status == 200) { 
                     let publicationId = document.getElementById("id").value;
                     thisInstance.getUploadedFiles(publicationId);
                 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Symfony\Component\Mime\Exception\LogicException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Publication;
@@ -16,7 +17,9 @@ use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
+use Psy\Readline\Hoa\FileException;
 use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
 
 
@@ -24,7 +27,7 @@ class PublicationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('destroy');
     }
 
     /**
@@ -436,8 +439,26 @@ class PublicationController extends Controller
      */
     public function destroy(Publication $publication)
     {
-        $publication->delete();
-        return redirect()->route('publications.index.main')
-            ->withSuccess(_('Publicacion eliminada exitosamente'));
+        try {
+
+            $publication->delete();
+
+            $deleted = Storage::disk('publication-pictures')->deleteDirectory($publication->id);
+    
+            if(!$deleted){
+                abort(500);
+                throw new FileException('Publication pictures cannot be deleted');
+            }
+            
+            return response()->json(Config::get('responses.success.delete'));
+
+        } catch (FileException $th) {
+            Log::error($th->getMessage());
+        } catch (LogicException $le){
+            Log::error($le->getMessage());
+        }
+
+        return response()->json(['status' => 500]);
+
     }
 }

@@ -1,7 +1,7 @@
 import Spinner from "../../components/spinner";
 import Pagination from "../../components/fetchPagination";
 import Fetch from "../../components/fetch";
-
+import Alert from "../../components/alert";
 export default class PublicationEditList {
 
     spinner
@@ -14,7 +14,6 @@ export default class PublicationEditList {
         this.callToClearFilterAction();
         this.spinner = new Spinner();
         this.fetch = new Fetch();
-
     }
 
     fetchList(dataToSend = {}) {
@@ -27,6 +26,7 @@ export default class PublicationEditList {
         this.fetch.render(url, dataToSend).then((text) => { 
             publicationMainlist.innerHTML = text;
             this.refreshPagination();
+            this.callToDeletePublication();
         })
     }
 
@@ -54,12 +54,11 @@ export default class PublicationEditList {
     }
 
     filterList() { 
-        let filterValues = this.collectFiltervalues();
+        let filterValues = this.collectFilterValues();
         this.fetchList(filterValues);
     }
 
-
-    collectFiltervalues() { 
+    collectFilterValues() { 
         let filterValues = {};
 
         let filterInputs = document.querySelectorAll('.filter-input');
@@ -91,6 +90,32 @@ export default class PublicationEditList {
         });
 
         return totalCleaned
+    }
+
+    callToDeletePublication() { 
+        let deleteButtons = document.querySelectorAll('.delete-publication');
+        deleteButtons.forEach((button) => {
+            button.addEventListener('click', (e) => {
+                let publicationId = button.getAttribute('data-publication-id');
+                this.deletePublication(publicationId);
+            });
+        });
+    }
+
+    deletePublication(publicationId) { 
+        let url = `publications/${publicationId}`;
+        let init = {
+            method: 'DELETE'
+        }
+        this.fetch.json(url, init).then((response) => {
+
+            if (response.status === 200) {
+                Alert.success({title: response.title, text: response.message});
+                this.fetchList();
+                return;
+            }
+            console.error(response)
+        });
     }
 
 }

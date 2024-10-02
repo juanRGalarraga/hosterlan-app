@@ -12,7 +12,6 @@ export async function formatUrl(baseUrl, dataTosend) {
  * Simple method to format url
  */
 export function format(endPoint, baseUrl, dataToSend = {}) {
-    console.log(endPoint, baseUrl, dataToSend);
     let finalUrl = new URL(endPoint, baseUrl).href;
     if( !ObjectHelper.isEmpty(dataToSend) ){
         const queryString = new URLSearchParams(dataToSend).toString();
@@ -26,7 +25,6 @@ async function convertBlobsToQueryString(data) {
     const params = new URLSearchParams();
 
     for (const key in data) {
-        console.log(key, data);
         
         if (Array.isArray(data[key])) {
             for (const item of data[key]) {

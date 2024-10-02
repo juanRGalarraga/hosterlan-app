@@ -26,8 +26,7 @@ class PictureController extends Controller
         DB::transaction(function() use ($picture){
             $picture->delete();
         });
-
-        return response()->json(['status' => 'ok']);
+        return response()->json(['status' => 200]);
     }
 
     /**

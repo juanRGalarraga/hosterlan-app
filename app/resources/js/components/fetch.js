@@ -14,13 +14,11 @@ export default class Fetch {
         this.options = Object.assign({}, this.options, userOptions)
     }
 
-    async json(endpoint, dataToSend, options = {} ) {
+    async json(endpoint, dataToSend = {}, options = {} ) {
         try {
-
             this.mergeOptions(options)
             
             const finalUrl = formatUrl(endpoint, this.options.baseUrl, dataToSend)
-
             const response = await fetch(finalUrl, dataToSend);
             const text = await response.json();
             return text;
