@@ -26,8 +26,7 @@ class PictureController extends Controller
         DB::transaction(function() use ($picture){
             $picture->delete();
         });
-
-        return response()->json(['status' => 'ok']);
+        return response()->json(['status' => 200]);
     }
 
     /**
@@ -44,7 +43,7 @@ class PictureController extends Controller
                 $files[$picture->id] = $picture->getUrl();
             }
         }
-
+        
         return view('publications.common.form-preview-files', compact('files'))->render();
     }
 }

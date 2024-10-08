@@ -27,7 +27,7 @@ export default class PublicationList {
   getList(dataToSend = null){
     let thisObj = this;
     let publicationMainlist = document.getElementById('publicationMainlist');
-    let url = 'publications/list';
+    let url = 'publications/fetchList';
 
     if( !ObjectHelper.isEmpty(dataToSend)){
         const queryString = new URLSearchParams(dataToSend).toString();

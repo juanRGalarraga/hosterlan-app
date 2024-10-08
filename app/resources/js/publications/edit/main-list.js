@@ -1,16 +1,19 @@
-import ObjectHelper from "../../utilities/objectHelper";
-import { isEmptyString } from "../../utilities/string";
 import Spinner from "../../components/spinner";
-
+import Pagination from "../../components/fetchPagination";
+import Fetch from "../../components/fetch";
+import Alert from "../../components/alert";
 export default class PublicationEditList {
 
     spinner
+    pagination
+    fetch
 
     constructor() { 
+        this.pagination = new Pagination();
         this.callToFilterAction();
         this.callToClearFilterAction();
         this.spinner = new Spinner();
-
+        this.fetch = new Fetch();
     }
 
     fetchList(dataToSend = {}) {
@@ -18,39 +21,19 @@ export default class PublicationEditList {
         // this.spinner.show('mainView');
 
         let publicationMainlist = document.getElementById('mainList');
-        let baseUrl = 'publications/edit/list/fetch';
-
-
-        let url = new URL(baseUrl, window.location.origin).href;
-
-        console.log(url);
+        let url = 'publications/edit/list/fetch';
         
-
-        if( !ObjectHelper.isEmpty(dataToSend) ){
-            const queryString = new URLSearchParams(dataToSend).toString();
-            url = `${url}?${queryString}`;
-        }
-
-        const absoluteUrl = url
-        
-        this.#executeFetch(absoluteUrl, dataToSend, publicationMainlist);
-    }
-
-    async #executeFetch(url, dataToSend, publicationMainlist) {
-        if (isEmptyString(url)) return console.error('Without URL');
-        if( !(publicationMainlist instanceof HTMLElement) ) return console.error('Without element!');
-
-        let response = await fetch(url, dataToSend);
-        let blob = await response.blob();
-        let text = await blob.text();
-        publicationMainlist.innerHTML = text;
-        this.refreshPagination();
+        this.fetch.render(url, dataToSend).then((text) => { 
+            publicationMainlist.innerHTML = text;
+            this.refreshPagination();
+            this.callToDeletePublication();
+        })
     }
 
     refreshPagination() {
-        this.collectLinkPagination();
-        this.getButtonNextPage();
-        this.getButtonPrevPage();
+        this.pagination.collectLinkPagination();
+        this.pagination.getButtonNextPage();
+        this.pagination.getButtonPrevPage();
     }
 
     callToFilterAction() {
@@ -71,12 +54,11 @@ export default class PublicationEditList {
     }
 
     filterList() { 
-        let filterValues = this.collectFiltervalues();
+        let filterValues = this.collectFilterValues();
         this.fetchList(filterValues);
     }
 
-
-    collectFiltervalues() { 
+    collectFilterValues() { 
         let filterValues = {};
 
         let filterInputs = document.querySelectorAll('.filter-input');
@@ -110,50 +92,30 @@ export default class PublicationEditList {
         return totalCleaned
     }
 
-    collectLinkPagination() { 
-        let paginationLinks = document.querySelectorAll('.pagination-link');
-        
-        if(paginationLinks.length < 1) {
-            return;
-        }
-
-        paginationLinks.forEach((link) => {
-            let page = link.getAttribute('data-page');
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                this.fetchList({ page: page });
+    callToDeletePublication() { 
+        let deleteButtons = document.querySelectorAll('.delete-publication');
+        deleteButtons.forEach((button) => {
+            button.addEventListener('click', (e) => {
+                let publicationId = button.getAttribute('data-publication-id');
+                this.deletePublication(publicationId);
             });
         });
     }
 
-    getButtonNextPage() { 
-        let buttonNext = document.getElementById('nextPageUrlButton');
-
-        if (!(buttonNext instanceof HTMLButtonElement)) {
-            return
+    deletePublication(publicationId) { 
+        let url = `publications/${publicationId}`;
+        let init = {
+            method: 'DELETE'
         }
+        this.fetch.json(url, init).then((response) => {
 
-        buttonNext.onclick = () => { 
-            let nextPage = buttonNext.getAttribute('data-href');
-            this.fetchList({ page: nextPage });
-        }
-
-        return buttonNext
-    }
-
-    getButtonPrevPage() {
-        let buttonPrev = document.getElementById('previusPageUrlButton');
-
-        if (!(buttonPrev instanceof HTMLButtonElement)) {
-            return
-        }
-        
-        buttonPrev.onclick = () => {
-            let prevPage = buttonPrev.getAttribute('data-href');
-            this.fetchList({ page: prevPage });
-        }
-
-        return buttonPrev;
+            if (response.status === 200) {
+                Alert.success({title: response.title, text: response.message});
+                this.fetchList();
+                return;
+            }
+            Alert.error(response.message)
+        });
     }
 
 }

@@ -20,7 +20,7 @@ export default class Spinner {
     #build() {
         const div = document.createElement('div');
         div.setAttribute('role', 'status');
-        div.classList.add('absolute', 'bg-opacity-50', 'w-screen', 'h-screen', 'bg-gray-700')
+        div.classList.add('fixed', 'bg-opacity-50', 'w-screen', 'h-screen', 'bg-gray-700')
 
         const svg = this.#createSVG();
 
