@@ -50,11 +50,18 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request,Guest $guest)
+    public function index(Request $request, Guest $guest)
     
     {
+        $queryBuilder=Reservation::query();
+        $state=$request->string('state');
+        
+        if (ReservationStateEnum::fromName($state)) {
+            $queryBuilder->where('state',$state);
+        }
+        
 
-        $reservations = Reservation::where('guest_id', $guest->id)
+        $reservations =$queryBuilder->where('guest_id', $guest->id)
         ->orderBy('state', 'asc')
         ->orderBy('created_at', 'asc');
 

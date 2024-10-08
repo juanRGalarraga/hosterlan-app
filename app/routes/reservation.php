@@ -8,4 +8,3 @@ Route::post('reservation/create', [ReservationController::class, 'preReserve'])-
 Route::get('reservation/show/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
 Route::get('reservation/create/{reservation}', [ReservationController::class, 'create'])->name('reservations.create');
 Route::get('reservation/index/{guest}', [ReservationController::class, 'index'])->name('reservations.index');
-Route::get('reservations', [ReservationController::class, 'index'])->name('reservations.index');

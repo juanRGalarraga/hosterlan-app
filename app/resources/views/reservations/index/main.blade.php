@@ -1,6 +1,13 @@
 <x-app-layout>
     <div class="form-container p-40 grid-cols-200 px-auto h-screen">
         <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas y Pre-reservas </h1>
+        <form action=""></form>
+
+        <x-form.select-input name="state" id="state" value="{{old('state')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3 w-full">
+            @foreach(RentTypeEnum::cases() as $key => $rentType)
+                <x-form.select-input-option value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
+            @endforeach
+        </x-form.select-input>
 
         @if($reservations->isEmpty())
             <p class="text-gray-600">No hay reservas o pre-reservas registradas.</p>
