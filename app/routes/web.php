@@ -23,12 +23,14 @@ Route::get('/', function () {
 
     if(Auth::check()){
         return redirect()->route('publications.index');
+        
     }
     return view('welcome');
-})->name('home');
-// Route::get('/home', [PublicationController::class, 'index'])
-//     ->middleware(['auth', 'verified'])
-//     ->name('home');
+})->name('home')
+->middleware(['auth', 'verified']);
+//Route::get('/home', [PublicationController::class, 'index'])
+ //->middleware(['auth', 'verified'])
+    //->name('home');
 
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
