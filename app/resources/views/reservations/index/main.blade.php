@@ -1,13 +1,17 @@
 <x-app-layout>
     <div class="form-container p-40 grid-cols-200 px-auto h-screen">
         <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas y Pre-reservas </h1>
-        <form action=""></form>
-
-        <x-form.select-input name="state" id="state" value="{{old('state')}}" label="{{__('Tipo de renta')}}" placeholder="Tipo de renta" class="mb-3 w-full">
-            @foreach(RentTypeEnum::cases() as $key => $rentType)
-                <x-form.select-input-option value="{{$key}}">{{$rentType->value}}</x-form.select-input-option>
-            @endforeach
-        </x-form.select-input>
+        <form action="{{ route('reservations.index', $guest) }}" method="GET" class="mb-6">
+            <x-form.select-input name="state" id="state" value="{{ old('state', $state) }}" label="{{ __('Estado') }}" placeholder="Estado" class="mb-3 w-full">
+                <x-form.select-input-option value="">{{ __('Todos') }}</x-form.select-input-option>
+                <x-form.select-input-option value="{{ \App\Enums\Reservation\ReservationStateEnum::PreReserved->name }}">{{ __('Pre-reservado') }}</x-form.select-input-option>
+                <x-form.select-input-option value="{{ \App\Enums\Reservation\ReservationStateEnum::Reserved->name }}">{{ __('Reservado') }}</x-form.select-input-option>
+            </x-form.select-input>
+            
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                {{ __('Filtrar') }}
+            </button>
+        </form>
 
         @if($reservations->isEmpty())
             <p class="text-gray-600">No hay reservas o pre-reservas registradas.</p>
@@ -16,15 +20,14 @@
                 <table class="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
                     <thead>
                         <tr class="border-b border-gray-600">
-                            <th class="py-3 px-4  text-white">Fecha de Reserva</th>
+                            <th class="py-3 px-4 text-white">Fecha de Reserva</th>
                             <th class="py-3 px-4 text-white">Estado</th>
-                        
+                            <th class="py-3 px-4 text-white">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($reservations as $reservation)
                             <tr class="border-b border-gray-600">
-                               
                                 <td class="py-3 px-4 text-white">{{ $reservation->created_at->format('d-m-Y') }}</td>
                                 <td class="py-3 px-4">
                                     @if($reservation->state == \App\Enums\Reservation\ReservationStateEnum::PreReserved->name)
@@ -34,14 +37,12 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">
-                                    <a href="{{ route('publications.show', ['publication' => $reservation->availableDay->publication]) }}" class="text-blue-500 underline">
-                                        Ver publicación
-                                    </a>
+                                    <a href="{{ route('publications.show', ['publication' => $reservation->availableDay->publication]) }}" class="text-blue-500 underline">Ver publicación</a>
                                 </td>
                                 <td class="py-3 px-4">
-                                    <a href="{{ route('reservations.create', ['reservation' => $reservation]) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                                        Ver Reserva
-                                    </a>
+                                    @if($reservation->state == \App\Enums\Reservation\ReservationStateEnum::PreReserved->name)
+                                    <a href="{{ route('reservations.create', ['reservation' => $reservation]) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Ver Reserva</a>
+                                @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -51,7 +52,7 @@
 
             <!-- Paginación -->
             <div class="mt-4">
-                {{ $reservations->links() }} 
+                {{ $reservations->links() }}
             </div>
         @endif
     </div>

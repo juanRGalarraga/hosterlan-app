@@ -51,28 +51,41 @@ class ReservationController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request, Guest $guest)
+{
     
-    {
-        $queryBuilder=Reservation::query();
-        $state=$request->string('state');
-        
-        if (ReservationStateEnum::fromName($state)) {
-            $queryBuilder->where('state',$state);
-        }
-        
+    $queryBuilder = Reservation::query();
 
-        $reservations =$queryBuilder->where('guest_id', $guest->id)
+    
+    $state = $request->input('state');
+
+    
+    $validStates = [
+        ReservationStateEnum::PreReserved->name,
+        ReservationStateEnum::Reserved->name
+    ];
+
+    
+    if ($state && in_array($state, $validStates)) {
+        
+        $queryBuilder->where('state', $state);
+    }
+
+    $reservations = $queryBuilder->where('guest_id', $guest->id)
         ->orderBy('state', 'asc')
         ->orderBy('created_at', 'asc');
 
-
-        
-        if ($reservations->count() === 1) {
-            return redirect()->route('reservations.show', $reservations->first());
-        }
-        $reservations = $reservations->paginate(25);
-        return view('reservations.index.main', compact('reservations'));
+    
+    if ($reservations->count() === 1 && $state == "PreReserved") {
+        return redirect()->route('reservations.show', $reservations->first());
     }
+
+   
+    $reservations = $reservations->paginate(25);
+
+    return view('reservations.index.main', compact('reservations', 'state','guest'));
+}
+
+    
     
 
 

@@ -8,4 +8,5 @@ enum ReservationStateEnum: string {
     use BaseEnum;
     case PreReserved = 'Pre-Reservado';
     case Reserved = 'Reservado';
+ 
 }
