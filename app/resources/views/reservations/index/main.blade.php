@@ -2,21 +2,23 @@
     <div class="form-container p-40 grid-cols-200 px-auto h-screen">
         <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas y Pre-reservas </h1>
         <form action="{{ route('reservations.index', $guest) }}" method="GET" class="mb-6">
-            <x-form.select-input name="state" id="state" value="{{ old('state', $state) }}" label="{{ __('Estado') }}" placeholder="Estado" class="mb-3 w-full">
-                <x-form.select-input-option value="">{{ __('Todos') }}</x-form.select-input-option>
-                <x-form.select-input-option value="{{ \App\Enums\Reservation\ReservationStateEnum::PreReserved->name }}">{{ __('Pre-reservado') }}</x-form.select-input-option>
-                <x-form.select-input-option value="{{ \App\Enums\Reservation\ReservationStateEnum::Reserved->name }}">{{ __('Reservado') }}</x-form.select-input-option>
-            </x-form.select-input>
-            
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                {{ __('Filtrar') }}
-            </button>
+            <div class="flex flex-row">
+                <x-form.select-input name="state" id="state" value="{{ old('state', $state) }}" label="{{ __('Estado') }}" placeholder="Estado" class="mb-3">
+                    <x-form.select-input-option value="">{{ __('Todos') }}</x-form.select-input-option>
+                    <x-form.select-input-option value="{{ \App\Enums\Reservation\ReservationStateEnum::PreReserved->name }}">{{ __('Pre-reservado') }}</x-form.select-input-option>
+                    <x-form.select-input-option value="{{ \App\Enums\Reservation\ReservationStateEnum::Reserved->name }}">{{ __('Reservado') }}</x-form.select-input-option>
+                </x-form.select-input>
+                <div class="pt-7 ml-3">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        {{ __('Filtrar') }}
+                    </button>
+                </div>
+            </div>    
         </form>
-
         @if($reservations->isEmpty())
-            <p class="text-gray-600">No hay reservas o pre-reservas registradas.</p>
+            <p class="text-gray-600">{{__('No hay elementos para mostrar')}}.</p>
         @else
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto mb-10">
                 <table class="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
                     <thead>
                         <tr class="border-b border-gray-600">

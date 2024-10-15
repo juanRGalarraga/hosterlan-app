@@ -51,39 +51,30 @@ class ReservationController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request, Guest $guest)
-{
-    
-    $queryBuilder = Reservation::query();
+    {
+        $showReserved = $request->input('showReserved', false);
 
-    
-    $state = $request->input('state');
-
-    
-    $validStates = [
-        ReservationStateEnum::PreReserved->name,
-        ReservationStateEnum::Reserved->name
-    ];
-
-    
-    if ($state && in_array($state, $validStates)) {
+        $queryBuilder = Reservation::query();
         
-        $queryBuilder->where('state', $state);
+        $state = $request->input('state');
+        $validStates = [
+            ReservationStateEnum::PreReserved->name,
+            ReservationStateEnum::Reserved->name
+        ];
+
+
+        if ($state && in_array($state, $validStates)) {
+            $queryBuilder->where('state', $state);
+        }
+
+        $reservations = $queryBuilder->where('guest_id', $guest->id)
+            ->orderByRaw("FIELD(state, 'Reserved', 'PreReserved') ASC")
+            ->orderBy('created_at', 'asc');
+
+        $reservations = $reservations->paginate(25);
+
+        return view('reservations.index.main', compact('reservations', 'state', 'guest'));
     }
-
-    $reservations = $queryBuilder->where('guest_id', $guest->id)
-        ->orderBy('state', 'asc')
-        ->orderBy('created_at', 'asc');
-
-    
-    if ($reservations->count() === 1 && $state == "PreReserved") {
-        return redirect()->route('reservations.show', $reservations->first());
-    }
-
-   
-    $reservations = $reservations->paginate(25);
-
-    return view('reservations.index.main', compact('reservations', 'state','guest'));
-}
 
     
     
@@ -106,12 +97,13 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         Log::channel('debug')->debug(json_encode($request->all()));
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
             'phoneNumber' => 'required',
-            'since' => 'date',
-            'to' => 'after_or_equal:since',
+            'since' => 'required|date_format:d/m/Y',
+            'to' => 'required|date_format:d/m/Y|after:since',
         ]);
         Log::channel('debug')->debug($validator->errors());
         if($validator->fails()){
