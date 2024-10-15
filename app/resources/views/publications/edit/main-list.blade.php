@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody id="mainList">
-    @foreach ($publications as $publication)
+    @forelse ($publications as $publication)
         <tr>
             <td class="py-2 px-4 border-b border-gray-700">{{$publication->id}}</td>
             <td class="py-2 px-4 border-b border-gray-700" title="{{$publication->title}}">{{elipsis($publication->title)}}</td>
@@ -37,7 +37,11 @@
                 </div>
             </td>
         </tr>
-    @endforeach                        
+    @empty
+        <tr>
+            <td class="py-2 px-4 border-b border-gray-700" colspan="6">No hay publicaciones</td>
+        </tr>
+    @endforelse 
     </tbody>
 </table>
 <div class="mt-4" id="paginator">
