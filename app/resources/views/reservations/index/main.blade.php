@@ -27,7 +27,7 @@
                             <th class="py-3 px-4 text-white">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         @foreach($reservations as $reservation)
                             <tr class="border-b border-gray-600">
                                 <td class="py-3 px-4 text-white">{{ $reservation->created_at->format('d-m-Y') }}</td>
