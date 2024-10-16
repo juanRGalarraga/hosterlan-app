@@ -355,6 +355,8 @@ class PublicationController extends Controller
      */
     public function update(Request $request, Publication $publication)
     {
+        Log::channel('debugger')->debug(print_r($request->file('files'), true));
+
         $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
@@ -363,10 +365,12 @@ class PublicationController extends Controller
             'number_people' => 'required|integer',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
-            'pets' => 'in:1,0',
-            'files' => 'required|array|min:1',
+            'pets' => 'in:1,0'
         ];
        
+        
+        $files = count($request->file('files', [])) - 1;
+        Log::channel('debugger')->debug(print_r($request->file('files'), true));
         $validated = Validator::make(
             $request->all(),
             $rules,
@@ -375,13 +379,17 @@ class PublicationController extends Controller
                 'files.*.required' => 'Upload even one photo'
             ]
         );
+        Log::channel('debugger')->debug(print_r($request->file('files'), true));
+        if($files >= 1){
+            
 
-        $files = count($request->file('files')) - 1;
-        foreach(range(0, $files) as $index) {
-            $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
+            foreach(range(0, $files) as $index) {
+                $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
+            }
+            $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
+            
         }
-
-        $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
+        
 
         if ($validated->fails()) {
             $request->flash();
@@ -405,31 +413,32 @@ class PublicationController extends Controller
             throw new ModelNotFoundException("Error Processing Request");
         }
 
-        foreach ($request->file('files') as $id => $file) {
-
-            if (!$file->store("public/publication-pictures/$publication->id")) {
-                Log::emergency('File cannot be stored');
-                DB::rollBack();
-                throw new FileCouldNotBeWrittenException("Error Processing Request");
-            }
-
-            $picture = Picture::create([
-                'name' => $file->hashName(),
-                'publication_id' => $publication->id,
-                'type' => $file->extension(),
-            ]);
-
-            if (!$picture->exists()) {
-                Storage::disk('publication-pictures')->deleteDirectory($publication->id);
-                Log::emergency('Piciture cannot be created');
-                DB::rollBack();
-                throw new ModelNotFoundException("Error Processing Request");
+        if($files >= 1){
+            foreach ($request->file('files') as $id => $file) {
+    
+                if (!$file->store("public/publication-pictures/$publication->id")) {
+                    Log::emergency('File cannot be stored');
+                    DB::rollBack();
+                    throw new FileCouldNotBeWrittenException("Error Processing Request");
+                }
+    
+                $picture = Picture::create([
+                    'name' => $file->hashName(),
+                    'publication_id' => $publication->id,
+                    'type' => $file->extension(),
+                ]);
+    
+                if (!$picture->exists()) {
+                    Storage::disk('publication-pictures')->deleteDirectory($publication->id);
+                    Log::emergency('Piciture cannot be created');
+                    DB::rollBack();
+                    throw new ModelNotFoundException("Error Processing Request");
+                }
             }
         }
 
         DB::commit();
-        return redirect()->route('publications.edit', ['publication' => $publication])
-            ->withSuccess(_('Publicacion actualizada exitosamente'));
+        return response()->json(Config::get('responses.success.update'));
     }
 
     /**
