@@ -10,7 +10,7 @@
     <div style="background-image: url('{{$imageSource}}');" class="bg-no-repeat bg-cover bg-center rounded-md h-[9rem] to-bg-black-10 inset-0 from-transparent via-transparent to-black/60"></div>
   </div>
   <div class="col-span-1 p-3">
-      <div class="block font-sans text-xs font-light leading-relaxed text-white antialiased max-h-32">
+      <div class="block font-sans text-xs font-light leading-relaxed text-white antialiased max-h-fit">
         {{$description}}
       </div>
       <footer class="font-mono block font-extralight text-xs italic leading-relaxed text-white antialiased">
