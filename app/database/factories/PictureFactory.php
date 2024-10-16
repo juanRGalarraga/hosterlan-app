@@ -13,6 +13,8 @@ class PictureFactory extends Factory
 {
     private static int $pictureIndex = 0;
 
+    private static array $pictures = [];
+
     /**
      * Define the model's default state.
      *
@@ -20,31 +22,32 @@ class PictureFactory extends Factory
      */
     public function definition(): array
     {
-        $pictures = $this->pictures();
-        $picture = $pictures[self::$pictureIndex];
+        self::$pictures = $this->pictures();
+        $picture = self::$pictures[self::$pictureIndex];
 
         // Incrementar el índice y reiniciarlo si es necesario
-        self::$pictureIndex = (self::$pictureIndex + 1) % count($pictures);
+        self::$pictureIndex = (self::$pictureIndex + 1) % count(self::$pictures);
 
         return [
             'name' => $picture,
-            'type' => 'jpeg',
+            'type' => pathinfo($picture, PATHINFO_EXTENSION),
         ];
     }
 
     public function configure(): static
     {
         return $this->afterCreating(function (Picture $picture) {
-            Storage::disk('publication-pictures')->copy("factory/$picture->name", "{$picture->publication->id}/{$picture->name}");
+            Storage::copy("stock/$picture->name", "public/publication-pictures/{$picture->publication->id}/{$picture->name}");
         });
     }
 
     public function pictures(): array
     {
-        return [
-            'picture00.jpeg',
-            'picture01.jpeg',
-            'picture02.jpeg',
-        ];
+        $files = Storage::allFiles('stock');
+        if($files){
+            $files = array_map(fn($file) => basename($file), $files);
+        }
+        return $files;
+
     }
 }

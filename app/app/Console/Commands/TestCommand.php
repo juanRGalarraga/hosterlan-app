@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
 use App\Enums\Publication\StateEnum;
 use Carbon\Carbon;
@@ -26,9 +27,10 @@ class TestCommand extends Command
      */
     public function handle()
     {   
-        $since = (new \DateTime())->format('Y-m-d');
-        $to = (new \DateTime($since))->modify('+7 days')->format('Y-m-d');
-        print_r($since . PHP_EOL);
-        print_r($to);
+        $files = Storage::allFiles('stock');
+        if($files){
+            Storage::copy("stock/$picture->name", "{$picture->publication->id}/{$picture->name}");
+        }
+        dump($files);
     }
 }

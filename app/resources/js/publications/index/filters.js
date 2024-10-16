@@ -6,7 +6,6 @@ import Search from '../../components/search.js';
 class PublicationFilter extends PublicationList {
 
     search
-    publication_state
     available_since
     available_to
     price_min
@@ -26,7 +25,6 @@ class PublicationFilter extends PublicationList {
 
     initFilters(){
         this.search = document.getElementById('search')
-        this.publication_state = document.getElementById('publication_state')
         this.available_since = document.getElementById('available_since')
         this.available_to = document.getElementById('available_to')
         this.price_min = document.getElementById('price_min')
@@ -65,7 +63,6 @@ class PublicationFilter extends PublicationList {
 
     getInputValues(){
         this.appendToFilters('search',            this.search.value)
-        this.appendToFilters('publication_state', this.publication_state.value)
         this.appendToFilters('available_since',   this.available_since.value)
         this.appendToFilters('available_to',      this.available_to.value)
         this.appendToFilters('price_min',         this.price_min.value)
@@ -83,7 +80,6 @@ class PublicationFilter extends PublicationList {
         this.available_to.value = ''
         this.price_min.value = ''
         this.price_max.value = ''
-        this.publication_state[0].selected = true;
         this.roomCount[0].selected = true;
         this.bathroomCount[0].selected = true;
         this.rentType[0].selected = true;
