@@ -51,12 +51,6 @@
                 @endforeach
             </x-form.select-input>
         
-            <x-form.select-input id="room_count" value="{{old('room_count')}}" name="room_count" label="{{__('Habitaciones')}}" class="mb-3 w-full">
-                @for ($i=1;$i<=$optRoomCount;$i++)
-                    <option value="{{$i}}" @selected($i == $publication->room_count)>{{$i}}</option>
-                @endfor
-            </x-form.select-input>
-        
             <x-form.select-input id="bathroom_count" value="{{old('bathroom_count')}}" name="bathroom_count" label="{{__('Baños')}}" class="mb-3 w-full">
                 @for ($i=1;$i<=$optBathroomCount;$i++)
                     <option value="{{$i}}" @selected($i == $publication->bathroom_count)>{{$i}}</option>

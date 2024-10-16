@@ -150,10 +150,10 @@ class PublicationController extends Controller
             $queryBuilder->where('p.rent_type_id', '=', $rentType);
         }
 
-        $roomCount = $request->input('roomCount');
-        if (is_numeric($roomCount)) {
-            $queryBuilder->where('p.room_count', '=', $roomCount);
-        }
+        // $roomCount = $request->input('roomCount');
+        // if (is_numeric($roomCount)) {
+        //     $queryBuilder->where('p.room_count', '=', $roomCount);
+        // }
 
         $bathroomCount = $request->input('bathroomCount');
         if (is_numeric($bathroomCount)) {
@@ -206,7 +206,6 @@ class PublicationController extends Controller
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
             'rent_type_id' => 'required|integer',
-            'room_count' => 'integer',
             'bathroom_count' => 'integer',
             'number_people' => 'required|integer',
             'ubication' => 'string|max:250',
@@ -360,7 +359,6 @@ class PublicationController extends Controller
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
             'rent_type_id' => 'required|integer',
-            'room_count' => 'integer',
             'bathroom_count' => 'integer',
             'number_people' => 'required|integer',
             'ubication' => 'string|max:250',
