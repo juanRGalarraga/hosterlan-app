@@ -10,7 +10,6 @@ class PublicationFilter extends PublicationList {
     available_to
     price_min
     price_max
-    roomCount
     bathroomCount
     rentType
     withPets
@@ -29,7 +28,6 @@ class PublicationFilter extends PublicationList {
         this.available_to = document.getElementById('available_to')
         this.price_min = document.getElementById('price_min')
         this.price_max = document.getElementById('price_max')
-        this.roomCount = document.getElementById('roomCount')
         this.bathroomCount = document.getElementById('bathroomCount')
         this.rentType = document.getElementById('rentType')
         this.withPets = document.getElementById('withPets')
@@ -67,7 +65,6 @@ class PublicationFilter extends PublicationList {
         this.appendToFilters('available_to',      this.available_to.value)
         this.appendToFilters('price_min',         this.price_min.value)
         this.appendToFilters('price_max',         this.price_max.value)
-        this.appendToFilters('roomCount',         this.roomCount.value)
         this.appendToFilters('bathroomCount',     this.bathroomCount.value)
         this.appendToFilters('rentType',          this.rentType.value)
         this.appendToFilters('withPets',          this.withPets.value)
@@ -80,7 +77,6 @@ class PublicationFilter extends PublicationList {
         this.available_to.value = ''
         this.price_min.value = ''
         this.price_max.value = ''
-        this.roomCount[0].selected = true;
         this.bathroomCount[0].selected = true;
         this.rentType[0].selected = true;
         this.withPets.value = 'false'
@@ -97,35 +93,6 @@ class PublicationFilter extends PublicationList {
         /**
          * TODO append to localstorage for persistence.
          */
-    }
-
-    loadDatePicker(){
-        // set the target element of the input field
-        const $datepickerEl = document.getElementById('dateRangePicker');
-
-       // optional options with default values and callback functions
-        const options = {
-            defaultDatepickerId: null,
-            autohide: false,
-            format: 'dd/mm/yyyy',
-            maxDate: null,
-            minDate: null,
-            orientation: 'bottom',
-            buttons: false,
-            autoSelectToday: false,
-            title: null,
-            rangePicker: false,
-        };
-
-        const instanceOptions = {
-            id: 'dateRangePicker',
-            override: true
-        };
-        const datepicker = new Datepicker($datepickerEl, options, instanceOptions);
-    }
-
-    sum(a, b) {
-        
     }
 }
 
