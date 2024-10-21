@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
 use App\Enums\Publication\StateEnum;
+use App\Models\Publication;
 use Carbon\Carbon;
 class TestCommand extends Command
 {
@@ -26,11 +27,11 @@ class TestCommand extends Command
      * Execute the console command.
      */
     public function handle()
-    {   
-        $files = Storage::allFiles('stock');
-        if($files){
-            Storage::copy("stock/$picture->name", "{$picture->publication->id}/{$picture->name}");
+    {
+        $publication = Publication::find(1);
+        $pictures = $publication->pictures->all();
+        foreach ($pictures as $key => $picture) {
+            dump($picture);
         }
-        dump($files);
     }
 }

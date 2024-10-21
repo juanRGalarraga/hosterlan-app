@@ -1,9 +1,12 @@
+@php
+    dump($errors->all());
+@endphp
 <div class="flex flex-col xs:w-full md:w-1/2 lg:w-1/2 xl:w-1/2 mx-auto">
     <div class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll my-h-screen-form-step-2">
         <div class="bg-gray-800 text-white rounded-lg shadow-lg p-8 w-full max-w-md min-w-full min-h-full">
             <form id="publicationStep2Form" name="publicationStep2Form" action="{{ route('publications.store') }}" method="POST">
-                @csrf
                 @method('PUT')
+                @csrf
                 <input type="text" name="publication_id" hidden value="{{$publication_id}}">
 
                     <!-- Título -->
@@ -28,6 +31,7 @@
         </div>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button form="publicationStep2Form" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
+        <button form="publicationStep2Form" id="buttonSendForm" type="button" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
     </div>
+    
 </div>

@@ -201,7 +201,6 @@ class PublicationController extends Controller
      */
     public function getStep2(Request $request)
     {
-
         $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
@@ -212,9 +211,11 @@ class PublicationController extends Controller
             'description' => 'string|nullable',
             'pets' => 'in:1,0',
             'files.*' => 'max:2048|file',
+            'files' => 'required|array|min:1',
         ];
 
-        $files = count($request->file('files')) - 1;
+
+        $files = count($request->file('files', [])) - 1;
         foreach (range(0, $files) as $index) {
             $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
         }
@@ -223,8 +224,9 @@ class PublicationController extends Controller
             $request->all(),
             $rules,
             [
-                'files.*.min' => 'Upload even one photo',
-                'files.*.required' => 'Upload even one photo'
+                'files' => 'Selecciona al menos una foto',
+                'files.*.min' => 'Selecciona al menos una foto',
+                'files.*.required' => 'Selecciona al menos una foto'
             ]
         );
 
@@ -290,13 +292,22 @@ class PublicationController extends Controller
             'days.*.since' => 'required|date',
             'days.*.to' => 'required|date',
             'publication_id' => 'required|integer',
-        ], ['days' => 'Select even one date available']);
+        ], ['days' => 'Selecciona al menos un día']);
 
         if ($validator->fails()) {
             $request->flash();
 
+            if($request->input('publication_id') == null){
+                return abort(500);
+            }
+
+            $publication = Publication::findOrFail($request->publication_id);
+
+            $files = $publication->pictures->all();
+            
+
             return redirect()
-                ->route('publications.create2')
+           ->route('publications.create2', $publication->getAttributes())
                 ->withErrors($validator->errors())
                 ->withInput();
         }
@@ -381,13 +392,10 @@ class PublicationController extends Controller
         );
         Log::channel('debugger')->debug(print_r($request->file('files'), true));
         if($files >= 1){
-            
-
             foreach(range(0, $files) as $index) {
                 $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
             }
             $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
-            
         }
         
 

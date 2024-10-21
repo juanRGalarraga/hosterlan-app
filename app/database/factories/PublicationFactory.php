@@ -24,7 +24,6 @@ class PublicationFactory extends Factory
             'price'=>fake()->numberBetween('3000.00', '20000.00'),
             'ubication'=> fake()->randomElement($this->addresses()),
             'description'=>fake()->randomElement($this->descriptions()),
-            'room_count'=>fake()->numberBetween(1,10),
             'bathroom_count'=>fake()->numberBetween(1,10),
             'pets'=>fake()->boolean(),
             'number_people'=> fake()->numberBetween(1,10),

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->float('price');
             $table->string('ubication');
             $table->text('description')->nullable();
-            $table->integer('room_count');
             $table->integer('bathroom_count');
             $table->boolean('pets')->default(0);
             $table->integer('number_people');
