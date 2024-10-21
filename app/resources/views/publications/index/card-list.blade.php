@@ -1,6 +1,6 @@
 @if($publications->count() >= 1)
     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 min-h-full">
-        <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-14 lg:grid-cols-2 xl:grid-cols-4 grid-flow-row">
+        <div class="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-14 lg:grid-cols-2 xl:grid-cols-2 xl:gap-x-2 grid-flow-row">
             @foreach($publications as $publication)
                 <div class="mx-auto">
                     <x-booking-card 
