@@ -46,17 +46,22 @@ class FormStep2 {
                 'text': 'Publication ID no encontrado'
             });
         }
-
+        
         let init = {
             method: 'PUT',
             headers: {
+                'Content-Type': 'application/json',
                 "X-CSRF-TOKEN": form.querySelector('[name="_token"]')?.value ?? ""
             },
-            publication_id: form.querySelector('#publication_id')?.value ?? "",
-            days: JSON.stringify(AvailableDay.datesInputs),
+            body: {
+                publication_id: form.querySelector('#publication_id')?.value ?? "",
+                days: AvailableDay.getArrayDates()
+            },
         };
         this.fetch.json(url, init).then((response) => {
-            console.debug(response);
+            if (response.status == 200) {
+                window.location.href = response.redirect;
+            }
         });
     }
 }

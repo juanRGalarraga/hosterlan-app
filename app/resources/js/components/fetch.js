@@ -20,7 +20,7 @@ export default class Fetch {
             
             let finalUrl = formatUrl(endpoint, this.options.baseUrl)
 
-            if (dataToSend?.method?.toUpperCase() !== "POST") {
+            if (dataToSend?.method?.toUpperCase() == "GET") {
                 finalUrl = formatUrl(endpoint, this.options.baseUrl, dataToSend)   
             }
 

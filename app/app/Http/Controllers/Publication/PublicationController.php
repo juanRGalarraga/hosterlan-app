@@ -323,7 +323,12 @@ class PublicationController extends Controller
             }
         });
 
-        return  response()->json(Config::get('responses.success.create'));
+        return  response()->json([
+            'status' => 200,
+            'message'=> 'Publicación guardada correctamente',
+            'title' => 'Éxito',
+            'redirect' => route('publications.index')
+        ]);
     }
 
     /**

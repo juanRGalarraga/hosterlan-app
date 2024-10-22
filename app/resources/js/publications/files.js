@@ -174,7 +174,7 @@ export default class PublicationFile {
         formatUrl(absoluteUrl).then((fullUrl) => {
 
             let init = {
-                method: 'DELETE',
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('[name="_token"]').value
