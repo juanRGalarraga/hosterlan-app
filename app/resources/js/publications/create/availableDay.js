@@ -14,6 +14,7 @@ export default class AvailableDay {
     inputTo
     contextMenu
     static dates = {}
+    static datesInputs = []
     search
     tableDates = 'tableDates'
     form
@@ -135,6 +136,8 @@ export default class AvailableDay {
 
         this.form.insertAdjacentElement('beforeend', inputSince);
         this.form.insertAdjacentElement('beforeend', inputTo);
+        AvailableDay.datesInputs.push(inputSince);
+        AvailableDay.datesInputs.push(inputTo);
 
         this.tableDates.appendChild(row);
 

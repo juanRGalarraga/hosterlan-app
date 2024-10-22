@@ -19,9 +19,15 @@ export default class Fetch {
             this.mergeOptions(options)
             
             let finalUrl = formatUrl(endpoint, this.options.baseUrl)
-            if (dataToSend?.method !== "POST") {
+
+            if (dataToSend?.method?.toUpperCase() !== "POST") {
                 finalUrl = formatUrl(endpoint, this.options.baseUrl, dataToSend)   
             }
+
+            if (dataToSend?.body !== null) {
+                dataToSend.body = JSON.stringify(dataToSend.body)
+            }
+debugger
             const response = await fetch(finalUrl, dataToSend);
             const text = await response.json();
             return text;

@@ -2,6 +2,7 @@ import AvailableDay from "./availableDay";
 import ObjectHelper from "../../utilities/objectHelper";
 import Fetch from "../../components/fetch";
 import { format } from "../../utilities/url";
+import Alert from "../../components/alert";
 class FormStep2 {
     buttonSendForm
     availableDay
@@ -20,7 +21,10 @@ class FormStep2 {
         let thisInstance = this;
         this.buttonSendForm.onclick = function (event) {
             if (ObjectHelper.isEmpty(AvailableDay.dates)) {
-                return console.error("No hay fechas disponibles");
+                return Alert.warning({
+                    title: 'Atención',
+                    text: "Cargue al menos una fecha"
+                });
             }
             thisInstance.sendForm();
         };
@@ -32,23 +36,27 @@ class FormStep2 {
             return console.error("Form not found");
         }
 
-        let formData = new FormData(form);
+        let url = format('publications/create', window.location.origin);
 
-        formData.append("available", JSON.stringify(AvailableDay.dates));
-        let url = format('publication/create/2', window.location.origin);
-        this.fetch.json({
-            url: url,
-            method: form.method ||= "POST",
-            header: {
-                "X-CSRF-TOKEN": formData.get("_token")
+        let publicationId = form.querySelector('#publication_id')?.value ?? "";
+
+        if (!publicationId) {
+            return Alert.error({
+                'title': 'Error',
+                'text': 'Publication ID no encontrado'
+            });
+        }
+
+        let init = {
+            method: 'PUT',
+            headers: {
+                "X-CSRF-TOKEN": form.querySelector('[name="_token"]')?.value ?? ""
             },
-            body: form,
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (error) {
-                console.error(error);
-            }
+            publication_id: form.querySelector('#publication_id')?.value ?? "",
+            days: JSON.stringify(AvailableDay.datesInputs),
+        };
+        this.fetch.json(url, init).then((response) => {
+            console.debug(response);
         });
     }
 }

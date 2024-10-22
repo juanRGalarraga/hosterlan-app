@@ -214,7 +214,6 @@ class PublicationController extends Controller
             'files' => 'required|array|min:1',
         ];
 
-
         $files = count($request->file('files', [])) - 1;
         foreach (range(0, $files) as $index) {
             $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
@@ -287,6 +286,7 @@ class PublicationController extends Controller
      */
     public function store(Request $request)
     {
+        Log::channel('debugger')->debug(print_r($request->all(), true));
         $validator = Validator::make($request->all(), [
             'days' => 'required|array',
             'days.*.since' => 'required|date',
@@ -296,20 +296,12 @@ class PublicationController extends Controller
 
         if ($validator->fails()) {
             $request->flash();
-
-            if($request->input('publication_id') == null){
-                return abort(500);
-            }
-
-            $publication = Publication::findOrFail($request->publication_id);
-
-            $files = $publication->pictures->all();
-            
-
-            return redirect()
-           ->route('publications.create2', $publication->getAttributes())
-                ->withErrors($validator->errors())
-                ->withInput();
+            return response()->json([
+                'status' => 406,
+                'message'=> 'Error al guardar la publicación',
+                'messages' => $validator->errors(),
+                'title' => 'Error'
+            ]);
         }
 
         $publication = Publication::findOrFail($request->publication_id);
@@ -331,9 +323,7 @@ class PublicationController extends Controller
             }
         });
 
-        return redirect()
-            ->route('publications.index')
-            ->withSuccess(__('La publicacion ha sido creada exitosamente'));
+        return  response()->json(Config::get('responses.success.create'));
     }
 
     /**
