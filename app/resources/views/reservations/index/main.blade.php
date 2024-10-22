@@ -39,7 +39,7 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">
-                                    <a href="{{ route('publications.show', ['publication' => $reservation->availableDay->publication]) }}" class="text-blue-500 underline">Ver publicación</a>
+                                    <a href="{{ route('reservations.show', ['reservation' => $reservation]) }}" class="text-blue-500 underline">Ver publicación</a>
                                 </td>
                                 <td class="py-3 px-4">
                                     @if($reservation->state == \App\Enums\Reservation\ReservationStateEnum::PreReserved->name)
