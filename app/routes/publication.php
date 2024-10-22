@@ -14,11 +14,10 @@ Route::get('publications/fetchList', [PublicationController::class, 'getList'])
 Route::get('publications/{publication?}', [PublicationController::class, 'show'])
  ->name('publications.show');
 
-Route::group(['middleware' => ['is.owner']], function () {
+Route::middleware('is.owner')->group(function () {
     
     Route::put('publications/create', [PublicationController::class, 'store'])
         ->name('publications.store');
-        
 
     Route::match(['post'], 'publications/create/2', [PublicationController::class, 'getStep2'])
         ->name('publications.create2');
