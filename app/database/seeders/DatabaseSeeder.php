@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
         Publication::factory()
-            ->count(100)
+            ->count(10)
             ->hasPictures(3)
             ->hasRentType(1)
             ->hasAvailableDays(rand(1, 5))

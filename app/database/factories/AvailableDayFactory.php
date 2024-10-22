@@ -20,7 +20,7 @@ class AvailableDayFactory extends Factory
     public function definition(): array
     {
         $since = (new \DateTime())->format('Y-m-d');
-        $days = fake()->numberBetween(5, 20);
+        $days = fake()->numberBetween( 2, 20);
         $to = (new \DateTime($since))->modify("+$days days")->format('Y-m-d');
         return [
             'publication_id' => Publication::factory(),

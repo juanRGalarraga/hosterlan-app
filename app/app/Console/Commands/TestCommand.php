@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
 use App\Enums\Publication\StateEnum;
+use App\Models\Publication;
 use Carbon\Carbon;
 class TestCommand extends Command
 {
@@ -25,10 +27,11 @@ class TestCommand extends Command
      * Execute the console command.
      */
     public function handle()
-    {   
-        $since = (new \DateTime())->format('Y-m-d');
-        $to = (new \DateTime($since))->modify('+7 days')->format('Y-m-d');
-        print_r($since . PHP_EOL);
-        print_r($to);
+    {
+        $publication = Publication::find(1);
+        $pictures = $publication->pictures->all();
+        foreach ($pictures as $key => $picture) {
+            dump($picture);
+        }
     }
 }

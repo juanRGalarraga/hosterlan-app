@@ -1,4 +1,12 @@
 <x-app-layout>
+
+    <x-slot:scripts>
+        @vite([
+            'resources/js/reservations/index/index.js',
+        ])
+    </x-slot:scripts>
+
+
     <div class="form-container p-40 grid-cols-200 px-auto h-screen">
         <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas y Pre-reservas </h1>
         <form action="{{ route('reservations.index', $guest) }}" method="GET" class="mb-6">

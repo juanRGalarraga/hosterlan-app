@@ -35,4 +35,15 @@ class Picture extends Model
       
       return asset("publication-pictures/$filename");
     }
+
+    public function getUploadedFile(){
+      $filename = self::DEFAULT_PICTURE;
+      if($this->exists()){
+        $path = "{$this->publication->id}/{$this->name}";
+        if( Storage::disk('publication-pictures')->exists($path) ){
+          $filename = $path;
+        }
+      } 
+      return asset("publication-pictures/$filename");
+    }
 }

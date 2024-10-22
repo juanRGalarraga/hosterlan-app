@@ -18,12 +18,13 @@ Route::group(['middleware' => ['is.owner']], function () {
     
     Route::put('publications/create', [PublicationController::class, 'store'])
         ->name('publications.store');
+        
 
-    Route::get('publications/create/1', [PublicationController::class, 'getStep1'])
-        ->name('publications.create1');
-
-    Route::post('publications/create/2', [PublicationController::class, 'getStep2'])
+    Route::match(['post'], 'publications/create/2', [PublicationController::class, 'getStep2'])
         ->name('publications.create2');
+
+    Route::match(['get'],'publications/create/1', [PublicationController::class, 'getStep1'])
+        ->name('publications.create1');
         
     Route::get('publications/edit/list', [PublicationController::class, 'editIndex'])
         ->name('publications.edit.list');

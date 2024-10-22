@@ -14,6 +14,7 @@ export default class AvailableDay {
     inputTo
     contextMenu
     static dates = {}
+    static datesInputs = []
     search
     tableDates = 'tableDates'
     form
@@ -97,6 +98,10 @@ export default class AvailableDay {
         AvailableDay.dates[dateMap] = {since,to};
     }
 
+    static getArrayDates() { 
+        return Object.values(AvailableDay.dates);
+    }
+
     createRow(id, dateSince, dateTo){
         let hashId = SimpleHash.generate(`${dateSince}:${dateTo}`)
         let inputClassName = 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600';
@@ -135,6 +140,8 @@ export default class AvailableDay {
 
         this.form.insertAdjacentElement('beforeend', inputSince);
         this.form.insertAdjacentElement('beforeend', inputTo);
+        AvailableDay.datesInputs.push(inputSince);
+        AvailableDay.datesInputs.push(inputTo);
 
         this.tableDates.appendChild(row);
 

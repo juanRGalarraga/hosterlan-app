@@ -150,10 +150,10 @@ class PublicationController extends Controller
             $queryBuilder->where('p.rent_type_id', '=', $rentType);
         }
 
-        $roomCount = $request->input('roomCount');
-        if (is_numeric($roomCount)) {
-            $queryBuilder->where('p.room_count', '=', $roomCount);
-        }
+        // $roomCount = $request->input('roomCount');
+        // if (is_numeric($roomCount)) {
+        //     $queryBuilder->where('p.room_count', '=', $roomCount);
+        // }
 
         $bathroomCount = $request->input('bathroomCount');
         if (is_numeric($bathroomCount)) {
@@ -201,21 +201,20 @@ class PublicationController extends Controller
      */
     public function getStep2(Request $request)
     {
-
         $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
             'rent_type_id' => 'required|integer',
-            'room_count' => 'integer',
             'bathroom_count' => 'integer',
             'number_people' => 'required|integer',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
             'pets' => 'in:1,0',
             'files.*' => 'max:2048|file',
+            'files' => 'required|array|min:1',
         ];
 
-        $files = count($request->file('files')) - 1;
+        $files = count($request->file('files', [])) - 1;
         foreach (range(0, $files) as $index) {
             $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
         }
@@ -224,8 +223,9 @@ class PublicationController extends Controller
             $request->all(),
             $rules,
             [
-                'files.*.min' => 'Upload even one photo',
-                'files.*.required' => 'Upload even one photo'
+                'files' => 'Selecciona al menos una foto',
+                'files.*.min' => 'Selecciona al menos una foto',
+                'files.*.required' => 'Selecciona al menos una foto'
             ]
         );
 
@@ -286,20 +286,22 @@ class PublicationController extends Controller
      */
     public function store(Request $request)
     {
+        Log::channel('debugger')->debug(print_r($request->all(), true));
         $validator = Validator::make($request->all(), [
             'days' => 'required|array',
             'days.*.since' => 'required|date',
             'days.*.to' => 'required|date',
             'publication_id' => 'required|integer',
-        ], ['days' => 'Select even one date available']);
+        ], ['days' => 'Selecciona al menos un día']);
 
         if ($validator->fails()) {
             $request->flash();
-
-            return redirect()
-                ->route('publications.create2')
-                ->withErrors($validator->errors())
-                ->withInput();
+            return response()->json([
+                'status' => 406,
+                'message'=> 'Error al guardar la publicación',
+                'messages' => $validator->errors(),
+                'title' => 'Error'
+            ]);
         }
 
         $publication = Publication::findOrFail($request->publication_id);
@@ -321,9 +323,12 @@ class PublicationController extends Controller
             }
         });
 
-        return redirect()
-            ->route('publications.index')
-            ->withSuccess(__('La publicacion ha sido creada exitosamente'));
+        return  response()->json([
+            'status' => 200,
+            'message'=> 'Publicación guardada correctamente',
+            'title' => 'Éxito',
+            'redirect' => route('publications.index')
+        ]);
     }
 
     /**
@@ -356,19 +361,22 @@ class PublicationController extends Controller
      */
     public function update(Request $request, Publication $publication)
     {
+        Log::channel('debugger')->debug(print_r($request->file('files'), true));
+
         $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
             'rent_type_id' => 'required|integer',
-            'room_count' => 'integer',
             'bathroom_count' => 'integer',
             'number_people' => 'required|integer',
             'ubication' => 'string|max:250',
             'description' => 'string|nullable',
-            'pets' => 'in:1,0',
-            'files' => 'required|array|min:1',
+            'pets' => 'in:1,0'
         ];
        
+        
+        $files = count($request->file('files', [])) - 1;
+        Log::channel('debugger')->debug(print_r($request->file('files'), true));
         $validated = Validator::make(
             $request->all(),
             $rules,
@@ -377,13 +385,14 @@ class PublicationController extends Controller
                 'files.*.required' => 'Upload even one photo'
             ]
         );
-
-        $files = count($request->file('files')) - 1;
-        foreach(range(0, $files) as $index) {
-            $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
+        Log::channel('debugger')->debug(print_r($request->file('files'), true));
+        if($files >= 1){
+            foreach(range(0, $files) as $index) {
+                $rules["files.$index"] = 'required|mimes:png,jpeg,jpg,gif|max:2048';
+            }
+            $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
         }
-
-        $validated = Validator::make($request->all(), $rules, ['files.*.min' => 'Upload even one photo', 'files.*.required' => 'Upload even one photo']);
+        
 
         if ($validated->fails()) {
             $request->flash();
@@ -407,31 +416,32 @@ class PublicationController extends Controller
             throw new ModelNotFoundException("Error Processing Request");
         }
 
-        foreach ($request->file('files') as $id => $file) {
-
-            if (!$file->store("public/publication-pictures/$publication->id")) {
-                Log::emergency('File cannot be stored');
-                DB::rollBack();
-                throw new FileCouldNotBeWrittenException("Error Processing Request");
-            }
-
-            $picture = Picture::create([
-                'name' => $file->hashName(),
-                'publication_id' => $publication->id,
-                'type' => $file->extension(),
-            ]);
-
-            if (!$picture->exists()) {
-                Storage::disk('publication-pictures')->deleteDirectory($publication->id);
-                Log::emergency('Piciture cannot be created');
-                DB::rollBack();
-                throw new ModelNotFoundException("Error Processing Request");
+        if($files >= 1){
+            foreach ($request->file('files') as $id => $file) {
+    
+                if (!$file->store("public/publication-pictures/$publication->id")) {
+                    Log::emergency('File cannot be stored');
+                    DB::rollBack();
+                    throw new FileCouldNotBeWrittenException("Error Processing Request");
+                }
+    
+                $picture = Picture::create([
+                    'name' => $file->hashName(),
+                    'publication_id' => $publication->id,
+                    'type' => $file->extension(),
+                ]);
+    
+                if (!$picture->exists()) {
+                    Storage::disk('publication-pictures')->deleteDirectory($publication->id);
+                    Log::emergency('Piciture cannot be created');
+                    DB::rollBack();
+                    throw new ModelNotFoundException("Error Processing Request");
+                }
             }
         }
 
         DB::commit();
-        return redirect()->route('publications.edit', ['publication' => $publication])
-            ->withSuccess(_('Publicacion actualizada exitosamente'));
+        return response()->json(Config::get('responses.success.update'));
     }
 
     /**

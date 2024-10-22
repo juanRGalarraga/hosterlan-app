@@ -51,12 +51,6 @@
                 @endforeach
             </x-form.select-input>
         
-            <x-form.select-input id="room_count" value="{{old('room_count')}}" name="room_count" label="{{__('Habitaciones')}}" class="mb-3 w-full">
-                @for ($i=1;$i<=$optRoomCount;$i++)
-                    <option value="{{$i}}" @selected($i == $publication->room_count)>{{$i}}</option>
-                @endfor
-            </x-form.select-input>
-        
             <x-form.select-input id="bathroom_count" value="{{old('bathroom_count')}}" name="bathroom_count" label="{{__('Baños')}}" class="mb-3 w-full">
                 @for ($i=1;$i<=$optBathroomCount;$i++)
                     <option value="{{$i}}" @selected($i == $publication->bathroom_count)>{{$i}}</option>
@@ -88,6 +82,6 @@
         </form>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button form="publicationForm" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Siguiente') }}</button>
+        <button form="publicationForm" id="buttonUpdatePublication" type="button" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Siguiente') }}</button>
     </div>
 </div>

@@ -174,7 +174,7 @@ export default class PublicationFile {
         formatUrl(absoluteUrl).then((fullUrl) => {
 
             let init = {
-                method: 'DELETE',
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('[name="_token"]').value
@@ -205,13 +205,13 @@ export default class PublicationFile {
     fillField() {
         document.getElementById("title").value = "Oportunidad de cabaña!!";
         document.getElementById("rent_type_id").options[1].selected = true;
-        document.getElementById("room_count").options[2].selected = true;
         document.getElementById("bathroom_count").options[3].selected = true;
         document.getElementById("number_people").options[3].selected = true;
         document.getElementById("price").value = 2000;
         document.getElementById("ubication").value = "Gualeguaychú";
         document.getElementById("description").value =
-            "Cabaña con 2 habitaciones, amueblada. Gran oportunidad";
+            `Cabaña con 2 habitaciones, amueblada. Gran oportunida. Todas las comodidades. A 10 cuadras del centro.
+            Aceptamos mascotas. No dudes en consultar. Precio por día.`;
         document.getElementById("pets").checked = true;
     }
 

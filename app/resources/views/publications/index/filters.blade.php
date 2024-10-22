@@ -14,14 +14,6 @@
         @endforeach
     </x-form.select-input>
 
-    <x-form.select-input id="roomCount" name="roomCount" class="mb-3 col-span-1 w-full">
-        <x-form.select-input-option selected>{{__('Cantidad de habitaciones')}}</x-form.select-input-option>
-        <x-form.select-input-option value="1">1</x-form.select-input-option>
-        <x-form.select-input-option value="2">2</x-form.select-input-option>
-        <x-form.select-input-option value="3">3</x-form.select-input-option>
-        <x-form.select-input-option value="4">4</x-form.select-input-option>
-    </x-form.select-input>
-
     <x-form.select-input id="bathroomCount" name="bathroomCount" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected>{{__('Cantidad de baños')}}</x-form.select-input-option>
         <x-form.select-input-option value="1">1</x-form.select-input-option>
@@ -29,6 +21,8 @@
         <x-form.select-input-option value="3">3</x-form.select-input-option>
         <x-form.select-input-option value="4">4</x-form.select-input-option>
     </x-form.select-input>
+
+    <x-form.minimal-input class="mr-2 w-1/2" id="ubication" name="ubication" type="text" placeholder="{{__('Ubicación')}}"></x-form.minimal-input>
 
     <x-form.toggle-switch label="{{__('Permite mascotas')}}" name="withPets" id="withPets" class="mb-3 col-span-1 text-right" value="false"></x-form.toggle-switch>
 

@@ -25,9 +25,12 @@ class ReservationController extends Controller
     public function preReserve(Request $request){
         $validator = Validator::make($request->all(), [
             'publication_id' => 'required|integer',
-            'available_day_id' => 'required|integer',
-            'guest_id' => 'required|integer'
+            'available_day_id' => 'required|integer'
         ]);
+
+        if(!isset(Auth::user()->guest)){
+            return redirect()->route('/');
+        }
         
         if($validator->fails()){
             return redirect()
@@ -38,8 +41,9 @@ class ReservationController extends Controller
         Publication::findOrFail($request->publication_id);
         
         AvailableDay::findOrFail($request->available_day_id);
-        
-        Guest::findOrFail($request->guest_id);
+
+        $request->mergeIfMissing(['guest_id' => Auth::user()->guest->id]);
+    
 
         if( !( $reservation = Reservation::create($request->all()) ) ) {
             Log::emergency('Error during procesing update');
