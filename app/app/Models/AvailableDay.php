@@ -54,7 +54,8 @@ class AvailableDay extends Model
     }
 
     public function isPreReserved(){
-        $reservationFound = null;
+        $reservationFound = new \stdClass();
+        $reservationFound->exists = false;
         if($this->exists()){
             $reservationFound = $this
             ->reservations
@@ -62,7 +63,7 @@ class AvailableDay extends Model
             ->where('guest_id', Auth::id())
             ->first();
         }
-        return isset($reservationFound);
+        return $reservationFound->exists ?? false;
     }
 
     public function isAvailable(){
