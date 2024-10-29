@@ -32,6 +32,7 @@
                         {{ __('Mis propiedades') }}
                     </x-nav-link>
                     @endif
+                    {{debugbar()->debug(Auth::user()?->isGuest())}}
                     @if(Auth::user()?->isGuest())
                     <x-nav-link :href="route('reservations.index', Auth::user()->guest)" :active="request()->routeIs('reservations.index')">
                         {{ __('Mis reservas') }}

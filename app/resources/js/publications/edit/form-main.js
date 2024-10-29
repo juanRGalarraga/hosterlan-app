@@ -19,33 +19,31 @@ class PublicationEdit {
     }
 
     updatePublication() {
-        let form = document.getElementById('publicationForm');
-       
-        if (!this.checkValidity(form)) {
+        if (!this.checkValidity()) {
             return;
         }
 
-        let publicationId = document.getElementById('id')?.value;
-        this.fetch = new Fetch();
+        // let publicationId = document.getElementById('id')?.value;
+        // this.fetch = new Fetch();
         
-        this.fetch.json(`publications/update/${publicationId}`,
-            { method: 'PUT', body: new FormData(form) }).then(response => 
-        {
-                if (response.status !== 200) {
-                console.log(response);
+        // this.fetch.json(`publications/update/${publicationId}`,
+        //     { method: 'PUT', body: new FormData(form) }).then(response => 
+        // {
+        //         if (response.status !== 200) {
+        //         console.log(response);
                 
-                Alert.error({ title: response.title, text: response.message });
-                return;
-            }
+        //         Alert.error({ title: response.title, text: response.message });
+        //         return;
+        //     }
 
-            Alert.success({ title: response.title, text: response.message });
-            window.location.href = format(`publications/show/${publicationId}`, window.location.origin);
-            return;
-        }
-        );
+        //     Alert.success({ title: response.title, text: response.message });
+        //     window.location.href = format(`publications/show/${publicationId}`, window.location.origin);
+        //     return;
+        // }
+        // );
     }
 
-    checkValidity(form) {
+    checkValidity() {
         let title = document.getElementById("title").value,
             price = document.getElementById("price").value,
             ubication = document.getElementById("ubication").value;

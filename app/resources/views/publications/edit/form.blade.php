@@ -78,10 +78,9 @@
             <x-form.toggle-switch label="{{__('Permite mascotas')}}"  name="pets" id="pets" class="withPets mb-[10-rem]" checked="{{$publication->pets}}" value="{{$publication->pets}}"></x-form.toggle-switch>
             
             <!-- <input  name="image" id="image" type="file"  multiple="multiple" accept="image/*" label="{{__('Imagen')}}"></input> -->
-    
         </form>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button form="publicationForm" id="buttonUpdatePublication" type="button" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Siguiente') }}</button>
+        <button form="publicationForm" id="buttonUpdatePublication" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Siguiente') }}</button>
     </div>
 </div>
