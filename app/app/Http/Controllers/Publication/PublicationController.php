@@ -406,11 +406,7 @@ class PublicationController extends Controller
         
 
         if ($validated->fails()) {
-            $request->flash();
-            return redirect()
-                ->route('publications.create1')
-                ->withErrors($validated->errors())
-                ->withInput();
+            return response()->json(Config::get('responses.error.update'));
         }
 
         DB::beginTransaction();

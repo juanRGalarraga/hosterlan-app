@@ -2,36 +2,54 @@ import Swal from "sweetalert2";
 
 export default class Alert {
 
-    static error({title, text}) {
+    static error({ title, text }) {
+
+        let message = Alert.#joinMessages(text);
+        
         Swal.fire({
             icon: 'error',
             title,
-            text,
+            text: message,
         });
     }
+    static #joinMessages(collection) {
 
-    static debug({title='', text=''}) {
+        if (typeof collection === 'object') {
+            let messages = [];
+            for (let key in collection) {
+                messages.push(`${key}: ${collection[key]}`);
+            }
+            collection = messages.join("\n\r");
+        }
+        return collection;
+    }
+
+    static debug({ title = '', text = '' }) {
+        let message = Alert.#joinMessages(text);
         Swal.fire({
             icon: 'info',
             className:'bg-gray-800',
             title,
-            text,
+            text: message,
         });
     }
 
-    static success({title, text}) {
+    static success({ title, text }) {
+        let message = Alert.#joinMessages(text);
         Swal.fire({
             icon: 'success',
             title,
-            text,
+            text: message,
         });
     }
 
-    static warning({title, text}) {
+    static warning({ title, text }) {
+        let message = Alert.#joinMessages(text);
+        
         Swal.fire({
             icon: 'warning',
             title,
-            text,
+            text: message,
         });
     }
 

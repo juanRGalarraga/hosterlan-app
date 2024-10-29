@@ -44,7 +44,7 @@ class Publication extends Model
     return Attribute::make(
         get: function (string $value) {
           if(empty($value)){
-              return 'vacío';
+              return '';
           }
           return Str::title($value);
         }
@@ -55,7 +55,7 @@ class Publication extends Model
     return Attribute::make(
         get: function ($value) {
           if(empty($value) || !is_string($value )){
-            return 'vacío';
+            return '';
           }
           return Str::ucfirst($value);
         }
@@ -66,7 +66,7 @@ class Publication extends Model
     return Attribute::make(
         get: function ($value) {
           if(empty($value) || !is_numeric($value)){
-            return 'vacío';
+            return '';
           }
           return convert($value);
         }

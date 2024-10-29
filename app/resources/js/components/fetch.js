@@ -19,7 +19,7 @@ export default class Fetch {
             this.mergeOptions(options)
             
             let finalUrl = formatUrl(endpoint, this.options.baseUrl)
-
+            
             if (dataToSend?.method?.toUpperCase() == "GET") {
                 finalUrl = formatUrl(endpoint, this.options.baseUrl, dataToSend)   
             }
@@ -28,6 +28,8 @@ export default class Fetch {
                 dataToSend.body = JSON.stringify(dataToSend.body)
             }
             const response = await fetch(finalUrl, dataToSend);
+            console.log(response);
+            
             const text = await response.json();
             return text;
 
