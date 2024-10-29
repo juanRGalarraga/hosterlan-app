@@ -19,7 +19,7 @@ Route::middleware('is.owner')->group(function () {
     Route::put('publications/create', [PublicationController::class, 'store'])
         ->name('publications.store');
 
-    Route::match(['post'], 'publications/create/2', [PublicationController::class, 'getStep2'])
+    Route::match(['post'], 'publications/create/{publication_id}', [PublicationController::class, 'getStep2'])
         ->name('publications.create2');
 
     Route::match(['get'],'publications/create/1', [PublicationController::class, 'getStep1'])

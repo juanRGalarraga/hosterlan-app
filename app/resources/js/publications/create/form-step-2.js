@@ -37,7 +37,7 @@ class FormStep2 {
         }
 
         let url = format('publications/create', window.location.origin);
-
+        
         let publicationId = form.querySelector('#publication_id')?.value ?? "";
 
         if (!publicationId) {
@@ -54,11 +54,12 @@ class FormStep2 {
                 "X-CSRF-TOKEN": form.querySelector('[name="_token"]')?.value ?? ""
             },
             body: {
-                publication_id: form.querySelector('#publication_id')?.value ?? "",
+                publication_id: publicationId,
                 days: AvailableDay.getArrayDates()
             },
         };
         this.fetch.json(url, init).then((response) => {
+            debugger
             if (response.status == 200) {
                 window.location.href = response.redirect;
             }

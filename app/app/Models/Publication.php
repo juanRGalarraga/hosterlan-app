@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Publication\StateEnum;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,9 +26,52 @@ class Publication extends Model
     'bathroom_count',
     'rent_type_id',
     'user_id',
+    'state',
     'pets',
     'number_people'
   ];
+
+  public function getHTMLState(): string {
+    return match($this->state) {
+      StateEnum::Published->name => '<span class="bg-green-400 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Publicado</span>',
+      StateEnum::Draft->name => '<span class="bg-yellow-600 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Borrador</span>',
+      default => '<span class="bg-gray-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Desconocido</span>'
+    };
+  }
+
+
+  protected function title() : Attribute {
+    return Attribute::make(
+        get: function (string $value) {
+          if(empty($value)){
+              return 'vacío';
+          }
+          return Str::title($value);
+        }
+    );
+  }
+
+  protected function description() : Attribute {
+    return Attribute::make(
+        get: function ($value) {
+          if(empty($value) || !is_string($value )){
+            return 'vacío';
+          }
+          return Str::ucfirst($value);
+        }
+    );
+  }
+
+  protected function price() : Attribute {
+    return Attribute::make(
+        get: function ($value) {
+          if(empty($value) || !is_numeric($value)){
+            return 'vacío';
+          }
+          return convert($value);
+        }
+    );
+  }
 
   public function user()
   {

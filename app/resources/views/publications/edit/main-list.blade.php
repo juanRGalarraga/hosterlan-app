@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th class="py-2 px-4 border-b border-gray-700">Numero</th>
+            <th class="py-2 px-4 border-b border-gray-700">Estado</th>
             <th class="py-2 px-4 border-b border-gray-700">Titulo</th>
             <th class="py-2 px-4 border-b border-gray-700">Descripcion</th>
             <th class="py-2 px-4 border-b border-gray-700">Precio</th>
@@ -11,8 +12,16 @@
     </thead>
     <tbody id="mainList">
     @forelse ($publications as $publication)
+
+    @php
+        $title = $publication->title;    
+
+
+    @endphp
+
         <tr>
             <td class="py-2 px-4 border-b border-gray-700">{{$publication->id}}</td>
+            <td class="py-2 px-4 border-b border-gray-700">{!! $publication->getHTMLState() !!}</td>
             <td class="py-2 px-4 border-b border-gray-700" title="{{$publication->title}}">{{elipsis($publication->title)}}</td>
             <td class="py-2 px-4 border-b border-gray-700" title="{{$publication->description}}">{{elipsis($publication->description)}}</td>
             <td class="py-2 px-4 border-b border-gray-700">{{convert($publication->price)}}</td>
