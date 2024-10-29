@@ -41,3 +41,20 @@ if(!function_exists('convert')){
         return $symbol . number_format($number, $decimals);
     }
 }
+
+
+if(!function_exists('cleanPrice')){
+    /**
+     * Delete the format of the price
+     * @param int|float|string|null $number
+     * @param string $symbol
+     * @param int $decimals
+     * @return float|int|string|null
+     */
+    function cleanPrice(int|float|string|null $number){
+        if (preg_match('/^\D*\d+(\.\d{1,2})?$/', $number)) {
+            return str_replace(['$', '€', '£'], '', $number);
+        }
+        return $number;
+    }
+}

@@ -406,7 +406,11 @@ class PublicationController extends Controller
         
 
         if ($validated->fails()) {
-            return response()->json(Config::get('responses.error.update'));
+            $request->flash();
+            return redirect()
+                ->back()
+                ->withErrors($validated->errors())
+                ->withInput();
         }
 
         DB::beginTransaction();
@@ -448,7 +452,9 @@ class PublicationController extends Controller
         }
 
         DB::commit();
-        return response()->json(Config::get('responses.success.update'));
+        return redirect()
+        ->back()
+        ->with('success', __('Publication actualizada correctamente'));
     }
 
     /**

@@ -8,39 +8,19 @@ class PublicationEdit {
     fetch = null;
 
     constructor() {
-        this.loadButtonUpload()
+        // this.loadButtonUpload()
     }
 
     loadButtonUpload() { 
         this.buttonUpload = document.getElementById(this.buttonUploadId);
-        this.buttonUpload.addEventListener('click', () => {
-            this.updatePublication();
+        this.buttonUpload.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+                // if (!this.checkValidity()) {
+                //     return;
+                // }
+            this.buttonUpload.click();
         });
-    }
-
-    updatePublication() {
-        if (!this.checkValidity()) {
-            return;
-        }
-
-        // let publicationId = document.getElementById('id')?.value;
-        // this.fetch = new Fetch();
-        
-        // this.fetch.json(`publications/update/${publicationId}`,
-        //     { method: 'PUT', body: new FormData(form) }).then(response => 
-        // {
-        //         if (response.status !== 200) {
-        //         console.log(response);
-                
-        //         Alert.error({ title: response.title, text: response.message });
-        //         return;
-        //     }
-
-        //     Alert.success({ title: response.title, text: response.message });
-        //     window.location.href = format(`publications/show/${publicationId}`, window.location.origin);
-        //     return;
-        // }
-        // );
     }
 
     checkValidity() {

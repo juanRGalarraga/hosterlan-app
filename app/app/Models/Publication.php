@@ -62,17 +62,6 @@ class Publication extends Model
     );
   }
 
-  protected function price() : Attribute {
-    return Attribute::make(
-        get: function ($value) {
-          if(empty($value) || !is_numeric($value)){
-            return '';
-          }
-          return convert($value);
-        }
-    );
-  }
-
   public function user()
   {
     return $this->belongsTo(User::class);

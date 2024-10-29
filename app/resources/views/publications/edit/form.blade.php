@@ -14,6 +14,12 @@
             @method('PUT')
             <input type="hidden" id="id" value="{{$publication->id}}">
 
+            @if(Session::has('success'))
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                {{Session::get('success')}}
+            </div>
+            @endif
+
             <x-form.select-input id="state" value="{{old('state')}}" name="state" label="{{__('Estado')}}" class="mb-3 w-full">
                 @foreach (App\Enums\Publication\StateEnum::cases() as $case)
                     <option value="{{$case->name}}" @selected($case->name == $publication->state)>
