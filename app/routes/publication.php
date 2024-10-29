@@ -19,7 +19,7 @@ Route::middleware('is.owner')->group(function () {
     Route::put('publications/create', [PublicationController::class, 'store'])
         ->name('publications.store');
 
-    Route::post('publications/create/2', [PublicationController::class, 'getStep2'])
+    Route::post('publications/create/2/{publication_id?}', [PublicationController::class, 'getStep2'])
         ->name('publications.create.2');
 
     Route::get('publications/create/1', [PublicationController::class, 'getStep1'])

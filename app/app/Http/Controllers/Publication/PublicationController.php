@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\Mime\Exception\LogicException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,7 @@ use App\Models\AvailableDay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -195,12 +197,7 @@ class PublicationController extends Controller
      */
     public function getStep1()
     {
-        $publication = Publication::create([
-            'state' => StateEnum::Draft->name,
-            'user_id' => Auth::user()->id
-        ]);
-        
-        return view('publications.create.form-step-1-main', ['publication' => $publication]);
+        return view('publications.create.form-step-1-main');
     }
 
     /**
@@ -210,8 +207,9 @@ class PublicationController extends Controller
      * @throws \SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function getStep2(Request $request, int $publication_id)
+    public function getStep2(Request $request, $publication)
     {
+        $this->middleware(\App\Http\Middleware\Publication\GetStep::class);
         $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
@@ -243,7 +241,7 @@ class PublicationController extends Controller
         if ($validated->fails()) {
             $request->flash();
             return redirect()
-                ->route('publications.create1')
+                ->back()
                 ->withErrors($validated->errors())
                 ->withInput();
         }
