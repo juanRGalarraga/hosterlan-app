@@ -60,8 +60,11 @@
         @foreach ($publication->availableDays as $availableDay)
             @php
                 $isPreReserved = $availableDay->isPreReserved();
+                $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
-                $canReserve = $isAvailable;
+                dump($isPreReserved, $isReserved, $isAvailable);
+                $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved;
+
             @endphp
 
             <button type="submit"
@@ -72,7 +75,7 @@
                 data-date="{{$availableDay->since . " hasta " . $availableDay->to}}"
                 @class(array: [
                     'buttons-reserve-day',
-                    'cursor-not-allowed' => !$canReserve,
+                    'cursor-not-allowed' => $isReserved && !$isClickeable,
                     'relative',
                     'inline-flex',
                     'items-center',
@@ -84,19 +87,19 @@
                     'border-b',
                     'border-gray-200',
                     'rounded-t-lg',
-                    'hover:bg-gray-100' => $canReserve,
-                    'hover:text-blue-700'  => $canReserve,
-                    'focus:z-10 focus:ring-2'  => $canReserve,
-                    'focus:ring-blue-700'  => $canReserve,
-                    'focus:text-blue-700'  => $canReserve,
+                    'hover:bg-gray-100' => $isClickeable,
+                    'hover:text-blue-700'  => $isClickeable,
+                    'focus:z-10 focus:ring-2'  => $isClickeable,
+                    'focus:ring-blue-700'  => $isClickeable,
+                    'focus:text-blue-700'  => $isClickeable,
                     'dark:border-gray-600',
-                    'dark:hover:text-gray-500' => $canReserve,
-                    'dark:focus:text-white'  => $canReserve,
-                    'dark:focus:ring-gray-500'  => $canReserve,
-                    'cursor-pointer'  => $canReserve,
-                    'text-gray-500' => !$canReserve,
+                    'dark:hover:text-gray-500' => $isClickeable,
+                    'dark:focus:text-white'  => $isClickeable,
+                    'dark:focus:ring-gray-500'  => $isClickeable,
+                    'cursor-pointer'  => $isClickeable,
+                    'text-gray-500' => $isReserved && !$isClickeable,
                 ])
-                @disabled(!$canReserve)
+                @disabled($isReserved && !$isClickeable)
                 type="button"
                 title="{{$isPreReserved ? __('Click para continuar con la reserva') : ''}}"
                 >

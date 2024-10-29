@@ -24,29 +24,36 @@ class DatabaseSeeder extends Seeder
             ->count(count(RentTypeEnum::cases()))
             ->create();
 
-        $user = User::factory()
-            ->count(1)
+        User::factory()
+            ->count(10)
+            ->hasOwner(1)
+            ->hasPhones(1)
+            ->create();
+
+        User::factory()
+            ->count(10)
             ->hasGuest(1)
-            ->create([
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-            'is_dev' => true
-        ]);
+            ->hasPhones(1)
+            ->create();
 
-        Phone::factory()
+        //This user is for only development purposes.
+        //You can use it to login and test the application.
+        User::factory()
             ->count(1)
+            ->hasOwner(1)
+            ->hasPhones(1)
             ->create([
-                'user_id' => $user->first()->id,
-                'is_default' => 1
+                'email' => 'test@example.com',
+                'password' => Hash::make('password'),
+                'is_dev' => true
             ]);
-
+        
         Publication::factory()
             ->count(10)
             ->hasPictures(3)
             ->hasRentType(1)
             ->hasAvailableDays(rand(1, 5))
             ->create();
-
 
         Reservation::factory()
             ->count(rand(2, 10))

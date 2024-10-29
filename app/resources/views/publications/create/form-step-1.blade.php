@@ -10,7 +10,7 @@
 
 <div class="flex flex-col w-1/2 mx-auto">
     <section class="space-x-2 px-5 my-h-screen pt-3 overflow-y-auto overflow-x-hidden mcss-hover-show-scroll mcss-hide-scroll">
-        <form id="publicationForm" name="publicationForm" action="{{ route('publications.create2') }}" method="POST" enctype="multipart/form-data">
+        <form id="publicationForm" name="publicationForm" action="{{ route('publications.create.2') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <x-form.minimal-input name="title" id="title" autohide="" type="text" value="{{old('title')}}" placeholder="Título de la publicación" class="mt-5 mb-3"></x-form.minimal-input>
             <x-input-error :messages="$errors->first('title')" />

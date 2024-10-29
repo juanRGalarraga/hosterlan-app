@@ -23,7 +23,7 @@
                         {{ __('Inicio') }}
                     </x-nav-link>
                     @if(Auth::user()?->isOwner())
-                    <x-nav-link :href="route('publications.create1')" :active="request()->routeIs('publications.create')">
+                    <x-nav-link :href="route('publications.create.1')" :active="request()->routeIs('publications.create.1')">
                         {{ __('Crear Publicacion') }}
                     </x-nav-link>
                     @endif

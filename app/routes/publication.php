@@ -19,11 +19,11 @@ Route::middleware('is.owner')->group(function () {
     Route::put('publications/create', [PublicationController::class, 'store'])
         ->name('publications.store');
 
-    Route::match(['post'], 'publications/create/2', [PublicationController::class, 'getStep2'])
-        ->name('publications.create2');
+    Route::post('publications/create/2', [PublicationController::class, 'getStep2'])
+        ->name('publications.create.2');
 
-    Route::match(['get'],'publications/create/1', [PublicationController::class, 'getStep1'])
-        ->name('publications.create1');
+    Route::get('publications/create/1', [PublicationController::class, 'getStep1'])
+        ->name('publications.create.1');
         
     Route::get('publications/edit/list', [PublicationController::class, 'editIndex'])
         ->name('publications.edit.list');
@@ -36,6 +36,7 @@ Route::middleware('is.owner')->group(function () {
 
     Route::put('publications/update/{publication}', [PublicationController::class, 'update'])
         ->name('publications.update');
-        Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
+
+    Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
             ->name('publications.destroy');
 });
