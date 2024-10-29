@@ -176,9 +176,15 @@ class PublicationController extends Controller
         }
 
         $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
-        $query = $queryBuilder->getQuery()->toRawSql();
 
-        $html = view("publications.index.card-list", compact('publications', 'query'))->render();
+        if($publications->count() == 0){
+            $publications = Publication::latest()->limit(25)->orderBy('created_at', 'DESC')->get();
+            $emptyBut = "El criterio no obtuvo resultados, pero puedes ver las siguientes publicaciones";
+            $html = view("publications.index.card-list", compact('publications', 'emptyBut'))->render();
+            return $html;
+        }
+
+        $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;
     }
 
