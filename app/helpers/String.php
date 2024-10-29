@@ -34,7 +34,10 @@ if( !function_exists('elipsis') ){
 }
 
 if(!function_exists('convert')){
-    function convert(int|float $number, string $symbol = '$', int $decimals = 2){
+    function convert(int|float|string|null $number, string $symbol = '$', int $decimals = 2){
+        if(! (is_int($number) || is_float($number) ) ){
+            return $number;
+        }
         return $symbol . number_format($number, $decimals);
     }
 }

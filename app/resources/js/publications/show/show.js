@@ -29,7 +29,7 @@ export default class PublicationShow {
                 let available_day_id = DOM.$(button).attr('data-day-available-id');
                 let publication_id = DOM.$(button).attr('data-publication-id');
                 let reserveId = DOM.$(button).attr('data-reserve-id');
-                // debugger;
+                
                 if (reserveId) {
                     let url = format(`reservation/create/${reserveId}`, window.location.origin);
                     window.location.href = url;

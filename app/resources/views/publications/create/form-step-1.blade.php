@@ -65,9 +65,7 @@
             <x-input-error :messages="$errors->first('description')" />
         
             <x-form.toggle-switch label="{{__('Permite mascotas')}}"  name="pets" id="pets" class="withPets mb-[10-rem]" value="{{old('pets', 0)}}"></x-form.toggle-switch>
-            
-            <!-- <input  name="image" id="image" type="file"  multiple="multiple" accept="image/*" label="{{__('Imagen')}}"></input> -->
-    
+        
         </form>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">

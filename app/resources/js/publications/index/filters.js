@@ -11,6 +11,7 @@ class PublicationFilter extends PublicationList {
     price_min
     price_max
     bathroomCount
+    ubication
     rentType
     withPets
     filters = {}
@@ -29,6 +30,7 @@ class PublicationFilter extends PublicationList {
         this.price_min = document.getElementById('price_min')
         this.price_max = document.getElementById('price_max')
         this.bathroomCount = document.getElementById('bathroomCount')
+        this.ubication = document.getElementById('ubication')
         this.rentType = document.getElementById('rentType')
         this.withPets = document.getElementById('withPets')
         this.buttonApplyFilter = document.getElementById('buttonApplyFilter')
@@ -64,6 +66,7 @@ class PublicationFilter extends PublicationList {
         this.appendToFilters('available_since',   this.available_since.value)
         this.appendToFilters('available_to',      this.available_to.value)
         this.appendToFilters('price_min',         this.price_min.value)
+        this.appendToFilters('ubication',         this.ubication.value)
         this.appendToFilters('price_max',         this.price_max.value)
         this.appendToFilters('bathroomCount',     this.bathroomCount.value)
         this.appendToFilters('rentType',          this.rentType.value)
@@ -75,6 +78,7 @@ class PublicationFilter extends PublicationList {
         this.search.value = ''
         this.available_since.value = ''
         this.available_to.value = ''
+        this.ubication.value = ''
         this.price_min.value = ''
         this.price_max.value = ''
         this.bathroomCount[0].selected = true;

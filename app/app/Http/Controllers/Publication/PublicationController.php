@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
+use NunoMaduro\Collision\Adapters\Phpunit\State;
 use Psy\Readline\Hoa\FileException;
 use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
 
@@ -35,7 +36,7 @@ class PublicationController extends Controller
      */
     public function index(Request $request)
     {
-        $publications = Publication::latest()->paginate(25);
+        $publications = Publication::latest()->where('state', StateEnum::Published->name)->paginate(25);
         $html = view("publications.index.main", compact('publications'));
         return $html;
     }
@@ -113,7 +114,8 @@ class PublicationController extends Controller
             ->select('p.*')
             ->from(Publication::tableName() . ' as p')
             ->join(RentType::tableName() . ' as rt', 'rent_type_id', '=', 'rt.id')
-            ->leftjoin(AvailableDay::tableName() . " as pda", 'pda.publication_id', '=', 'p.id');
+            ->leftjoin(AvailableDay::tableName() . " as pda", 'pda.publication_id', '=', 'p.id')
+            ->where('p.state',  StateEnum::Published->name);
 
         $searchValue = $request->string('search');
         if ($searchValue->isNotEmpty()) {
@@ -150,10 +152,10 @@ class PublicationController extends Controller
             $queryBuilder->where('p.rent_type_id', '=', $rentType);
         }
 
-        // $roomCount = $request->input('roomCount');
-        // if (is_numeric($roomCount)) {
-        //     $queryBuilder->where('p.room_count', '=', $roomCount);
-        // }
+        $ubication = $request->string('ubication');
+        if (!$ubication->isEmpty()) {
+            $queryBuilder->where('p.ubication', 'LIKE', "%$ubication%");
+        }
 
         $bathroomCount = $request->input('bathroomCount');
         if (is_numeric($bathroomCount)) {
@@ -176,12 +178,16 @@ class PublicationController extends Controller
         }
 
         $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
-        $query = $queryBuilder->getQuery()->toRawSql();
 
-        $html = view("publications.index.card-list", compact('publications', 'query'))->render();
+        if($publications->count() == 0){
+            $publications = Publication::latest()->where('state', StateEnum::Published->name)->limit(25)->orderBy('created_at', 'DESC')->get();
+            $emptyBut = "El criterio de búsqueda no obtuvo resultados, pero puedes ver las siguientes publicaciones";
+            $html = view("publications.index.card-list", compact('publications', 'emptyBut'))->render();
+            return $html;
+        }
+        $html = view("publications.index.card-list", compact('publications'))->render();
         return $html;
     }
-
 
     /**
      * Get the step-1-form to create a publication.
@@ -189,7 +195,12 @@ class PublicationController extends Controller
      */
     public function getStep1()
     {
-        return view('publications.create.form-step-1-main');
+        $publication = Publication::create([
+            'state' => StateEnum::Draft->name,
+            'user_id' => Auth::user()->id
+        ]);
+        
+        return view('publications.create.form-step-1-main', ['publication' => $publication]);
     }
 
     /**
@@ -199,7 +210,7 @@ class PublicationController extends Controller
      * @throws \SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function getStep2(Request $request)
+    public function getStep2(Request $request, int $publication_id)
     {
         $rules = [
             'title' => 'required|string|max:150',
@@ -237,7 +248,7 @@ class PublicationController extends Controller
                 ->withInput();
         }
 
-        $publication = new Publication();
+        $publication = Publication::findOrFail($publication_id);
         $publicationCreated = new Publication();
 
         DB::beginTransaction();
@@ -246,7 +257,7 @@ class PublicationController extends Controller
         $publicationData['state'] = StateEnum::Draft->name;
         $publicationData['user_id'] = Auth::user()->id;
 
-        $publicationCreated = $publication->create($publicationData);
+        $publicationCreated = $publication->createOrFirst($publicationData);
 
         if (!$publicationCreated->exists()) {
             Log::emergency('Publication cannot be created');
@@ -395,11 +406,7 @@ class PublicationController extends Controller
         
 
         if ($validated->fails()) {
-            $request->flash();
-            return redirect()
-                ->route('publications.create1')
-                ->withErrors($validated->errors())
-                ->withInput();
+            return response()->json(Config::get('responses.error.update'));
         }
 
         DB::beginTransaction();
