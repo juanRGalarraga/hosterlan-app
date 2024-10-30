@@ -105,7 +105,7 @@ class Publication extends Model
       }
 
       $path = "{$this->id}/{$picture->name}";
-
+      debugbar()->info($path);  
       if (Storage::disk('publication-pictures')->exists($path)) {
         return asset("publication-pictures/$path");
       }
@@ -136,6 +136,17 @@ class Publication extends Model
       return $dateString->translatedFormat('d/m/Y');
     }
     return '';
+  }
+  
+
+  public function extractRecord(array $data) : array {
+    $record = [];
+    foreach ($data as $key => $value) {
+      if(in_array($key, $this->getFillable())) {
+        $record[$key] = $value;
+      }
+    }
+    return $record;
   }
   
 }

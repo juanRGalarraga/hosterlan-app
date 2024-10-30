@@ -4,31 +4,28 @@
             <form id="publicationStep2Form" name="publicationStep2Form" action="{{ route('publications.store') }}" method="POST">
                 @method('PUT')
                 @csrf
-                <input type="text" name="publication_id" id="publication_id" hidden value="{{$publication_id}}">
+                <!-- Título -->
+                <h2 class="text-center text-xl font-bold mb-4">Días disponibles</h2>
 
-                    <!-- Título -->
-                    <h2 class="text-center text-xl font-bold mb-4">Días disponibles</h2>
+                <!-- Formulario de rango de fechas -->
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    <x-form.date-range-picker idDateFrom="available_since" idDateTo="available_to" id="dateRangePicker"></x-form.date-range-picker>
+                    <x-primary-button type="button" class="ml-3" id="buttonAddDates">{{__('Añadir')}}</x-primary-button>
+                </div>
 
-                    <!-- Formulario de rango de fechas -->
-                    <div class="flex items-center justify-center space-x-4 mb-4">
-                        <x-form.date-range-picker idDateFrom="available_since" idDateTo="available_to" id="dateRangePicker"></x-form.date-range-picker>
-                        <x-primary-button type="button" class="ml-3" id="buttonAddDates">{{__('Añadir')}}</x-primary-button>
-                    </div>
+                @if ($errors->any())
+                    <x-alert.warning>{{$errors->first('days')}}</x-alert.warning>
+                @endif
 
-                    @if ($errors->any())
-                        <x-alert.warning>{{$errors->first('days')}}</x-alert.warning>
-                    @endif
-
-                    <!-- Tabla con scroll -->
-                    <div class="overflow-y-auto h-full">
-                        @include('publications.create.form-step-2-table')
-                    </div>
+                <!-- Tabla con scroll -->
+                <div class="overflow-y-auto h-full">
+                    @include('publications.create.form-step-2-table')
                 </div>
             </form>
         </div>
     </section>
     <div class="bottom-0 relative text-center justify-center mx-0 mb-6">
-        <button form="publicationStep2Form" id="buttonSendForm" type="button" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
+        <button form="publicationStep2Form" id="buttonSendForm" type="submit" class="p-2 rounded-md w-full text-white border-2 border-blue-700 hover:bg-blue-700 focus:bg-blue-700">{{ __('Publicar') }}</button>
     </div>
     
 </div>

@@ -62,7 +62,6 @@
                 $isPreReserved = $availableDay->isPreReserved();
                 $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
-                dump($isPreReserved, $isReserved, $isAvailable);
                 $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved;
 
             @endphp

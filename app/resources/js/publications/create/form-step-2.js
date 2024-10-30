@@ -26,7 +26,7 @@ class FormStep2 {
                     text: "Cargue al menos una fecha"
                 });
             }
-            thisInstance.sendForm();
+            // thisInstance.sendForm();
         };
     }
 
@@ -37,16 +37,7 @@ class FormStep2 {
         }
 
         let url = format('publications/create', window.location.origin);
-        
-        let publicationId = form.querySelector('#publication_id')?.value ?? "";
-
-        if (!publicationId) {
-            return Alert.error({
-                'title': 'Error',
-                'text': 'Publication ID no encontrado'
-            });
-        }
-        
+      
         let init = {
             method: 'PUT',
             headers: {
@@ -54,14 +45,12 @@ class FormStep2 {
                 "X-CSRF-TOKEN": form.querySelector('[name="_token"]')?.value ?? ""
             },
             body: {
-                publication_id: publicationId,
                 days: AvailableDay.getArrayDates()
             },
         };
         this.fetch.json(url, init).then((response) => {
-            debugger
             if (response.status == 200) {
-                window.location.href = response.redirect;
+                // window.location.href = response.redirect;
             }
         });
     }

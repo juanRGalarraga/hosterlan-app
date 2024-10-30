@@ -67,7 +67,6 @@ class AvailableDay extends Model
                 ->reservations
                 ->where('state', ReservationStateEnum::PreReserved->name)
                 ->where('guest_id', Auth::id());
-            dump($query);
         }
         return $reservationFound->exists ?? false;
     }

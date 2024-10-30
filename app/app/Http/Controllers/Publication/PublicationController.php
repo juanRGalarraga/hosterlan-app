@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\Mime\Exception\LogicException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,6 +21,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 use NunoMaduro\Collision\Adapters\Phpunit\State;
 use Psy\Readline\Hoa\FileException;
@@ -207,9 +209,9 @@ class PublicationController extends Controller
      * @throws \SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function getStep2(Request $request, $publication)
+    public function getStep2(Request $request)
     {
-        $this->middleware(\App\Http\Middleware\Publication\GetStep::class);
+        
         $rules = [
             'title' => 'required|string|max:150',
             'price' => 'required|numeric',
@@ -245,49 +247,21 @@ class PublicationController extends Controller
                 ->withErrors($validated->errors())
                 ->withInput();
         }
-
-        $publication = Publication::findOrFail($publication_id);
-        $publicationCreated = new Publication();
-
-        DB::beginTransaction();
-
+        
         $publicationData = $request->except('files');
-        $publicationData['state'] = StateEnum::Draft->name;
+        $publicationData['state'] = StateEnum::Published->name;
         $publicationData['user_id'] = Auth::user()->id;
 
-        $publicationCreated = $publication->createOrFirst($publicationData);
-
-        if (!$publicationCreated->exists()) {
-            Log::emergency('Publication cannot be created');
-            DB::rollBack();
-            throw new ModelNotFoundException("Error Processing Request");
-        }
+        $directoryName = 'publication_' . Str::random(Auth::user()->id);
+        $publicationData['directory'] = $directoryName;
 
         foreach ($request->file('files') as $file) {
-
-            if (!$file->store("public/publication-pictures/$publicationCreated->id")) {
-                Log::emergency('File cannot be stored');
-                DB::rollBack();
-                throw new FileCouldNotBeWrittenException("Error Processing Request");
-            }
-
-            $picture = Picture::create([
-                'name' => $file->hashName(),
-                'publication_id' => $publicationCreated->id,
-                'type' => $file->extension(),
-            ]);
-
-            if (!$picture->exists()) {
-                Storage::disk('publication-pictures')->deleteDirectory($publicationCreated->id);
-                Log::emergency('Piciture cannot be created');
-                DB::rollBack();
-                throw new ModelNotFoundException("Error Processing Request");
-            }
+            Storage::disk('temp')->put("$directoryName/" . $file->hashName(), $file->getContent());
         }
+        
+        Session::push("publication-" . Auth::user()->id, $publicationData);
 
-        DB::commit();
-
-        return view('publications.create.form-step-2-main', ['publication_id' => $publicationCreated->id]);
+        return view('publications.create.form-step-2-main');
     }
 
     /**
@@ -295,49 +269,69 @@ class PublicationController extends Controller
      */
     public function store(Request $request)
     {
-        Log::channel('debugger')->debug(print_r($request->all(), true));
+        
         $validator = Validator::make($request->all(), [
             'days' => 'required|array',
             'days.*.since' => 'required|date',
             'days.*.to' => 'required|date',
-            'publication_id' => 'required|integer',
         ], ['days' => 'Selecciona al menos un día']);
 
         if ($validator->fails()) {
             $request->flash();
-            return response()->json([
-                'status' => 406,
-                'message'=> 'Error al guardar la publicación',
-                'messages' => $validator->errors(),
-                'title' => 'Error'
-            ]);
+            return  redirect()->back()->with('error', __('Publication no se pudo crear'));
         }
+        $publicationData = $request->session()->get(key: 'publication-' . Auth::user()->id);
+        $publicationData = reset($publicationData);
 
-        $publication = Publication::findOrFail($request->publication_id);
-        $days = $request->input('days');
+        DB::transaction(function () use ($request, $publicationData) {
 
-        if (!($publication->exists() && $days)) {
-            Log::emergency("Neccessary data to store publication not found");
-            return abort(500);
-        }
+            $publicationObj = new Publication();
+            $days = $request->input('days');
+            
+            $record = $publicationObj->extractRecord($publicationData);
+            $record['state'] = StateEnum::Published->name; 
+            $publication = Publication::create($record);
 
-        Db::transaction(function () use ($publication, $days) {
-
-            foreach ($days as $key => $availableDays) {
-                AvailableDay::create([
+            
+            foreach ($days as $availableDays) {
+                AvailableDay::create(attributes: [
                     'publication_id' => $publication->id,
                     'since' => \DateTime::createFromFormat('d/m/Y', $availableDays['since'])->format('Y-m-d'),
                     'to' => \DateTime::createFromFormat('d/m/Y', $availableDays['to'])->format('Y-m-d'),
                 ]);
             }
+
+            $files = Storage::disk('temp')->files($publicationData['directory']);
+            // dd($files);
+            foreach ($files as $file) {
+
+                $basename = basename($file);
+
+                $stored = Storage::putFile("public/publication-pictures/" . $publication->id, storage_path("app/temp/$file"));
+
+
+                if (!$stored) {
+                    Log::debug('File cannot be stored');
+                    DB::rollBack();
+                    throw new FileCouldNotBeWrittenException("Error Processing Request");
+                }
+
+                $picture = Picture::create([
+                    'name' => $basename,
+                    'publication_id' => $publication->id,
+                    'type' => pathinfo($file, PATHINFO_EXTENSION),
+                ]);
+
+                if (!$picture->exists()) {
+                    Storage::disk('publication-pictures')->deleteDirectory($publication->id);
+                    Log::emergency('Piciture cannot be created');
+                    DB::rollBack();
+                    throw new ModelNotFoundException("Error Processing Request");
+                }
+            }
         });
 
-        return  response()->json([
-            'status' => 200,
-            'message'=> 'Publicación guardada correctamente',
-            'title' => 'Éxito',
-            'redirect' => route('publications.index')
-        ]);
+        return  redirect()->route('publications.index')->with('success', __('Publication creada correctamente'));
     }
 
     /**

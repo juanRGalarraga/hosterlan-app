@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command;
 use App\Enums\Publication\StateEnum;
@@ -28,10 +29,13 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $publication = Publication::find(1);
-        $pictures = $publication->pictures->all();
-        foreach ($pictures as $key => $picture) {
-            dump($picture);
-        }
+        $files = Storage::disk('temp')->files("publication_1GkhyXXzJ9WTxGyaJJaSo");
+        $publication = new Publication();
+        dump($publication->getFillable());
+        // foreach ($files as $key => $file) {
+        //     dump(basename($file));
+        //     dump(pathinfo($file, PATHINFO_EXTENSION));
+        // }
+
     }
 }

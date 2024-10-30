@@ -3,3 +3,6 @@
 !.gitignore
 !stock/
 !stock/**
+./temp/*
+/temp
+/temp/*

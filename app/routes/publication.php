@@ -37,6 +37,7 @@ Route::middleware('is.owner')->group(function () {
     Route::put('publications/update/{publication}', [PublicationController::class, 'update'])
         ->name('publications.update');
 
+
     Route::delete('publications/{publication}', [PublicationController::class, 'destroy'])
             ->name('publications.destroy');
 });
