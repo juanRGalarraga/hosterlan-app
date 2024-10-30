@@ -27,11 +27,8 @@ export default class Fetch {
             if (dataToSend?.body !== null) {
                 dataToSend.body = JSON.stringify(dataToSend.body)
             }
-            debugger
-            const response = await fetch(finalUrl, dataToSend);
-            debugger
-            console.log(response);
             
+            const response = await fetch(finalUrl, dataToSend);
             const text = await response.json();
             return text;
 
