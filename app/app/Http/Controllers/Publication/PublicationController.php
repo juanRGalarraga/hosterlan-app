@@ -279,15 +279,12 @@ class PublicationController extends Controller
             return  redirect()->back()->with('error', __('Publication no se pudo crear'));
         }
         $publicationData = $request->session()->get(key: 'publication-' . Auth::user()->id);
-        $publicationData = reset($publicationData);
+        $publicationData = end($publicationData);
 
         DB::transaction(function () use ($request, $publicationData) {
 
-            $publicationObj = new Publication();
             $days = $request->input('days');
-            
-            
-            $publicationData['state'] = StateEnum::Published->name; 
+            $publicationData['state'] = StateEnum::Published->name;
             $publication = Publication::create($publicationData);
 
             foreach ($days as $availableDays) {
@@ -299,7 +296,7 @@ class PublicationController extends Controller
             }
 
             $files = Storage::disk('temp')->files($publicationData['directory']);
-            // dd($files);
+           
             foreach ($files as $file) {
 
                 $basename = basename($file);
@@ -330,6 +327,8 @@ class PublicationController extends Controller
                 }
             }
         });
+
+        Session::forget('publication-' . Auth::user()->id);
 
         return  redirect()->route('publications.index')->with('success', __('Publication creada correctamente'));
     }
