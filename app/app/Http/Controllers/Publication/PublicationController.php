@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Publication;
 
+use Illuminate\Http\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\Mime\Exception\LogicException;
@@ -17,13 +18,10 @@ use App\Models\AvailableDay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\RentType;
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
 use Psy\Readline\Hoa\FileException;
 use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
 
@@ -288,11 +286,10 @@ class PublicationController extends Controller
             $publicationObj = new Publication();
             $days = $request->input('days');
             
-            $record = $publicationObj->extractRecord($publicationData);
-            $record['state'] = StateEnum::Published->name; 
-            $publication = Publication::create($record);
-
             
+            $publicationData['state'] = StateEnum::Published->name; 
+            $publication = Publication::create($publicationData);
+
             foreach ($days as $availableDays) {
                 AvailableDay::create(attributes: [
                     'publication_id' => $publication->id,
@@ -307,7 +304,10 @@ class PublicationController extends Controller
 
                 $basename = basename($file);
 
-                $stored = Storage::putFile("public/publication-pictures/" . $publication->id, storage_path("app/temp/$file"));
+                $stored = Storage::putFileAs(
+                    "public/publication-pictures/" . $publication->id, 
+                    new File(storage_path("app/temp/$file")),
+                    $basename);
 
 
                 if (!$stored) {
