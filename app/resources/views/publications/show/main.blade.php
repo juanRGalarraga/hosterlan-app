@@ -62,8 +62,8 @@
                 $isPreReserved = $availableDay->isPreReserved();
                 $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
-                $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved;
-
+                $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved && Auth::user()?->isGuest();
+                debugbar()->info($isClickeable);
             @endphp
 
             <button type="submit"
@@ -74,7 +74,6 @@
                 data-date="{{$availableDay->since . " hasta " . $availableDay->to}}"
                 @class(array: [
                     'buttons-reserve-day',
-                    'cursor-not-allowed' => $isReserved && !$isClickeable,
                     'relative',
                     'inline-flex',
                     'items-center',
@@ -96,6 +95,7 @@
                     'dark:focus:text-white'  => $isClickeable,
                     'dark:focus:ring-gray-500'  => $isClickeable,
                     'cursor-pointer'  => $isClickeable,
+                    'cursor-default' => !$isClickeable,
                     'text-gray-500' => $isReserved && !$isClickeable,
                 ])
                 @disabled($isReserved && !$isClickeable)

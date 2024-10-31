@@ -29,7 +29,7 @@ class ReservationController extends Controller
         ]);
 
         if(!isset(Auth::user()->guest)){
-            return redirect()->route('/');
+            return redirect()->back();
         }
         
         if($validator->fails()){
