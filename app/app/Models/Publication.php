@@ -31,6 +31,21 @@ class Publication extends Model
     'number_people'
   ];
 
+  public function getMinPrice(){
+    $price = 0.0;
+    if($this->exists()){
+      $prices = [];
+      foreach($this->availableDays as $day){
+        $prices[] = $day->finalPrice();
+      }
+
+      sort($prices, SORT_ASC & SORT_NUMERIC);
+      $price = $prices[0] ?? 0.0;
+    }
+
+    return $price;
+  }
+
   public function getHTMLState(): string {
     return match($this->state) {
       StateEnum::Published->name => '<span class="bg-green-400 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Publicado</span>',

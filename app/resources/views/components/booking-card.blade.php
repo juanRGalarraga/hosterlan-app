@@ -3,7 +3,7 @@
     $defaultClasses = "relative flex flex-col bg-blend-darken bg-clip-border text-gray-700 shadow-lg";
 @endphp
 
-@props(['imageSource' => $imageSourceDefault, 'title', 'description', 'buttonText' ,'rating' => '', 'footer' => ''])
+@props(['imageSource' => $imageSourceDefault, 'title', 'description', 'buttonText' ,'rating' => '', 'footer' => '', 'extraInfo' => ''])
 
 <div {{$attributes->merge(['class' => $defaultClasses])}}>
   <div class="col-span-1 relative overflow-hidden bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
@@ -13,7 +13,10 @@
       <div class="block font-sans text-xs font-light leading-relaxed text-white antialiased max-h-fit">
         {{$description}}
       </div>
-      <footer class="font-mono block font-extralight text-xs italic leading-relaxed text-white antialiased">
+      <div class="font-mono font-extralight text-xs italic leading-relaxed text-white antialiased flex flex-row justify-between">
+        {{$extraInfo}}
+      </div>
+      <footer class="font-mono font-extralight text-xs italic leading-relaxed text-green-400 antialiased flex flex-row justify-between">
         {{$footer}}
       </footer>
   </div>

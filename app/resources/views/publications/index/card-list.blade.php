@@ -18,7 +18,8 @@
                     :imageSource="$publication->getFirstPicture()" 
                     :title="__($publication->title)" 
                     :description="__($publication->description)" 
-                    :footer="$publication->ubication"
+                    :extraInfo="$publication->ubication"
+                    footer="Desde {{convert($publication->getMinPrice())}}"
                     :buttonText="__('')">
                 </x-booking-card>
             </div>
