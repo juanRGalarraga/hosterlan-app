@@ -29,13 +29,17 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $files = Storage::disk('temp')->files("publication_1GkhyXXzJ9WTxGyaJJaSo");
-        $publication = new Publication();
-        dump($publication->getFillable());
-        // foreach ($files as $key => $file) {
-        //     dump(basename($file));
-        //     dump(pathinfo($file, PATHINFO_EXTENSION));
-        // }
+        $record = [
+            'nombre' => 'Juan',
+            'apellido' => 'Perez',
+            'dni' => '12345678',
+            'dirección' => 'Asturias 322',
+        ];
+
+        Session::put("publicartion__" . 2, $record);
+        Session::put("publicartion__" . 3, $record);
+
+        dump(Session::get("publicartion__" . 3));
 
     }
 }

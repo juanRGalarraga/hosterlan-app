@@ -5,7 +5,10 @@ import {
     Div, 
     DOM,
     Input,
-    Label } from '../../components/main';
+    Label
+} from '../../components/main';
+    
+import Alert from '../../components/alert';
 
 export default class AvailableDay {
 
@@ -77,14 +80,21 @@ export default class AvailableDay {
         }
     }
 
-    addDates(dateSince=null, dateTo=null){
+    addDates(dateSince = null, dateTo = null) {
 
         let since = dateSince ?? this.inputSince?.value;
         let to = dateTo ?? this.inputTo?.value;
     
-        if((typeof since != "string" || typeof to != "string")
-            || (since.length < 1 || to.length < 1)){
+        if ((typeof since != "string" || typeof to != "string")
+            || (since.length < 1 || to.length < 1)) {
             return;
+        }
+
+        let dateSinceObj = new Date(since).getTime();
+        let dateToObj = new Date(to).getTime();
+
+        if (dateSinceObj >= dateToObj) {
+            return Alert.warning({title: 'Atención', text: 'La fecha de fin debe ser mayor a la fecha de inicio'});
         }
 
         let dateMap = SimpleHash.generate(`${since}:${to}`);
