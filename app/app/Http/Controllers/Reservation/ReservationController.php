@@ -130,6 +130,7 @@ class ReservationController extends Controller
             Log::emergency('Error during procesing update');
             return abort(500);
         }
+        
 
         return redirect()
         ->route('publications.index')

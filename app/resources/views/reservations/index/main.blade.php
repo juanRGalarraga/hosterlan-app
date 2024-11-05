@@ -60,7 +60,7 @@
                 </table>
             </div>
 
-            <!-- Paginación -->
+           
             <div class="mt-4">
                 {{ $reservations->links() }}
             </div>
