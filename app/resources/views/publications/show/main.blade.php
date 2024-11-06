@@ -63,7 +63,6 @@
                 $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
                 $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved && Auth::user()?->isGuest();
-                debugbar()->info($isClickeable);
             @endphp
 
             <button type="submit"

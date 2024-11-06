@@ -171,15 +171,28 @@ class PublicationController extends Controller
 
         $priceMin = $request->input('price_min');
         if (is_numeric($priceMin)) {
-            $queryBuilder->where('p.price', '>=', $priceMin);
+            $queryBuilder->whereExists(function($query) use ($priceMin){
+                $query->select("*")
+                    ->from(AvailableDay::tableName() . ' as ad')
+                    ->where(Db::raw("`ad`.`publication_id`"), DB::raw("`p`.`id`"))
+                    ->where(DB::raw('p.price * DATEDIFF(ad.to, ad.since)'), '>=', (double)$priceMin);
+            });
         }
 
         $priceMax = $request->input('price_max');
         if (is_numeric($priceMax)) {
-            $queryBuilder->where('p.price', '<=', $priceMax);
+            $queryBuilder->whereExists(function($query) use ($priceMax){
+                $query->select("*")
+                    ->from(AvailableDay::tableName() . ' as ad')
+                    ->where(Db::raw("`ad`.`publication_id`"), DB::raw("`p`.`id`"))
+                    ->where(DB::raw('p.price * DATEDIFF(ad.to, ad.since)'), '>=', (double)$priceMax);
+            });
         }
 
-        $publications = $queryBuilder->limit(25)->orderBy('p.created_at', 'desc')->groupBy('p.id')->get();
+        debugbar()->info($queryBuilder->getQuery()->toRawSql());
+
+        $publications = $queryBuilder->limit(25)->groupBy('p.id')->get();
+        
 
         if($publications->count() == 0){
             $publications = Publication::latest()->where('state', StateEnum::Published->name)->limit(25)->orderBy('created_at', 'DESC')->get();

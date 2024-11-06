@@ -120,7 +120,6 @@ class Publication extends Model
       }
 
       $path = "{$this->id}/{$picture->name}";
-      debugbar()->info($path);  
       if (Storage::disk('publication-pictures')->exists($path)) {
         return asset("publication-pictures/$path");
       }
