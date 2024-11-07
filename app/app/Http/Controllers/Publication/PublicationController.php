@@ -179,6 +179,7 @@ class PublicationController extends Controller
             });
         }
 
+        //Comentario
         $priceMax = $request->input('price_max');
         if (is_numeric($priceMax)) {
             $queryBuilder->whereExists(function($query) use ($priceMax){
