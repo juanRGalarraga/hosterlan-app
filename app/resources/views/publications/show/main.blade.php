@@ -14,7 +14,7 @@
    <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
    </svg>
 </button>
-<button type="button" id="buttonCloseView" class="absolute top-4 right-4 bg-gray-700 text-white rounded-full p-2 focus:outline-none z-50">
+<button type="button" id="buttonCloseView" class="z-50 absolute top-4 right-4 bg-gray-700 text-white rounded-full p-2 focus:outline-none z-50">
   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
   </svg>
@@ -32,7 +32,7 @@
 
       <!-- Grupo de botones -->
       <div class="justify-center flex">
-      <div class="inline-flex rounded-md shadow-sm justify-center" role="group">
+      <!-- <div class="inline-flex rounded-md shadow-sm justify-center" role="group">
         <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
@@ -51,7 +51,7 @@
           </svg>
           {{__('Guardar')}}
         </button>
-      </div>
+      </div> -->
     </div>
 
     <p class="text-sm text-center my-3 dark:text-white">{{__('Días disponibles')}}</p>
@@ -62,6 +62,7 @@
                 $isPreReserved = $availableDay->isPreReserved();
                 $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
+                debugbar()->debug($isPreReserved, $isReserved, $isAvailable);
                 $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved && Auth::user()?->isGuest();
             @endphp
 
@@ -72,6 +73,9 @@
                 data-reserve-id="{{$availableDay->getMyReservation()?->id ?? ''}}"
                 data-date="{{$availableDay->since . " hasta " . $availableDay->to}}"
                 @class(array: [
+                    'disable' => !$isClickeable,
+                    'opacity-50' => !$isClickeable,
+                    'cursor-not-allowed' => !$isClickeable,
                     'buttons-reserve-day',
                     'relative',
                     'inline-flex',
@@ -94,10 +98,9 @@
                     'dark:focus:text-white'  => $isClickeable,
                     'dark:focus:ring-gray-500'  => $isClickeable,
                     'cursor-pointer'  => $isClickeable,
-                    'cursor-default' => !$isClickeable,
                     'text-gray-500' => $isReserved && !$isClickeable,
                 ])
-                @disabled($isReserved && !$isClickeable)
+                @disabled($isReserved || !$isClickeable)
                 type="button"
                 title="{{$isPreReserved ? __('Click para continuar con la reserva') : ''}}"
                 >

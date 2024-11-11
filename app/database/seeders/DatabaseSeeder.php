@@ -36,6 +36,15 @@ class DatabaseSeeder extends Seeder
             ->hasPhones(1)
             ->create();
 
+        User::factory()
+            ->count(1)
+            ->hasGuest(1)
+            ->hasPhones(1)
+            ->create([
+                'email' => 'guest@example.com',
+                'password' => Hash::make('password'),
+            ]);
+
         //This user is for only development purposes.
         //You can use it to login and test the application.
         User::factory()
@@ -43,7 +52,7 @@ class DatabaseSeeder extends Seeder
             ->hasOwner(1)
             ->hasPhones(1)
             ->create([
-                'email' => 'test@example.com',
+                'email' => 'owner@example.com',
                 'password' => Hash::make('password'),
                 'is_dev' => true
             ]);

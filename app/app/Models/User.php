@@ -55,8 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getDefaultPhone(): string{
         $phone = $this->phones->where('is_default', 1)->first();
-        debugbar()->debug($phone->number );
-        if($phone->exists()){
+        if($phone?->exists()){
             return $phone->number;
         }
         return '';

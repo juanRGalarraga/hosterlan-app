@@ -105,7 +105,6 @@ class ReservationController extends Controller
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
-            'phoneNumber' => 'required',
             'since' => 'required|date_format:d/m/Y',
             'to' => 'required|date_format:d/m/Y|after:since',
         ]);
@@ -123,8 +122,8 @@ class ReservationController extends Controller
 
         $reservation = Reservation::findOrFail($request->reservation_id);
 
-        $updatedAvailableDay = AvailableDay::where('id', $reservation->availableDay->publication->id)
-            ->update(['state' => AvailableDayEnum::Unavailable->name]);
+        $updatedAvailableDay = AvailableDay::where('id', $reservation->availableDay->id)
+            ->update( ['state' => AvailableDayEnum::Unavailable->name]);
 
         if(!$updated || !$updatedAvailableDay){
             Log::emergency('Error during procesing update');
