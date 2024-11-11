@@ -34,13 +34,7 @@ class Publication extends Model
   public function getMinPrice(){
     $price = 0.0;
     if($this->exists()){
-      $prices = [];
-      foreach($this->availableDays as $day){
-        $prices[] = $day->finalPrice();
-      }
-
-      sort($prices, SORT_ASC & SORT_NUMERIC);
-      $price = $prices[0] ?? 0.0;
+      return $this->price;
     }
 
     return $price;

@@ -19,7 +19,7 @@
                     :title="__($publication->title)" 
                     :description="__($publication->description)" 
                     :extraInfo="$publication->ubication"
-                    footer="Desde {{convert($publication->getMinPrice())}}"
+                    footer="Desde {{convert($publication->getMinPrice())}} por noche!"
                     :buttonText="__('')">
                 </x-booking-card>
             </div>
