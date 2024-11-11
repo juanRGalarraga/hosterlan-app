@@ -122,8 +122,8 @@ class ReservationController extends Controller
 
         $reservation = Reservation::findOrFail($request->reservation_id);
 
-        $updatedAvailableDay = AvailableDay::where('id', $reservation->availableDay->publication->id)
-            ->update(['state' => AvailableDayEnum::Unavailable->name]);
+        $updatedAvailableDay = AvailableDay::where('id', $reservation->availableDay->id)
+            ->update( ['state' => AvailableDayEnum::Unavailable->name]);
 
         if(!$updated || !$updatedAvailableDay){
             Log::emergency('Error during procesing update');

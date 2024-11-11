@@ -30,8 +30,10 @@ export default class PublicationShow {
                 let publication_id = DOM.$(button).attr('data-publication-id');
                 let reserveId = DOM.$(button).attr('data-reserve-id');
                 
+                
                 if (reserveId) {
                     let url = format(`reservation/create/${reserveId}`, window.location.origin);
+                    
                     window.location.href = url;
                     return;
                 }

@@ -42,33 +42,29 @@ class AvailableDay extends Model
     }
 
     public function getMyReservation(){
-        $reservationFound = null;
-        if($this->exists()){
-            $reservationFound = $this
-            ->reservations
-            ->where('state', ReservationStateEnum::PreReserved->name)
-            ->where('guest_id', Auth::id())
-            ->first();
+        $reservation = null;
+        if($this->exists() && Auth::user()?->isGuest()){
+            $reservation = $this
+                ->reservations
+                ->where('guest_id', Auth::user()->guest->id)
+                ->first();
+
+            if(!$reservation?->exists()) $reservation = null;
         }
-        return $reservationFound;
+        return $reservation;
     }
 
     public function isPreReserved(){
-        $reservationFound = new \stdClass();
-        $reservationFound->exists = false;
-        if($this->exists()){
-            $reservationFound = $this
+        $isPrereserved = false;
+        if($this->exists() && Auth::user()?->isGuest()){
+            $exist = $this
             ->reservations
             ->where('state', ReservationStateEnum::PreReserved->name)
-            ->where('guest_id', Auth::id())
-            ->first();
-
-            $query = $this
-                ->reservations
-                ->where('state', ReservationStateEnum::PreReserved->name)
-                ->where('guest_id', Auth::id());
+            ->where('guest_id', Auth::user()->guest->id)
+            ->first()?->exists();
+            if($exist) $isPrereserved = true;
         }
-        return $reservationFound->exists ?? false;
+        return $isPrereserved;
     }
 
     public function isReserved(){

@@ -62,6 +62,7 @@
                 $isPreReserved = $availableDay->isPreReserved();
                 $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
+                debugbar()->debug($isPreReserved, $isReserved, $isAvailable);
                 $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved && Auth::user()?->isGuest();
             @endphp
 
@@ -73,6 +74,7 @@
                 data-date="{{$availableDay->since . " hasta " . $availableDay->to}}"
                 @class(array: [
                     'disable' => !$isClickeable,
+                    'opacity-50' => !$isClickeable,
                     'cursor-not-allowed' => !$isClickeable,
                     'buttons-reserve-day',
                     'relative',
