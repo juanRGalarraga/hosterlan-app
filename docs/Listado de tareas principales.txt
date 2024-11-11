@@ -24,3 +24,8 @@ Modelos:
 [] - Publication
 [] - Picture
 [] - RentType
+
+Tarea para practica
+Descripcion del proyecto
+Diagrama de entidad y relacion
+Pantallas y opciones estimadas
