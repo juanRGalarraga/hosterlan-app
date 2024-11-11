@@ -72,6 +72,8 @@
                 data-reserve-id="{{$availableDay->getMyReservation()?->id ?? ''}}"
                 data-date="{{$availableDay->since . " hasta " . $availableDay->to}}"
                 @class(array: [
+                    'disable' => !$isClickeable,
+                    'cursor-not-allowed' => !$isClickeable,
                     'buttons-reserve-day',
                     'relative',
                     'inline-flex',
@@ -94,7 +96,6 @@
                     'dark:focus:text-white'  => $isClickeable,
                     'dark:focus:ring-gray-500'  => $isClickeable,
                     'cursor-pointer'  => $isClickeable,
-                    'cursor-default' => !$isClickeable,
                     'text-gray-500' => $isReserved && !$isClickeable,
                 ])
                 @disabled($isReserved || !$isClickeable)

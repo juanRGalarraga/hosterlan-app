@@ -105,7 +105,6 @@ class ReservationController extends Controller
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
-            'phoneNumber' => 'required',
             'since' => 'required|date_format:d/m/Y',
             'to' => 'required|date_format:d/m/Y|after:since',
         ]);
