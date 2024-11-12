@@ -269,30 +269,41 @@ class PublicationController extends Controller
     public function store(Request $request)
     {
         
-        $validator = Validator::make($request->all(), [
-            'days' => 'required|array',
-            'days.*.since' => 'required|date',
-            'days.*.to' => 'required|date',
-        ], ['days' => 'Selecciona al menos un día']);
+        // $validator = Validator::make($request->all(), [
+        //     'days' => 'required|array',
+        //     'days.*.since' => 'required|date',
+        //     'days.*.to' => 'required|date',
+        // ], ['days' => 'Selecciona al menos un día']);
 
-        if ($validator->fails()) {
-            $request->flash();
-            return  redirect()->back()->with('error', __('Publication no se pudo crear'));
-        }
+        // if ($validator->fails()) {
+        //     $request->flash();
+        //     return  redirect()->back()->with('error', __('Publication no se pudo crear'));
+        // }
+        
         $publicationData = $request->session()->get(key: 'publication-' . Auth::user()->id);
 
         DB::transaction(function () use ($request, $publicationData) {
 
             $days = $request->input('days');
-            debugbar()->info($publicationData);
+  
             $publication = Publication::create($publicationData);
-
+            
             foreach ($days as $availableDays) {
-                AvailableDay::create(attributes: [
+                $since = new Carbon($availableDays['since']);
+                $since->createFromFormat('d/m/Y', $availableDays['since']);
+                $to = new Carbon($availableDays['to']);
+                $to->createFromFormat('d/m/Y', $availableDays['to']);
+
+                // dump($availableDays['since']);
+                // dump($availableDays['to']);
+                // dump($since->format('Y-m-d'));
+                // dump($to->format('Y-m-d'));
+
+                AvailableDay::create([
                     'publication_id' => $publication->id,
-                    'since' => \DateTime::createFromFormat('d/m/Y', $availableDays['since'])->format('Y-m-d'),
-                    'to' => \DateTime::createFromFormat('d/m/Y', $availableDays['to'])->format('Y-m-d'),
-                ]);
+                    'since' => $since->format('Y-m-d'),
+                    'to' => $to->format('Y-m-d'),
+                ] );
             }
 
             $files = Storage::disk('temp')->files($publicationData['directory']);

@@ -33,8 +33,12 @@ class AvailableDay extends Model
     public function dayCount(): int {
         $count = 0;
         if($this->exists()){
-            $date = Carbon::createFromFormat('d/m/Y', $this->since);
-            $now = Carbon::createFromFormat('d/m/Y', $this->to);
+            debugbar()->debug($this->since);
+            debugbar()->debug($this->to);
+            $date = Carbon::createFromFormat('Y-m-d', $this->since);
+            $now = Carbon::createFromFormat('Y-m-d', $this->to);
+            debugbar()->debug($date);
+            debugbar()->debug($now);
             $diff = $date->diffInDays($now);
             $count = $diff;
         }
@@ -96,28 +100,5 @@ class AvailableDay extends Model
     
     public function guests() : HasMany {
         return $this->hasMany(Guest::class);
-    }
-
-    protected function since() : Attribute {
-        return Attribute::make(
-            get: function (string $value) {
-                $carbonDate = \DateTime::createFromFormat('Y-m-d', $value);
-                if($carbonDate){
-                    return $carbonDate->format('d/m/Y');
-                }
-                return $value;
-            }
-        );
-    }
-    protected function to() : Attribute {
-        return Attribute::make(
-            get: function (string $value) {
-                $carbonDate = \DateTime::createFromFormat('Y-m-d', $value);
-                if($carbonDate){
-                    return $carbonDate->format('d/m/Y');
-                }
-                return $value;
-            }
-        );
     }
 }

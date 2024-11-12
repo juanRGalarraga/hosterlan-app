@@ -90,12 +90,18 @@ export default class AvailableDay {
             return;
         }
 
-        let dateSinceObj = new Date(since).getTime();
-        let dateToObj = new Date(to).getTime();
+        let [sinceDay, sinceMonth, sinceYear] = since.split('/');
+        since = `${sinceDay}/${sinceMonth}/${sinceYear}`;
 
-        if (dateSinceObj >= dateToObj) {
-            return Alert.warning({title: 'Atención', text: 'La fecha de fin debe ser mayor a la fecha de inicio'});
-        }
+        let [toDay, toMonth, toYear] = to.split('/');
+        to = `${toDay}/${toMonth}/${toYear}`;
+
+        // let dateSinceObj = new Date(since).getTime();
+        // let dateToObj = new Date(to).getTime();
+
+        // if (dateSinceObj >= dateToObj) {
+        //     return Alert.warning({title: 'Atención', text: 'La fecha de fin debe ser mayor a la fecha de inicio'});
+        // }
 
         let dateMap = SimpleHash.generate(`${since}:${to}`);
         

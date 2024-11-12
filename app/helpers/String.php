@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if( !function_exists('elipsis') ){
     /**
     * Summary. Corta $cad por el espacio en blanco siguiente a la posición $len y agrega $elipse al final.
@@ -56,5 +58,19 @@ if(!function_exists('cleanPrice')){
             return str_replace(['$', '€', '£'], '', $number);
         }
         return $number;
+    }
+}
+
+if(!function_exists('formatDate')){
+    /**
+     * Delete the format of the price
+     * @param int|float|string|null $number
+     * @param string $symbol
+     * @param int $decimals
+     * @return float|int|string|null
+     */
+    function formatDate(string $number){
+        $date = Carbon::createFromFormat('Y-m-d', $number);
+        return $date->format('d/m/Y');
     }
 }

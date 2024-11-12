@@ -62,7 +62,6 @@
                 $isPreReserved = $availableDay->isPreReserved();
                 $isReserved = $availableDay->isReserved();
                 $isAvailable = $availableDay->isAvailable();
-                debugbar()->debug($isPreReserved, $isReserved, $isAvailable);
                 $isClickeable = ($isAvailable || $isPreReserved) && !$isReserved && Auth::user()?->isGuest();
             @endphp
 
@@ -111,7 +110,7 @@
                     <x-utils.badge class="ml-2 text-xs">{{__('Pendiente')}}</x-utils.badge>
                 @endif
                 <span class="text-xs">
-                  {{" $availableDay->since " . __('hasta el') . " {$availableDay->to} "}}
+                  {{formatDate($availableDay->since) . " " . __('hasta el') . " " . formatDate($availableDay->to)}}
                 </span>
                 <span class="text-green-400 font-bold text-xs ml-auto">
                   {{ convert($availableDay->finalPrice()) }}
