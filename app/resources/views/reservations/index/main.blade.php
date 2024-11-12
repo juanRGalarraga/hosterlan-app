@@ -52,7 +52,9 @@
                                 <td class="py-3 px-4">
                                     @if($reservation->state == \App\Enums\Reservation\ReservationStateEnum::PreReserved->name)
                                     <a href="{{ route('reservations.create', ['reservation' => $reservation]) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Ver Reserva</a>
-                                @endif
+                                    @elseif ($reservation->state == \App\Enums\Reservation\ReservationStateEnum::Reserved->name)
+                                    <a href="{{ route('reservations.show', ['reservation' => $reservation]) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Ver Reserva</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
