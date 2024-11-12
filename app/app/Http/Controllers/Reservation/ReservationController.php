@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reservation;
 
+use App\Models\Owner;
 use App\Enums\Publication\AvailableDayEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\Reservation\ReservationStateEnum;
@@ -80,6 +81,21 @@ class ReservationController extends Controller
         return view('reservations.index.main', compact('reservations', 'state', 'guest'));
     }
 
+    public function indexOwner(Request $request, Owner $owner)
+    {
+        $reservations = [];
+        $publicationIds = Publication::where('user_id', Auth::id())->pluck('id');
+
+        $availablesDays = AvailableDay::whereIn('publication_id', $publicationIds)
+            ->where('state', AvailableDayEnum::Unavailable->name)
+            ->get();
+        
+        foreach ($availablesDays as $availableDay) {
+            $reservations[] = $availableDay->reservations;
+        }
+
+        return view('reservations.index.main-owner', ['reservationsCollection' => $reservations]);
+    }
     
     
 
@@ -105,8 +121,6 @@ class ReservationController extends Controller
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
-            'since' => 'required|date_format:d/m/Y',
-            'to' => 'required|date_format:d/m/Y|after:since',
         ]);
         Log::channel('debug')->debug($validator->errors());
         if($validator->fails()){
