@@ -20,12 +20,7 @@
                     <label for="name" class="block text-sm font-medium text-gray-300">{{__('Nombre Completo')}}</label>
                     <input type="text" readonly id="name" name="name" value="{{Auth::user()->name ." ". Auth::user()->surname}}" required class="mt-1 block w-full px-3 py-2 border-0 rounded-md shadow-sm focus:outline-none placeholder-gray-400 sm:text-sm dark:bg-gray-900 text-white">
                 </div>
-
-                <div class="mb-4">
-                    <label for="dni" class="block text-sm font-medium text-gray-300">{{__('DNI')}}</label>
-                    <input type="text" readonly id="dni" name="dni" value="{{Auth::user()?->dni}}" required class="mt-1 block w-full px-3 py-2 border-0 rounded-md shadow-sm focus:outline-none placeholder-gray-400 sm:text-sm dark:bg-gray-900 text-white">
-                </div>
-    
+                
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-300">{{__('Correo Electrónico')}}</label>
                     <input type="email" id="email" name="email" value="{{old('email', Auth::user()->email)}}" required readonly class="mt-1 block w-full px-3 py-2 border-0 rounded-md shadow-sm focus:outline-none placeholder-gray-400 sm:text-sm dark:bg-gray-900 text-white focus:border-0">

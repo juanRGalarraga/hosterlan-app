@@ -101,7 +101,7 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         Log::channel('debug')->debug(json_encode($request->all()));
-        // dd($request->all());
+      
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer',
             'name' => 'required|string|max:80',
@@ -131,7 +131,7 @@ class ReservationController extends Controller
         }
 
         return redirect()
-        ->route('publications.index')
+        ->route('reservations.index', Auth::user()->guest->id)
         ->withSuccess(__('La reserva ha sido realizada correctamente'));
     }
 
