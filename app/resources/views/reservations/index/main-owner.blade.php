@@ -11,7 +11,7 @@
 
     <div class="form-container p-40 grid-cols-200 px-auto h-screen">
         <h1 class="text-2xl font-bold form-title mb-6 dark:text-white">Reservas confirmadas </h1>
-        @if(!count($reservationsCollection))
+        @if($reservations->isEmpty())
             <p class="text-gray-600">{{__('No hay elementos para mostrar')}}.</p>
         @else
             <div class="overflow-x-auto mb-10">
@@ -25,11 +25,7 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        
-                        @foreach($reservationsCollection as $reservations)
-                            @foreach ($reservations as $reservation)
-                                
-                            
+                        @foreach($reservations as $reservation)                            
                             <tr class="border-b border-gray-600">
                                 @php
                                     $since = new Carbon($reservation->availableDay->since);
@@ -55,7 +51,6 @@
                                     @endif
                                 </td>
                             </tr>
-                            @endforeach
                         @endforeach
                     </tbody>
                 </table>

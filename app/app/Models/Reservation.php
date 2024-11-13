@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\CanGetTableNameStatically;
 use App\Models\Guest;
 use App\Models\AvailableDay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    use HasFactory;
+    use HasFactory, CanGetTableNameStatically;
 
     protected $fillable = [
         'available_day_id',

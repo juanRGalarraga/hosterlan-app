@@ -37,6 +37,7 @@
                     </thead>
                     <tbody class="text-center">
                         @foreach($reservations as $reservation)
+                        
                             <tr class="border-b border-gray-600">
                                 <td class="py-3 px-4 text-white">{{ $reservation->created_at->format('d-m-Y') }}</td>
                                 <td class="py-3 px-4">
@@ -47,7 +48,7 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4">
-                                    <a href="{{ route('publications.show', ['publication' => $reservation->availableDay->publication]) }}" class="text-blue-500 underline">Ver publicación</a>
+                                    
                                 </td>
                                 <td class="py-3 px-4">
                                     @if($reservation->state == \App\Enums\Reservation\ReservationStateEnum::PreReserved->name)
@@ -60,11 +61,6 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Paginación -->
-            <div class="mt-4">
-                {{ $reservations->links() }}
             </div>
         @endif
     </div>

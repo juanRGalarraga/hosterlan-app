@@ -104,19 +104,19 @@ class Publication extends Model
 
   public function getFirstPicture(): string
   {
-    $defaultPath = asset(Picture::DEFAULT_PICTURE);
+      $defaultPath = asset(Picture::DEFAULT_PICTURE);
 
-    if ($this->exists()) {
-      $picture = $this->pictures->first() ?? '';
+      if ($this->exists()) {
+        $picture = $this->pictures->first() ?? '';
+        debugbar()->debug($picture);
+        if ( empty($picture) ) {
+          return $defaultPath;
+        }
 
-      if ( empty($picture) ) {
-        return $defaultPath;
-      }
-
-      $path = "{$this->id}/{$picture->name}";
-      if (Storage::disk('publication-pictures')->exists($path)) {
-        return asset("publication-pictures/$path");
-      }
+        $path = "{$this->id}/{$picture->name}";
+        if (Storage::disk('publication-pictures')->exists($path)) {
+          return asset("publication-pictures/$path");
+        }
 
     }
     return $defaultPath;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reservation;
 
+
 use App\Models\Owner;
 use App\Enums\Publication\AvailableDayEnum;
 use Illuminate\Support\Facades\Auth;
@@ -57,8 +58,6 @@ class ReservationController extends Controller
      */
     public function index(Request $request, Guest $guest)
     {
-        $showReserved = $request->input('showReserved', false);
-
         $queryBuilder = Reservation::query();
         
         $state = $request->input('state');
@@ -72,29 +71,35 @@ class ReservationController extends Controller
             $queryBuilder->where('state', $state);
         }
 
-        $reservations = $queryBuilder->where('guest_id', $guest->id)
-            ->orderByRaw("FIELD(state, 'Reserved', 'PreReserved') ASC")
-            ->orderBy('created_at', 'asc');
+        $queryBuilder->where('guest_id', $guest->id)
+        ->orderByRaw("FIELD(state, 'Reserved', 'PreReserved') ASC")
+        ->orderBy('created_at', 'asc');
 
-        $reservations = $reservations->paginate(25);
+        debugbar()->debug($queryBuilder->toRawSql());
+        
+        $reservations = $queryBuilder->limit(25)->get();
 
         return view('reservations.index.main', compact('reservations', 'state', 'guest'));
     }
 
     public function indexOwner(Request $request, Owner $owner)
     {
-        $reservations = [];
-        $publicationIds = Publication::where('user_id', Auth::id())->pluck('id');
+        $query = Reservation::query();
 
-        $availablesDays = AvailableDay::whereIn('publication_id', $publicationIds)
-            ->where('state', AvailableDayEnum::Unavailable->name)
-            ->get();
+        $query
+            ->select('r.*')
+            ->from(Publication::tableName() . ' as p')
+            ->join(AvailableDay::tableName() . ' as ad', 'ad.publication_id', '=', 'p.id')
+            ->join(Reservation::tableName() . ' as r', 'r.available_day_id', '=', 'ad.id')
+            ->where('p.user_id', $owner->user->id)
+            ->where('ad.state', AvailableDayEnum::Unavailable->name)
+            ->orderBy('p.created_at', 'desc');
+
+        debugbar()->debug($query->toRawSql());
+
+        $reservations = $query->get();
         
-        foreach ($availablesDays as $availableDay) {
-            $reservations[] = $availableDay->reservations;
-        }
-
-        return view('reservations.index.main-owner', ['reservationsCollection' => $reservations]);
+        return view('reservations.index.main-owner', ['reservations' => $reservations]);
     }
     
     

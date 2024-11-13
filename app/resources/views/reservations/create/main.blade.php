@@ -18,7 +18,7 @@
                 @csrf
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-300">{{__('Nombre Completo')}}</label>
-                    <input type="text" readonly id="name" name="name" value="{{Auth::user()->name ." ". Auth::user()->surname}}" required class="mt-1 block w-full px-3 py-2 border-0 rounded-md shadow-sm focus:outline-none placeholder-gray-400 sm:text-sm dark:bg-gray-900 text-white">
+                    <input type="text" readonly id="name" name="name" value="{{Auth::user()->name}}" required class="mt-1 block w-full px-3 py-2 border-0 rounded-md shadow-sm focus:outline-none placeholder-gray-400 sm:text-sm dark:bg-gray-900 text-white">
                 </div>
                 
                 <div class="mb-4">
@@ -57,11 +57,10 @@
         </div>
 
         <div class="col-span-2 md:col-span-2 ml-3 col-start-3">
-
             <x-publication.mini-card
                 srcImage="{{$publication->getFirstPicture()}}"
                 title="{{$publication->title}}"
-                subtitle="{{$publication->rentType->name}}"
+                subtitle=""
             ></x-publication.mini-card>
 
             <h2 class="text-2xl font-bold form-title mb-6 dark:text-white">{{__('Detalles del precio')}}</h2>

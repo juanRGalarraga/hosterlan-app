@@ -13,15 +13,18 @@ export default class PublicationFile {
     files = {};
     maxFilesUpload = 5;
     fetch
+    persist = true
 
     constructor({
         inputId,
         form = "publicationForm",
         rootPreviewFiles = "previewFiles",
+        persist = true
     }) {
         this.#initElements(inputId, form, rootPreviewFiles);
         this.loadOnchange();
         this.fetch = new Fetch();
+        this.persist = persist
     }
 
     #initElements(inputId, form, rootPreviewFiles) {
@@ -105,9 +108,9 @@ export default class PublicationFile {
                 
                 // Generate a hash that is a single alphabetic character
                 let hash = SimpleHash.generate(file.name);
-                this.files[hash] = value;
+                thisInstance.files[hash] = value;
                 
-                this.createInputFile(file, hash);
+                thisInstance.createInputFile(file, hash);
             }
         });
     }
@@ -146,27 +149,30 @@ export default class PublicationFile {
             buttons.forEach((button) => {
                 button.onclick = () => {
                     thisInstance.deleteFile(
-                        button.getAttribute("data-filename")
+                        button.getAttribute("data-filename"),
+                        thisInstance.persist
                     );
                 };
             });
         }
     }
 
-    deleteFile(id) {
-        
+    deleteFile(id, persist = true) {
         let indexOfFilename = this.files[id] ?? null;
         if (indexOfFilename == null) return console.error(id + " not exist");
 
         let input = document.getElementById(id);
         if (!input) return console.error(id + " input not exist");
         
-        this.persistDeletePicture(id)
+        if (persist) {
+            this.persistDeletePicture(id, input)
+        }
+
         input.remove();
         delete this.files[id];
     }
 
-    persistDeletePicture(id) { 
+    persistDeletePicture(id, input) { 
         let thisInstance = this
         let baseUrl = `pictures/${id}`;
         const absoluteUrl = new URL(baseUrl, window.location.origin).href;
@@ -186,7 +192,11 @@ export default class PublicationFile {
                     let publicationId = document.getElementById("id").value;
                     thisInstance.getUploadedFiles(publicationId);
                 }
-            });
+            }).catch((error) => {
+                input.remove();
+                delete this.files[id];
+                console.error(error);
+            })
 
         })
     }
