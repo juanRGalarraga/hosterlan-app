@@ -263,22 +263,67 @@ class PublicationController extends Controller
         return view('publications.create.form-step-2-main');
     }
 
+    public function getAddDaysForm(){
+        return view('publications.create.form-step-2-main');
+    }
+
+    /**
+     * Add more day to publiication
+     * @param \Illuminate\Http\Request $request
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function addDays(Request $request, Publication $publication)
+    {
+        $validator = Validator::make($request->all(), [
+            'days' => 'required|array',
+            'days.*.since' => 'required|date',
+            'days.*.to' => 'required|date',
+        ], ['days' => 'Selecciona al menos un día']);
+
+        if ($validator->fails()) {
+            $request->flash();
+            return  redirect()->back()->with('error', __('Publication no se pudo crear'));
+        }
+
+        DB::transaction(function () use ($request, $publication) {
+
+            $days = $request->input('days');
+            
+            foreach ($days as $availableDays) {
+                $since = new Carbon($availableDays['since']);
+                $since->createFromFormat('d/m/Y', $availableDays['since']);
+                $to = new Carbon($availableDays['to']);
+                $to->createFromFormat('d/m/Y', $availableDays['to']);
+
+                AvailableDay::create([
+                    'publication_id' => $publication->id,
+                    'since' => $since->format('Y-m-d'),
+                    'to' => $to->format('Y-m-d'),
+                ] );
+            }
+        });
+
+        return  redirect()->route('publications.index')->with('success', __('Publication guardada correctamente'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         
-        // $validator = Validator::make($request->all(), [
-        //     'days' => 'required|array',
-        //     'days.*.since' => 'required|date',
-        //     'days.*.to' => 'required|date',
-        // ], ['days' => 'Selecciona al menos un día']);
+        $validator = Validator::make($request->all(), [
+            'days' => 'required|array',
+            'days.*.since' => 'required|date',
+            'days.*.to' => 'required|date',
+        ], ['days' => 'Selecciona al menos un día']);
 
-        // if ($validator->fails()) {
-        //     $request->flash();
-        //     return  redirect()->back()->with('error', __('Publication no se pudo crear'));
-        // }
+        if ($validator->fails()) {
+            $request->flash();
+            return  redirect()->back()->with('error', __('Publication no se pudo crear'));
+        }
         
         $publicationData = $request->session()->get(key: 'publication-' . Auth::user()->id);
 
@@ -419,7 +464,13 @@ class PublicationController extends Controller
         DB::beginTransaction();
 
         $publicationData = $request->except('files');
-        $publicationData['state'] = StateEnum::Published->name;
+        $state = $request->input('state');
+        
+        $publicationData['state'] =  StateEnum::Published->name;
+        if(StateEnum::fromName($state)){
+            $publicationData['state'] = $state;
+        }
+        
         $publicationData['user_id'] = Auth::user()->id;
 
         $updated = $publication->update($publicationData);

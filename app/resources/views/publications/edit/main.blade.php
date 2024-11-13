@@ -31,6 +31,9 @@
                     <button type="button" form="frm-filter-properties" id="clearFilterButton" class="bg-red-400 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
                         {{ __('Borrar') }}
                     </button>
+                    <a href="{{route('publications.create.1')}}" class="">
+                        {{ __('Crear Publicacion') }}
+                    </a>
                 </div>
             </div>
             <div id="mainList">

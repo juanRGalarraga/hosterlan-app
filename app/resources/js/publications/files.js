@@ -169,7 +169,17 @@ export default class PublicationFile {
         }
 
         input.remove();
+
+        this.deleteCard(input.id);
+
         delete this.files[id];
+    }
+
+    deleteCard(id) {
+        let card = document.getElementById("wrapper-" + id);
+        if (card) { 
+            card.remove();
+        }
     }
 
     persistDeletePicture(id, input) { 
