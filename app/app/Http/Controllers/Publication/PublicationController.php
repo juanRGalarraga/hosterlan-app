@@ -135,7 +135,7 @@ class PublicationController extends Controller
 
         $availableSince = $request->input('available_since');
         if ($availableSince != null) {
-            $availableSinceFormated = Carbon::createFromFormat('d/m/Y', $availableSince)->format('Y-m-d');
+            $availableSinceFormated = Carbon::createFromFormat('Y-m-d', $availableSince)->format('Y-m-d');
             if ($availableSinceFormated) {
                 $queryBuilder->where(DB::raw('DATE(pda.since)'), '>=', $availableSinceFormated);
             }
@@ -143,7 +143,7 @@ class PublicationController extends Controller
 
         $availableTo = $request->input('available_to');
         if ($availableTo != null) {
-            $availableToFormated = Carbon::createFromFormat('d/m/Y', $availableTo)->format('Y-m-d');
+            $availableToFormated = Carbon::createFromFormat('Y-m-d', $availableTo)->format('Y-m-d');
             if ($availableToFormated && $availableToFormated > $availableSinceFormated) {
                 $queryBuilder->where(DB::raw('DATE(pda.to)'), '<=', $availableToFormated);
             }

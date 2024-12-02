@@ -5,7 +5,14 @@
         <x-form.minimal-input class="w-1/2" id="price_max" name="price_max" type="text" placeholder="{{__('Precio máx.')}}"></x-form.minimal-input>
     </div>
 
-    <x-form.date-range-picker id="dateRangePicker" idDateFrom="available_since" idDateTo="available_to"></x-form.flowbite-daterangepicker>
+    <div class="flex flex-row">
+        <div>
+            <input type="date" id="available_since" class="bg-gray-600 border-r-2 rounded-sm mr-1">
+        </div>
+        <div>
+            <input type="date" id="available_to" class="bg-gray-600 border-r-2 rounded-sm">
+        </div>
+    </div>
     
     <x-form.select-input id="rentType" name="rentType" class="mb-3 col-span-1 w-full">
         <x-form.select-input-option selected>{{__('Tipo de renta')}}</x-form.select-input-option>
