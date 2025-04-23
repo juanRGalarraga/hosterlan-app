@@ -1,15 +1,13 @@
 <?php
+
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Publication\PublicationController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Mail\Email;
 use App\Http\Controllers\Reservation\ReservationController;
 use App\Http\Controllers\PictureController;
-use Inertia\Inertia;
-
-use function Termwind\render;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,21 +20,9 @@ use function Termwind\render;
 |
 */
 
-Route::get('/', function () {
-
-    if(Auth::check()){
-        return redirect()->route('publications.index');
-    }
-    return redirect()->route('welcome');
-
-})->name('home')
+Route::get('/', HomeController::class)->name('home')
 ->middleware(['auth', 'verified']);
-
-Route::get('/v2', function () {
-    return Inertia::render('Welcome', [
-        'appName' => config('app.name'),
-    ]);
-})->name('v2');
+Route::get('/v2', [HomeController::class, 'homev2'])->name('v2');
 
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

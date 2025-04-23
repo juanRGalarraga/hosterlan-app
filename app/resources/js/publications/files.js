@@ -4,7 +4,7 @@
 
 import SimpleHash from "../simpleHash.js";
 import { formatUrl } from "../utilities/url.js";
-import Fetch from "../components/fetch.js";
+import Fetch from "../components/old/fetch.js";
 
 export default class PublicationFile {
     input = null;

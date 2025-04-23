@@ -1,7 +1,7 @@
-import Spinner from "../../components/spinner";
-import Pagination from "../../components/fetchPagination";
-import Fetch from "../../components/fetch";
-import Alert from "../../components/alert";
+import Spinner from "../../components/old/spinner";
+import Pagination from "../../components/old/fetchPagination";
+import Fetch from "../../components/old/fetch";
+import Alert from "../../components/old/alert";
 export default class PublicationEditList {
 
     spinner

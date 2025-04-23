@@ -1,7 +1,6 @@
-import DOM from '../../components/dom';
-import Fetch from '../../components/fetch';
+import DOM from '../../components/old/dom';
+import Fetch from '../../components/old/fetch';
 import { format } from '../../utilities/url';
-import alert from '../../components/alert';
 
 export default class PublicationShow {
     buttonsReserveDay = 'buttons-reserve-day'

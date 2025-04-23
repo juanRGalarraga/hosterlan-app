@@ -6,9 +6,7 @@ import {
     DOM,
     Input,
     Label
-} from '../../components/main';
-    
-import Alert from '../../components/alert';
+} from '../../components/old/main';
 
 export default class AvailableDay {
 

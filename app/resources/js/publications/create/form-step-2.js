@@ -1,8 +1,8 @@
 import AvailableDay from "./availableDay";
 import ObjectHelper from "../../utilities/objectHelper";
-import Fetch from "../../components/fetch";
+import Fetch from "../../components/old/fetch";
 import { format } from "../../utilities/url";
-import Alert from "../../components/alert";
+import Alert from "../../components/old/alert";
 class FormStep2 {
     buttonSendForm
     availableDay

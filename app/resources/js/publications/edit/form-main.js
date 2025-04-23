@@ -1,7 +1,5 @@
 import PublicationFile from "../files";
-import Fetch from "../../components/fetch";
-import { format } from "../../utilities/url";
-import Alert from "../../components/alert";
+import Alert from "../../components/old/alert";
 
 class PublicationEdit {
     buttonUploadId = 'buttonUpdatePublication'
