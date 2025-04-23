@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 use App\Mail\Email;
 use App\Http\Controllers\Reservation\ReservationController;
 use App\Http\Controllers\PictureController;
+use Inertia\Inertia;
+
+use function Termwind\render;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,9 +27,16 @@ Route::get('/', function () {
     if(Auth::check()){
         return redirect()->route('publications.index');
     }
-    return view('welcome');
+    return redirect()->route('welcome');
+
 })->name('home')
 ->middleware(['auth', 'verified']);
+
+Route::get('/v2', function () {
+    return Inertia::render('Welcome', [
+        'appName' => config('app.name'),
+    ]);
+})->name('v2');
 
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

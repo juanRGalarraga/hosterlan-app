@@ -10,7 +10,7 @@
         @vite([
             'resources/css/app.css', 
             'resources/css/main.css',
-            'resources/js/app.js'
+            'resources/js/app.jsx'
         ])
 
         <!-- Fonts -->
@@ -26,7 +26,7 @@
         @endif
 
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased" id="app">
         <div class="bg-gray-100 dark:bg-gray-900">
             
             @if ($includeNav)
