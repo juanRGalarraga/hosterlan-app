@@ -1,9 +1,9 @@
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
-import { decrement, increment, selectCount } from '@/store/slices/counterSlice'
+import { decrement, increment } from '@/store/slices/counterSlice'
 
 export default function Counter() {
 
-  const count = useAppSelector(selectCount)
+  const count = useAppSelector(state => state.counter.value)
   const dispatch = useAppDispatch()
 
   return (

@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react'
 import Layout from '@/pages/layout';
 import { useState } from 'react'
 import Dropdown from '@/components/dropdown';
-import Counter from '@/store/slices/counterSlice';
+import Counter from '@/components/counter';
 
 interface Props { 
   appName: string;
