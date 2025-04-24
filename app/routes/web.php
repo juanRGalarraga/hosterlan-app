@@ -20,10 +20,9 @@ use App\Http\Controllers\PictureController;
 |
 */
 
-Route::get('/', HomeController::class)->name('home')
-->middleware(['auth', 'verified']);
-Route::get('/v2', [HomeController::class, 'homev2'])->name('v2');
+require_once __DIR__ . '/web-v2.php';
 
+Route::get('/', HomeController::class)->name('home')->middleware(['auth', 'verified']);
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
