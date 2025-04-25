@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Psy\Readline\Hoa\FileException;
 use SebastianBergmann\CodeCoverage\FileCouldNotBeWrittenException;
+use Inertia\Inertia;
 
 
 class PublicationController extends Controller
@@ -39,8 +40,9 @@ class PublicationController extends Controller
     public function index(Request $request)
     {
         $publications = Publication::latest()->where('state', StateEnum::Published->name)->paginate(25);
-        $html = view("publications.index.main", compact('publications'));
-        return $html;
+        return Inertia::render('publications/publication', [
+            'publications' => $publications->items(),
+        ]);
     }
 
     /**
