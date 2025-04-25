@@ -1,4 +1,4 @@
-import { format as formatUrl } from "../utilities/url";
+import { format as formatUrl } from "../../utilities/url";
 
 export default class Fetch {
 
