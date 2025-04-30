@@ -108,7 +108,6 @@ class Publication extends Model
 
       if ($this->exists()) {
         $picture = $this->pictures->first() ?? '';
-        debugbar()->debug($picture);
         if ( empty($picture) ) {
           return $defaultPath;
         }

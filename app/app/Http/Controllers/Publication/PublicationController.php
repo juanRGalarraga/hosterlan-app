@@ -40,6 +40,11 @@ class PublicationController extends Controller
     public function index(Request $request)
     {
         $publications = Publication::latest()->where('state', StateEnum::Published->name)->paginate(25);
+
+        foreach ($publications as $key => $publication) {
+            $publications[$key]['image_url'] = $publication->getFirstPicture();
+        }
+
         return Inertia::render('publications/publication', [
             'publications' => $publications->items(),
         ]);

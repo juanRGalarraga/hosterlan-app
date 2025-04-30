@@ -81,9 +81,26 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+function CardImage({ className, ...props }: React.ComponentProps<"img">) {
+  return (
+    <div data-slot="card-image">
+      <div className={cn("w-full", "aspect-[4/3]", "overflow-hidden")}>
+        <img
+          {...props}
+          className={cn(
+            "w-full h-full object-cover",
+            className
+          )}
+        />
+      </div>
+    </div>
+  )
+}
+
 export {
   Card,
   CardHeader,
+  CardImage,
   CardFooter,
   CardTitle,
   CardAction,

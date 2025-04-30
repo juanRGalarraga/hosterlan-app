@@ -14,7 +14,7 @@ class PublicationSeeder extends Seeder
     public function run(): void
     {
         Publication::factory()
-            ->count(10)
+            ->count(20)
             ->hasPictures(5)
             ->hasRentType(1)
             ->hasAvailableDays(rand(1, 5))

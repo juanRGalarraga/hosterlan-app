@@ -6,31 +6,32 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardImage,
   CardTitle,
 } from "@/components/ui/card"
-
+import ResponsiveGrid from "@/components/ui/responsiveGrid"
 
 interface PublicationProps { 
   publications: PublicationModel[];
 }
 
 export default function Publication({ publications }: any) {
+  console.log('Publications:', publications);
   return (
     <Layout>
-      {publications.map( (publication: PublicationModel) => (
-        <Card key={publication.id}>
-          <CardHeader>
-            <CardTitle>{ publication.title }</CardTitle>
-            <CardDescription>{ publication.description }</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
-          </CardContent>
-          <CardFooter>
-            <p>{ publication.created_at }</p>
-          </CardFooter>
-        </Card>
-      ))}
+      <ResponsiveGrid>
+          {publications.map( (publication: PublicationModel) => (
+            <Card key={publication.id}>
+              <CardHeader>
+                <CardImage src={publication.image_url} alt={publication.title} />
+                <CardTitle>{publication.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{ publication.description }</CardDescription>
+              </CardContent>
+            </Card>
+          ))}
+        </ResponsiveGrid>
     </Layout>
   )
 }

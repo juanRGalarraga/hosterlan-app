@@ -10,6 +10,7 @@ export interface Publication {
     pets: boolean;
     number_people: number;
     user_id: number;
+    image_url: string;
     state: PublicationState; 
     rent_type_id: number;
     created_at: string;
