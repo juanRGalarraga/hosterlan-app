@@ -1,7 +1,7 @@
 
 # Hosterlan
 
-Crear una plataforma web que permita a los usuarios buscar, listar y administrar propiedades para alquiler, así como realizar reservas de alquiler.
+Plataforma web que permita a los usuarios buscar, listar y administrar propiedades para alquiler, así como realizar reservas de alquiler.
 
 # Características Principales:
  Usuarios:
